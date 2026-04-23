@@ -1,0 +1,33 @@
+# -*- Mode: python; py-indent-offset: 4; indent-tabs-mode: nil; coding: utf-8; -*-
+
+def build(bld):
+    if not bld.env['ENABLE_EXAMPLES']:
+        return;
+
+    obj = bld.create_ns3_program('leo-orbit',
+                                 ['core', 'leo', 'mobility'])
+    obj.source = 'leo-circular-orbit-tracing-example.cc'
+
+    obj = bld.create_ns3_program('leo-delay',
+                                 ['core', 'leo', 'mobility', 'aodv'])
+    obj.source = 'leo-delay-tracing-example.cc'
+
+    obj = bld.create_ns3_program('leo-bulk-send',
+                                 ['core', 'leo', 'mobility', 'aodv'])
+    obj.source = 'leo-bulk-send-example.cc'
+    
+    obj = bld.create_ns3_program('calculate_delay',
+                                 ['core', 'network', 'internet', 'applications', 'mobility', 'point-to-point', 'aodv', 'leo'])
+    obj.source = 'calculate_delay.cc'
+    
+    obj = bld.create_ns3_program('uav-vanet',
+                                 ['core',
+                                  'network',
+                                  'internet',
+                                  'mobility',
+                                  'wifi',
+                                  'applications',
+                                  'aodv',
+                                  'flow-monitor'])
+    obj.source = 'uav-vanet.cc'
+
