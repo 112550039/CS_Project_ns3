@@ -31,3 +31,11 @@ def build(bld):
                                   'flow-monitor'])
     obj.source = 'uav-vanet.cc'
 
+    obj = bld.create_ns3_program('uav-link-probe',
+                                 ['core',
+                                  'network',
+                                  'internet',
+                                  'mobility',
+                                  'wifi',
+                                  'applications'])
+    obj.source = 'uav-link-probe.cc'

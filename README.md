@@ -8,8 +8,12 @@ Current focus:
 - simulate `MOVE / ROLE_SET / SENSOR_TO_UAV / SLAVE_TO_MASTER`
 - check whether all tasks finish before their deadlines
 - report mission finish time, sensor finish time, and slave finish time
+- probe slave-to-master UAV links and output per-link estimated data rate / measured throughput for scheduling
 
-The current mainline is **`uav-vanet.cc`**.  
+Current mainline components:
+- **`uav-vanet.cc`** — schedule-driven replay / verification engine
+- **`uav-link-probe.cc`** — UAV-to-UAV probing tool for slave-to-master link measurement
+
 It is no longer the old random baseline simulator. It now acts as a **schedule-driven replay / verification engine**.
 
 ---
@@ -25,7 +29,8 @@ Validated inputs so far:
 Current repo role:
 
 - **implemented:** schedule replay / mission verification
-- **not yet complete:** probing throughput mode, UAV-to-LEO integration, full scheduler feedback loop
+- **implemented (initial):** UAV-to-UAV probing for slave-to-master links
+- **not yet complete:** UAV-to-LEO integration, beamforming comparison, full scheduler feedback loop
 
 ---
 
@@ -44,6 +49,18 @@ Main functions:
 ### `ns3/contrib/leo/examples/calculate_delay.cc`
 Earlier LEO / delay / SNR-rate line.  
 Useful as the basis for future UAV-to-LEO integration.
+
+### `ns3/contrib/leo/examples/uav-link-probe.cc`
+Initial UAV-to-UAV probing tool.
+
+Main functions:
+- probe slave-to-master links sequentially
+- output `src / dst / role / position / distance`
+- estimate SNR and Shannon-based data rate
+- measure average effective throughput with probing packets
+
+Current note:
+- conservative probe pacing can under-drive the link, so throughput results should be re-tested with more aggressive probing intervals before final use in scheduling
 
 ### JSON inputs
 - `schedule_trace.json`
@@ -70,6 +87,7 @@ repo/
 │  └─ contrib/leo/examples/
 │     ├─ calculate_delay.cc
 │     ├─ uav-vanet.cc
+│     ├─ uav-link-probe.cc
 │     ├─ wscript
 │     ├─ schedule_trace.json
 │     ├─ topo1.json
@@ -121,6 +139,25 @@ From the NS-3 root:
   --taskGapUs=5000 \
   --outFile=/home/demo/Desktop/output_topo1_v1.txt"
 ```
+
+### `uav-link-probe`
+```bash
+./waf --run "uav-link-probe \
+  --uavPos='0,0;300,0;600,0;900,0;1200,0' \
+  --masterUavId=2 \
+  --probeAllSlavesToMaster=1 \
+  --uavAltitude=50 \
+  --backhaulRange3d=1500 \
+  --wifiFreqHz=2490000000 \
+  --txPowerDbm=20 \
+  --backhaulBandwidthHz=20000000 \
+  --backhaulNoiseFigureDb=6 \
+  --packetSize=1000 \
+  --intervalUs=20000 \
+  --probeDurationSec=1.0 \
+  --pairGapSec=2.0 \
+  --outFile=/home/demo/Desktop/uav_link_probe.txt \
+  --csvOutFile=/home/demo/Desktop/uav_link_probe.csv"
 
 ---
 

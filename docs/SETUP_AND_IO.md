@@ -16,6 +16,7 @@ Important files:
 - `schedule_trace.json`
 - `topo1.json`
 - `topo2.json`
+- `uav-link-probe.cc`
 
 ---
 
@@ -93,6 +94,25 @@ Optional configure step if needed:
   --outFile=/home/demo/Desktop/output_topo2_v1.txt"
 ```
 
+### `uav-link-probe` (UAV-to-UAV probing)
+```bash
+./waf --run "uav-link-probe \
+  --uavPos='0,0;300,0;600,0;900,0;1200,0' \
+  --masterUavId=2 \
+  --probeAllSlavesToMaster=1 \
+  --uavAltitude=50 \
+  --backhaulRange3d=1500 \
+  --wifiFreqHz=2490000000 \
+  --txPowerDbm=20 \
+  --backhaulBandwidthHz=20000000 \
+  --backhaulNoiseFigureDb=6 \
+  --packetSize=1000 \
+  --intervalUs=20000 \
+  --probeDurationSec=1.0 \
+  --pairGapSec=2.0 \
+  --outFile=/home/demo/Desktop/uav_link_probe_v1.txt \
+  --csvOutFile=/home/demo/Desktop/uav_link_probe_v1.csv"
+
 ---
 
 ## 4. Current JSON schema (high level)
@@ -148,6 +168,27 @@ Smaller value = more aggressive offered load.
 
 ### `--outFile`
 Output log path.
+
+### `uav-link-probe` parameters
+
+#### `--uavPos`
+Semicolon-separated UAV coordinates, e.g. `x,y;x,y;...`
+
+#### `--masterUavId`
+Defines which UAV is treated as the master / CH in probing mode.
+
+#### `--packetSize`
+Probe packet payload size.
+
+#### `--intervalUs`
+Gap between probe packets.
+Smaller value = more aggressive offered load.
+
+#### `--probeDurationSec`
+How long each probing flow lasts.
+
+#### `--csvOutFile`
+Optional CSV output path for downstream use.
 
 ---
 

@@ -62,6 +62,9 @@ First larger topology already tested.
 ### `topo2.json`
 Next topology to test.
 
+### `uav-link-probe.cc`
+Current UAV-to-UAV probing tool.
+
 ---
 
 ## 4. Current validated progress
@@ -79,13 +82,27 @@ Meaning:
 
 This confirms that the current code is no longer limited to the simple trace.
 
+### Probing mode
+An initial `uav-link-probe.cc` has been added.
+
+Current status:
+- program builds and runs
+- outputs per-link `src / dst / role / position / distance / snr / estRate / throughput`
+- useful as the first functional probing version
+
+Current limitation:
+- with conservative probe pacing, measured throughput may be limited by application sending interval rather than the actual wireless link capacity
+- further parameter sweeps are still needed before producing the final throughput table for scheduling
+
 ---
 
 ## 5. Current limitations
 
 Still missing or not fully integrated yet:
 
-1. slave-to-master probing throughput mode
+1. initial slave-to-master probing throughput mode is implemented, but still needs:
+   - parameter tuning for more discriminative throughput measurement
+   - final teammate-aligned output format confirmation
 2. UAV-to-LEO / beamforming integration
 3. full scheduler feedback loop
 
@@ -97,10 +114,9 @@ So the current repo should be described as:
 
 ## 6. Immediate next steps
 
-1. run and validate `topo2.json`
-2. define probing throughput output format
-3. align scheduler input/output format with teammates
-4. later connect the UAV-side replay with the UAV-to-LEO line
+1. refine `uav-link-probe.cc` probing parameters and validate more discriminative throughput results
+2. align final scheduler input/output format with teammates
+3. later connect the UAV-side replay with the UAV-to-LEO / beamforming line
 
 ---
 
