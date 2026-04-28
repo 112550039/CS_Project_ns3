@@ -73,6 +73,29 @@ These traces define:
 - mission deadline
 - event list (`MOVE`, `ROLE_SET`, `SENSOR_TO_UAV`, `SLAVE_TO_MASTER`)
 
+### ``ns3/contrib/leo/examples/uav-to-leo.cc`
+Single-hop UAV-to-LEO satellite uplink simulator.
+
+Main functions:
+- build satellite constellation and auto-select nearest LEO satellite via `FindClosestSatellite()`
+- compute link budget per frequency band (Ku-User / Ka-Gateway / Ka-User / S-band): FSPL → SNR → Shannon capacity
+- apply hybrid beamforming gain via MATLAB-generated steering-aware CSV lookup (`steering_deg, elevation_deg, gain_dB`)
+- measure effective throughput at application layer: `totalRxBytes × 8 / (lastRxTime − firstTxTime)`, capturing TCP overhead and idle time that Shannon capacity does not account for
+- support fixed-volume mode (`--fixedVolume`): stop simulation once `maxBytes` are received, measuring transmission time rather than running a fixed duration
+
+Key parameters:
+- `--band`: frequency band preset (`Ku-User` default)
+- `--bpFile`: path to MATLAB beam pattern CSV
+- `--nAnt` / `--nRF`: antenna element count and RF chain count for hybrid beamforming
+- `--maxBytes`: total bytes to transmit
+- `--fixedVolume`: fixed-volume or fixed-time mode
+- `--rateInterval`: adaptive rate update interval (seconds)
+
+Current notes:
+- TCP receive buffer is set to 8 MB (`RcvBufSize` / `SndBufSize`) to prevent the window from capping effective throughput below Shannon capacity
+- effective throughput is significantly lower than Shannon capacity due to TCP slow start; approximately 35% efficiency over the 110 ms transfer window for a 10 MB payload
+- beamforming gain from CSV lookup is verified to increase effective throughput (752 → 784 Mbps) compared to analytical fallback (2128 → 2456 Mbps Shannon increase maps to ~4% application-layer gain, dominated by cwnd ramp-up)
+
 ---
 
 ## Repo layout
@@ -85,9 +108,11 @@ repo/
 │  └─ SETUP_AND_IO.md
 ├─ ns3/
 │  └─ contrib/leo/examples/
+│     ├─ beam_pattern.csv
 │     ├─ calculate_delay.cc
 │     ├─ uav-vanet.cc
 │     ├─ uav-link-probe.cc
+│     ├─ uav-to-leo.cc
 │     ├─ wscript
 │     ├─ schedule_trace.json
 │     ├─ topo1.json
@@ -158,6 +183,31 @@ From the NS-3 root:
   --pairGapSec=2.0 \
   --outFile=/home/demo/Desktop/uav_link_probe.txt \
   --csvOutFile=/home/demo/Desktop/uav_link_probe.csv"
+```
+### `uav-to-leo`
+```bash
+./waf --run "uav-to-leo \
+    --orbitFile:       CSV file with orbit parameters []
+    --traceFile:       CSV file to redirect stdout to []
+    --precision:       The time precision with which to compute position updates. 0 means arbitrary precision (ns3::LeoCircularOrbitMobilityModel::Precision) [+1e+09ns]
+    --duration:        Simulation duration (seconds) [300]
+    --uavLat:          UAV latitude  (degrees N) [24.8]
+    --uavLon:          UAV longitude (degrees E) [120.97]
+    --uavAlt:          UAV altitude  (meters ASL) [300]
+    --band:            Sat band: Ku-User|Ka-Gateway|Ka-User|S-band [Ku-User]
+    --targetSatIndex:  Satellite index (-1 = auto-closest) [-1]
+    --maxBytes:        Total bytes to send (0 = unlimited) [10485760]
+    --sendSize:        TCP segment size (bytes) [1024]
+    --ttlThresh:       AODV TTL threshold [0]
+    --routeTimeout:    AODV ActiveRouteTimeout (seconds) [300]
+    --rateInterval:    Adaptive rate update interval (seconds) [10]
+    --bpFile:          MATLAB beam pattern CSV file []
+    --nAnt:            Number of antenna elements (1/4/16/64) [16]
+    --nRF:             Number of RF chains (hybrid: nRF <= nAnt) [4]
+    --destOnly:        Indicates only the destination may respond to this RREQ. (ns3::aodv::RoutingProtocol::DestinationOnly) [false]
+    --pcap:            Enable PCAP packet capture [false]
+    --fixedVolume:     Stop simulation when maxBytes received (default true; pass false to run full duration) [true]"
+```
 
 ---
 
