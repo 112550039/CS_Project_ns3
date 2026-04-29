@@ -73,15 +73,15 @@ These traces define:
 - mission deadline
 - event list (`MOVE`, `ROLE_SET`, `SENSOR_TO_UAV`, `SLAVE_TO_MASTER`)
 
-### ``ns3/contrib/leo/examples/uav-to-leo.cc`
+### `ns3/contrib/leo/examples/uav-to-leo.cc`
 Single-hop UAV-to-LEO satellite uplink simulator.
 
 Main functions:
-- build satellite constellation and auto-select nearest LEO satellite via `FindClosestSatellite()`
-- compute link budget per frequency band (Ku-User / Ka-Gateway / Ka-User / S-band): FSPL → SNR → Shannon capacity
-- apply hybrid beamforming gain via MATLAB-generated steering-aware CSV lookup (`steering_deg, elevation_deg, gain_dB`)
-- measure effective throughput at application layer: `totalRxBytes × 8 / (lastRxTime − firstTxTime)`, capturing TCP overhead and idle time that Shannon capacity does not account for
-- support fixed-volume mode (`--fixedVolume`): stop simulation once `maxBytes` are received, measuring transmission time rather than running a fixed duration
+- build satellite constellation and auto-select nearest LEO satellite
+- compute link budget: FSPL → SNR → Shannon capacity
+- apply hybrid beamforming gain via MATLAB-generated CSV lookup
+- measure effective throughput at application layer
+- support fixed-volume mode: stop simulation once `maxBytes` are received, measuring transmission time rather than running a fixed duration
 
 Key parameters:
 - `--band`: frequency band preset (`Ku-User` default)
