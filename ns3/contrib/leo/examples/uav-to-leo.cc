@@ -10,6 +10,7 @@
 #include <cmath>
 #include <map>
 #include <fstream>
+#include <filesystem>
 #include <iomanip>
 #include <string>
 #include <vector>
@@ -666,7 +667,7 @@ main (int argc, char *argv[])
 
     uint64_t ttlThresh    = 0;
     double   routeTimeout = 300.0;
-    double   rateInterval = 10.0;
+    double   rateInterval = 1.0;
 
     bool        pcap = false;
     std::string bpFile;
@@ -982,39 +983,20 @@ main (int argc, char *argv[])
                   << " ms (" << (int) nums << " pkts)" << std::endl;
     }
 
-    if (!g_rateLog.empty ())
-    {
-        std::cout << "\n--- Adaptive Rate Log (interval="
-                  << rateInterval << "s) ---" << std::endl;
-        std::cout << "  Time   Dist(km)   Elev   BF(dB)   SNR    Rate(Mbps)  Status"
-                  << std::endl;
-        for (auto &r : g_rateLog)
-        {
-            bool down = (r.elevDeg < band.elevAngleDeg);
-            std::cout << std::fixed << std::setprecision(1)
-                      << std::setw(6) << r.timeSec << "s"
-                      << std::setw(10) << r.distKm
-                      << std::setw(8) << r.elevDeg << "°"
-                      << std::setw(7) << r.bfGainDb
-                      << std::setw(8) << r.snrDb << " dB"
-                      << std::setw(11) << r.rateMbps
-                      << "  " << (down ? "[DOWN <" : "[OK   >=")
-                      << band.elevAngleDeg << "°]" << std::endl;
-        }
-    }
-
     std::cout << "\n--- Effective Throughput Measurement ---" << std::endl;
     std::cout << "Mode:                "
               << (g_fixedVolume ? "fixed-volume (stop on maxBytes)"
                                 : "fixed-time (run full duration)")
               << std::endl;
+    
 
+    double effMbps;
     if (g_tput.firstTxSec >= 0.0
         && g_tput.lastRxSec  >  g_tput.firstTxSec
         && g_tput.totalRxBytes > 0)
     {
         double measSec = g_tput.lastRxSec - g_tput.firstTxSec;
-        double effMbps = (g_tput.totalRxBytes * 8.0) / (measSec * 1e6);
+        effMbps = (g_tput.totalRxBytes * 8.0) / (measSec * 1e6);
 
         std::cout << std::fixed;
         std::cout << "Total Tx bytes:      " << g_tput.totalTxBytes << std::endl;
@@ -1061,6 +1043,70 @@ main (int argc, char *argv[])
     }
 
     std::cout << "=====================================================" << std::endl;
+
+    // ------------------------------------------------------------------------
+    // 16. CSV outputs
+    // ------------------------------------------------------------------------
+    // std::filesystem::
+    std::string outputDir = "outputs";
+    if (!std::filesystem::exists(outputDir))
+    {
+        std::filesystem::create_directories(outputDir);
+    }
+
+    double visStart=-1.0, visEnd=-1.0;
+    if (!g_rateLog.empty ())
+    {
+        std::ofstream rateLogFile;
+        rateLogFile.open(outputDir+"/adaptiveRateLog.csv", std::ios::out);
+        rateLogFile << "Adaptive Rate Log (interval="
+                    << rateInterval << "s)" << std::endl;
+        rateLogFile << "Time,"
+                    << "Dist(km),"
+                    << "Elev,"
+                    << "BF(dB),"
+                    << "SNR,"
+                    << "Rate(Mbps),"
+                    << "Status"
+                    << std::endl;
+        for (auto &r : g_rateLog)
+        {
+            bool down = (r.elevDeg < band.elevAngleDeg);
+            if (!down && visStart < 0) visStart = r.timeSec;
+            else if (down && visEnd < 0) visEnd = r.timeSec;
+            
+            rateLogFile << std::fixed << std::setprecision(2)
+                        << std::setw(6) << r.timeSec << "s,"
+                        << std::setw(10) << r.distKm << ","
+                        << std::setw(8) << r.elevDeg << "°,"
+                        << std::setw(7) << r.bfGainDb << ","
+                        << std::setw(8) << r.snrDb << " dB,"
+                        << std::setw(11) << r.rateMbps << ","
+                        << "  " << (down ? "[DOWN <" : "[OK   >=")
+                        << band.elevAngleDeg << "°]" << std::endl;
+        }
+        rateLogFile.close();
+    }
+
+    {
+        std::ofstream resultFile;
+        resultFile.open(outputDir+"/uav-to-leo_result.csv", std::ios::out);
+
+        resultFile << "Effective Throughput (Mbps),"
+                << "Elevation Cutoff (Deg),"
+                << "Visible Time Window Start (s),"
+                << "Visible Time Window End (s)"
+                << std::endl;
+
+        resultFile << std::fixed << std::setprecision(6)
+                << effMbps << ","
+                << band.elevAngleDeg << ","
+                << visStart << ","
+                << visEnd
+                << std::endl;
+
+        resultFile.close();
+    }
 
     if (out.is_open ())
     {
