@@ -319,6 +319,8 @@ main(int argc, char* argv[])
   double backhaulBandwidthHz = 20e6;
   double backhaulNoiseFigureDb = 6.0;
 
+  std::string rateManager = "ideal";
+
   uint32_t packetSize = 1000;
   double intervalUs = 20000.0;     // 20 ms
   double probeDurationSec = 1.0;   // each pair probes for 1 second by default
@@ -345,6 +347,9 @@ main(int argc, char* argv[])
   cmd.AddValue("txPowerDbm", "Tx power (dBm)", txPowerDbm);
   cmd.AddValue("backhaulBandwidthHz", "Bandwidth (Hz) for SNR/Shannon estimate", backhaulBandwidthHz);
   cmd.AddValue("backhaulNoiseFigureDb", "Noise figure (dB)", backhaulNoiseFigureDb);
+  cmd.AddValue("rateManager",
+               "Wi-Fi rate control: ideal or constant6",
+               rateManager);
 
   cmd.AddValue("packetSize", "Probe packet payload size (bytes)", packetSize);
   cmd.AddValue("intervalUs", "Probe packet interval (microseconds)", intervalUs);
@@ -413,9 +418,22 @@ main(int argc, char* argv[])
 
   WifiHelper backhaulWifi;
   backhaulWifi.SetStandard(WIFI_STANDARD_80211g);
-  backhaulWifi.SetRemoteStationManager("ns3::ConstantRateWifiManager",
-                                       "DataMode", StringValue("ErpOfdmRate6Mbps"),
-                                       "ControlMode", StringValue("ErpOfdmRate6Mbps"));
+  
+  if (rateManager == "ideal")
+  {
+    backhaulWifi.SetRemoteStationManager("ns3::IdealWifiManager");
+  }
+  else if (rateManager == "constant6")
+  {
+    backhaulWifi.SetRemoteStationManager("ns3::ConstantRateWifiManager",
+                                         "DataMode", StringValue("ErpOfdmRate6Mbps"),
+                                         "ControlMode", StringValue("ErpOfdmRate6Mbps"));
+  }
+  else
+  {
+    NS_ABORT_MSG("Unsupported rateManager: " << rateManager
+                 << " (supported: ideal, constant6)");
+  }
 
   NetDeviceContainer devices = backhaulWifi.Install(backhaulPhy, backhaulMac, uavNodes);
 
@@ -433,6 +451,7 @@ main(int argc, char* argv[])
   std::cout << "[PROBE-SETUP]"
             << " nUav=" << nUav
             << " masterUavId=" << masterUavId
+            << " rateManager=" << rateManager
             << " backhaulRange3d=" << backhaulRange3d
             << " packetSize=" << packetSize
             << " intervalUs=" << intervalUs
