@@ -39,3 +39,7 @@ def build(bld):
                                   'wifi',
                                   'applications'])
     obj.source = 'uav-link-probe.cc'
+
+    obj = bld.create_ns3_program('uav-to-leo',
+                                 ['core', 'leo', 'mobility', 'aodv', 'network', 'wifi', 'internet', 'wave', 'applications', 'flow-monitor', 'netanim'])
+    obj.source = 'uav-to-leo.cc'
