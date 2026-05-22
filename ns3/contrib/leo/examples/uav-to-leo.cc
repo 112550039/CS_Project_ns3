@@ -50,7 +50,7 @@ struct SatBandParams
 };
 
 static const SatBandParams BAND_KU_USER = {
-    "Ku-User", 13.5, 0.25, 64.6, 38.3, 0.0, 0.41, 0.76, 350.1, 40.0, 1, 1
+    "Ku-User", 13.5, 0.25, 64.6, 38.3, 0.0, 0.41, 0.76, 350.1, 55.0, 1, 1
 };
 
 static const SatBandParams BAND_KA_GATEWAY = {
@@ -421,6 +421,10 @@ EchoTxRx (std::string context,
         if (TxTimes.find (uid) != TxTimes.end ())
             delay[uid] = time - TxTimes[uid];
     }
+
+    // std::cout << '\r' << Simulator::Now () << ":" << context << ":" << uid
+    //           << ":" << socket->GetNode ()
+    //           << ":" << header.GetSequenceNumber () << std::flush;
 }
 
 // ============================================================================
@@ -441,31 +445,117 @@ static bool     g_fixedVolume = false;
 static uint64_t g_volumeBytes = 0;
 static bool     g_stopFired   = false;
 
+// [Step-3] One record per (BeginWindow → CloseWindow) pair. windowId starts
+//          at 1 (initial connection) and increments each handoff.
+struct WindowRecord
+{
+    int       windowId      = 0;
+    uint32_t  satIdx        = 0;
+    double    startTimeSec  = -1.0;
+    double    endTimeSec    = -1.0;
+    double    firstTxSec    = -1.0;
+    double    lastRxSec     = -1.0;
+    uint64_t  totalTxBytes  = 0;
+    uint64_t  totalRxBytes  = 0;
+    double    avgEffMbps    = 0.0;
+};
+static std::vector<WindowRecord> g_windows;
+static WindowRecord              g_curWindow;
+static bool                      g_windowOpen = false;
+
+// [Step-3] Open a window owned by the given satellite. Called once at sim
+//          start (window 1) and once per handoff thereafter.
+static void
+BeginWindow (uint32_t satIdx)
+{
+    g_curWindow              = WindowRecord ();
+    g_curWindow.windowId     = (int) g_windows.size () + 1;
+    g_curWindow.satIdx       = satIdx;
+    g_curWindow.startTimeSec = Simulator::Now ().GetSeconds ();
+    g_windowOpen             = true;
+}
+
+// [Step-3] Close the current window. Uses the same effective-throughput
+//          formula as Section 16: rxBytes * 8 / (lastRxSec - firstTxSec).
+//          Idempotent — second call is a no-op.
+static void
+CloseWindow (double endTimeSec)
+{
+    if (!g_windowOpen) return;
+
+    g_curWindow.endTimeSec = endTimeSec;
+
+    double measSec = g_curWindow.lastRxSec - g_curWindow.firstTxSec;
+    if (measSec > 0.0 && g_curWindow.totalRxBytes > 0)
+        g_curWindow.avgEffMbps = (g_curWindow.totalRxBytes * 8.0)
+                               / (measSec * 1e6);
+
+    g_windowOpen = false;
+
+    std::cerr << "[Step-3] Window " << g_curWindow.windowId
+              << " closed: Sat[" << g_curWindow.satIdx << "] "
+              << std::fixed << std::setprecision(2)
+              << g_curWindow.startTimeSec << "s -> " << endTimeSec
+              << "s, rx=" << g_curWindow.totalRxBytes << " B, "
+              << "eff=" << std::setprecision(1)
+              << g_curWindow.avgEffMbps << " Mbps" << std::endl;
+
+    g_windows.push_back (g_curWindow);
+}
+
+// [MODIFIED for Step-3] Also writes to g_curWindow when a window is open.
+//                       g_tput cumulative behaviour preserved for Section 16.
 static void
 AppTxTrace (Ptr<const Packet> p)
 {
     double now = Simulator::Now ().GetSeconds ();
+
     if (g_tput.firstTxSec < 0.0) g_tput.firstTxSec = now;
     g_tput.totalTxBytes += p->GetSize ();
+
+    if (g_windowOpen)
+    {
+        if (g_curWindow.firstTxSec < 0.0) g_curWindow.firstTxSec = now;
+        g_curWindow.totalTxBytes += p->GetSize ();
+    }
 }
 
+// [MODIFIED for Step-3]
 static void
 AppRxTrace (Ptr<const Packet> p, const Address &/*from*/)
 {
     double now = Simulator::Now ().GetSeconds ();
+
     if (g_tput.firstRxSec < 0.0) g_tput.firstRxSec = now;
     g_tput.lastRxSec = now;
     g_tput.totalRxBytes += p->GetSize ();
 
-    if (g_fixedVolume && !g_stopFired && g_tput.totalRxBytes >= g_volumeBytes)
+    if (g_windowOpen)
+    {
+        g_curWindow.lastRxSec = now;
+        g_curWindow.totalRxBytes += p->GetSize ();
+    }
+
+    // [Step-3] Compare per-window bytes (was g_tput.totalRxBytes). Cumulative
+    //          comparison would stop the entire simulation after the FIRST
+    //          window receives maxBytes, making further handoffs unreachable.
+    //          Per-window comparison preserves single-window semantics exactly
+    //          when no handoff occurs.
+    if (g_fixedVolume && !g_stopFired
+        && g_windowOpen
+        && g_curWindow.totalRxBytes >= g_volumeBytes)
     {
         g_stopFired = true;
         Simulator::Stop ();
     }
 }
 
+// [Step-3] One-time hookup at sim start. PacketSinks live for the entire
+//          run, so AppRxTrace is attached here exactly once. Re-running this
+//          on every handoff would stack callbacks on each PacketSink → every
+//          Rx event would fire N times (N = number of completed handoffs).
 void
-connect ()
+connectInitial ()
 {
     Config::Connect ("/NodeList/*/$ns3::TcpL4Protocol/SocketList/*/Tx",
                      MakeCallback (&EchoTxRx));
@@ -477,6 +567,32 @@ connect ()
     Config::ConnectWithoutContext (
         "/NodeList/*/ApplicationList/*/$ns3::PacketSink/Rx",
         MakeCallback (&AppRxTrace));
+}
+
+// [Step-3] Per-handoff hookup. Hooks ONLY what the handoff just created:
+//          new TCP socket on UAV (EchoTxRx) and new BulkSend Tx.
+//          AppRxTrace is NOT re-connected here: connectInitial()'s wildcard
+//          already reached all satellite PacketSinks at t=1e-7 (they are all
+//          installed before simulation start).  TracedCallback has no dedup,
+//          so a second ConnectWithoutContext would double-count every Rx byte.
+void
+connectAfterHandoff (Ptr<Application> newBulkApp)
+{
+    Config::Connect ("/NodeList/*/$ns3::TcpL4Protocol/SocketList/*/Tx",
+                     MakeCallback (&EchoTxRx));
+    Config::Connect ("/NodeList/*/$ns3::TcpL4Protocol/SocketList/*/Rx",
+                     MakeCallback (&EchoTxRx));
+
+    if (newBulkApp)
+        newBulkApp->TraceConnectWithoutContext ("Tx",
+                                                MakeCallback (&AppTxTrace));
+}
+
+// Backward-compat shim — leftover call sites still work.
+void
+connect ()
+{
+    connectInitial ();
 }
 
 // ============================================================================
@@ -581,6 +697,48 @@ struct AdaptiveRateRecord
 };
 std::vector<AdaptiveRateRecord> g_rateLog;
 
+// [Step-1] Handoff scanning state
+//   linkDown:        whether the current target sat has dropped below cutoff
+//   candidateSatIdx: index of the best visible alternative (-1 = none yet)
+//   candidateElevDeg / candidateDistKm: cached for logging and Step-2 use
+struct HandoffState
+{
+    bool    linkDown        = false;
+    int32_t candidateSatIdx = -1;
+    double  candidateElevDeg = 0.0;
+    double  candidateDistKm  = 0.0;
+};
+static HandoffState g_handoff;
+
+// [Step-2] Simulation context shared between callbacks. Populated once in
+// main() before Simulator::Run(); read-only thereafter. Avoids passing
+// 6+ parameters through every Simulator::Schedule call.
+struct SimContext
+{
+    Ptr<Node>             uavNode;
+    NodeContainer         satellites;
+    NetDeviceContainer    utNet;
+    Ipv4InterfaceContainer utIf;
+    SatBandParams         band;
+    uint16_t              port      = 0;
+    uint32_t              maxBytes  = 0;
+    uint32_t              sendSize  = 0;
+};
+static SimContext g_ctx;
+
+// [Step-2] Currently-active target. Mutated atomically inside PerformHandoff().
+struct ActiveTarget
+{
+    Ptr<Node>      satNode;
+    uint32_t       satIdx          = 0;
+    Ipv4Address    ipAddr;
+    double         connectTimeSec  = 0.0;
+};
+static ActiveTarget g_active;
+
+// [Step-2] Forward declaration; defined after UpdateAdaptiveRate.
+static void PerformHandoff ();
+
 /**
  * Recomputes SNR / Shannon rate from current UAV-satellite geometry and
  * pushes the new rate into the MockNetDevice on both ends.
@@ -591,37 +749,176 @@ std::vector<AdaptiveRateRecord> g_rateLog;
  * \param band     Band parameters (incl. elevation cutoff)
  * \param satIdx   Index of the target satellite device in utNet
  */
+// [MODIFIED] No parameters — reads g_ctx + g_active so that the *current*
+//            target satellite is always honored, even after a handoff.
 static void
-UpdateAdaptiveRate (Ptr<Node> uavNode,
-                    Ptr<Node> satNode,
-                    NetDeviceContainer utNet,
-                    SatBandParams band,
-                    uint32_t satIdx)
+UpdateAdaptiveRate ()
 {
-    Vector uavPos = uavNode->GetObject<MobilityModel> ()->GetPosition ();
-    Vector satPos = satNode->GetObject<MobilityModel> ()->GetPosition ();
+    Vector uavPos = g_ctx.uavNode->GetObject<MobilityModel> ()->GetPosition ();
+    Vector satPos = g_active.satNode->GetObject<MobilityModel> ()->GetPosition ();
     double distKm  = EcefDistance (uavPos, satPos) / 1000.0;
     double elevDeg = ComputeElevationAngle (uavPos, satPos);
 
-    double bfGain   = CalcBeamformingGain (elevDeg, band.nAnt, band.nRF);
-    double snrDb    = CalcSNR (band, distKm, elevDeg);
-    double rateMbps = CalcShannonCapacity (band, snrDb);
+    double bfGain   = CalcBeamformingGain (elevDeg, g_ctx.band.nAnt, g_ctx.band.nRF);
+    double snrDb    = CalcSNR (g_ctx.band, distKm, elevDeg);
+    double rateMbps = CalcShannonCapacity (g_ctx.band, snrDb);
 
-    if (elevDeg < band.elevAngleDeg)
+    if (elevDeg < g_ctx.band.elevAngleDeg)
         rateMbps = 0.001;
 
+    // [Step-2 fix] Floor of 0.001 Mbps must NOT round to "0.0Mbps". The
+    // MockNetDevice's CalculateBytesTxTime() divides by rate; a zero rate
+    // causes SIGFPE the moment a packet is queued — which TCP's retransmit
+    // timer eventually does during a long link-down window between handoffs.
+    // (300s simulation never hit this; 7200s does.)
     std::ostringstream rateStr;
-    rateStr << std::fixed << std::setprecision(1) << rateMbps << "Mbps";
+    if (rateMbps < 1.0)
+        rateStr << std::fixed << std::setprecision(6) << rateMbps << "Mbps";
+    else
+        rateStr << std::fixed << std::setprecision(1) << rateMbps << "Mbps";
 
-    uint32_t uavDevIdx = utNet.GetN () - 1;
-    Ptr<MockNetDevice> uavDev = DynamicCast<MockNetDevice> (utNet.Get (uavDevIdx));
+    uint32_t uavDevIdx = g_ctx.utNet.GetN () - 1;
+    Ptr<MockNetDevice> uavDev = DynamicCast<MockNetDevice> (g_ctx.utNet.Get (uavDevIdx));
     if (uavDev) uavDev->SetDataRate (DataRate (rateStr.str ()));
 
-    Ptr<MockNetDevice> satDev = DynamicCast<MockNetDevice> (utNet.Get (satIdx));
+    Ptr<MockNetDevice> satDev = DynamicCast<MockNetDevice> (g_ctx.utNet.Get (g_active.satIdx));
     if (satDev) satDev->SetDataRate (DataRate (rateStr.str ()));
 
     g_rateLog.push_back ({Simulator::Now ().GetSeconds (), distKm, elevDeg,
                           bfGain, snrDb, rateMbps});
+
+    // ------------------------------------------------------------------
+    // [Step-1] Link-state tracking + rescan
+    // ------------------------------------------------------------------
+    double now = Simulator::Now ().GetSeconds ();
+    bool currentlyDown = (elevDeg < g_ctx.band.elevAngleDeg);
+
+    if (currentlyDown && !g_handoff.linkDown)
+    {
+        g_handoff.linkDown = true;
+        g_handoff.candidateSatIdx = -1;
+        std::cerr << "[Step-1] t=" << std::fixed << std::setprecision(2) << now
+                  << "s: Sat[" << g_active.satIdx << "] LINK DOWN (elev="
+                  << std::setprecision(2) << elevDeg << "° < cutoff "
+                  << g_ctx.band.elevAngleDeg << "°) -> entering RESCAN mode"
+                  << std::endl;
+
+        CloseWindow (now);   // [Step-3] window ends at link-down detection
+    }
+    else if (!currentlyDown && g_handoff.linkDown)
+    {
+        g_handoff.linkDown = false;
+        g_handoff.candidateSatIdx = -1;
+        std::cerr << "[Step-1] t=" << std::fixed << std::setprecision(2) << now
+                  << "s: Sat[" << g_active.satIdx
+                  << "] link recovered -> exiting RESCAN" << std::endl;
+    }
+
+    if (g_handoff.linkDown)
+    {
+        int32_t bestIdx = -1;
+        double  bestElev = -90.0, bestDist = 0.0;
+
+        for (uint32_t i = 0; i < g_ctx.satellites.GetN (); i++)
+        {
+            if (i == g_active.satIdx) continue;
+            Vector pos = g_ctx.satellites.Get (i)->GetObject<MobilityModel> ()
+                                                  ->GetPosition ();
+            double e = ComputeElevationAngle (uavPos, pos);
+            if (e >= g_ctx.band.elevAngleDeg && e > bestElev)
+            {
+                bestElev = e;
+                bestIdx  = (int32_t) i;
+                bestDist = EcefDistance (uavPos, pos) / 1000.0;
+            }
+        }
+
+        if (bestIdx >= 0)
+        {
+            // [Step-2] Trigger handoff IMMEDIATELY upon finding a visible sat.
+            //          (Step 1 only cached; Step 2 acts.)
+            g_handoff.candidateSatIdx  = bestIdx;
+            g_handoff.candidateElevDeg = bestElev;
+            g_handoff.candidateDistKm  = bestDist;
+            PerformHandoff ();
+        }
+        else if (g_handoff.candidateSatIdx != -1)
+        {
+            g_handoff.candidateSatIdx = -1;
+            std::cerr << "[Step-1] t=" << std::fixed << std::setprecision(2) << now
+                      << "s: candidate lost, still scanning..." << std::endl;
+        }
+    }
+}
+
+// [Step-2] Tear down the current TCP flow and bring up a new BulkSend
+//          targeting g_handoff.candidateSatIdx.
+static void
+PerformHandoff ()
+{
+    if (g_handoff.candidateSatIdx < 0) return;
+
+    uint32_t newIdx = (uint32_t) g_handoff.candidateSatIdx;
+    Ptr<Node> newSat = g_ctx.satellites.Get (newIdx);
+    Ipv4Address newAddr = newSat->GetObject<Ipv4> ()
+                                ->GetAddress (1, 0).GetLocal ();
+    double now = Simulator::Now ().GetSeconds ();
+
+    std::cerr << "[Step-2] t=" << std::fixed << std::setprecision(2) << now
+              << "s: HANDOFF Sat[" << g_active.satIdx << "] -> Sat[" << newIdx
+              << "] (IP " << newAddr
+              << ", elev=" << std::setprecision(2) << g_handoff.candidateElevDeg
+              << "°, dist=" << std::setprecision(1) << g_handoff.candidateDistKm
+              << " km)" << std::endl;
+
+    // (1) Stop the existing BulkSend on the UAV. Walking ApplicationList is
+    //     simpler than tracking a handle through globals; cost is trivial.
+    uint32_t nApps = g_ctx.uavNode->GetNApplications ();
+    for (uint32_t i = 0; i < nApps; i++)
+    {
+        Ptr<Application> app = g_ctx.uavNode->GetApplication (i);
+        if (DynamicCast<BulkSendApplication> (app))
+        {
+            app->SetStopTime (Simulator::Now ());
+        }
+    }
+
+    // (2) Switch the active target BEFORE installing the new app, so the
+    //     re-scheduled UpdateAdaptiveRate immediately sees the new geometry.
+    g_active.satNode        = newSat;
+    g_active.satIdx         = newIdx;
+    g_active.ipAddr         = newAddr;
+    g_active.connectTimeSec = now;
+
+    // (3) Reset handoff state so future link-down events are detected fresh.
+    g_handoff.linkDown         = false;
+    g_handoff.candidateSatIdx  = -1;
+
+    BeginWindow (newIdx);      // [Step-3] new window for the new target
+    g_stopFired = false;       // [Step-3] allow per-window stop (fixedVolume)
+
+    // (4) Install a new BulkSend pointed at the new satellite.
+    BulkSendHelper sender ("ns3::TcpSocketFactory",
+                           InetSocketAddress (newAddr, g_ctx.port));
+    sender.SetAttribute ("MaxBytes", UintegerValue (g_ctx.maxBytes));
+    sender.SetAttribute ("SendSize", UintegerValue (g_ctx.sendSize));
+    ApplicationContainer newApp = sender.Install (g_ctx.uavNode);
+    // Node::AddApplication schedules Initialize() with delay=0 from now.
+    // DoInitialize() then does Schedule(m_startTime, StartApplication).
+    // Using Now() would set m_startTime=349s → StartApplication fires at 698s.
+    // Using Seconds(0) keeps m_startTime=0 → fires immediately at the handoff time.
+    newApp.Start (Seconds (0.0));
+
+    // (5) Re-hook trace sources so the newly-created TCP socket and
+    //     BulkSendApplication Tx events are observed. Same one-shot scheduler
+    //     pattern used at simulation start (avoids racing with socket
+    //     construction inside Start()).
+    Ptr<Application> newAppPtr = newApp.Get (0);
+    Simulator::Schedule (Seconds (1e-7), &connectAfterHandoff, newAppPtr);
+
+    // (6) Re-apply adaptive rate immediately so the device DataRate reflects
+    //     the new geometry without waiting for the next periodic tick.
+    Simulator::Schedule (Seconds (2e-7), &UpdateAdaptiveRate);
 }
 
 // ============================================================================
@@ -663,7 +960,7 @@ main (int argc, char *argv[])
     uint16_t port     = 9;
     uint32_t maxBytes = 10 * 1024 * 1024;
     uint32_t sendSize = 1024;
-    double   duration = 300.0;
+    double   duration = 7200.0;
 
     uint64_t ttlThresh    = 0;
     double   routeTimeout = 300.0;
@@ -836,6 +1133,16 @@ main (int argc, char *argv[])
 
     NetDeviceContainer utNet = utCh.Install (satellites, uavNodes);
 
+    // The library's 2D GetCutoffDistance formula underestimates slant range by ~15%
+    // (returns ~1227km for 55°, but actual slant range at 55° elevation is ~1410km).
+    // Setting the channel's ElevationAngle to 20° (cutoff ~2253km) makes all
+    // operationally-selected satellites (>= band.elevAngleDeg = 55°) physically
+    // reachable. The operational threshold is enforced by handoff/link-down logic.
+    {
+        Ptr<LeoMockChannel> ch = DynamicCast<LeoMockChannel> (utNet.Get (0)->GetChannel ());
+        ch->GetPropagationLoss ()->SetAttribute ("ElevationAngle", DoubleValue (20.0));
+    }
+
     // ------------------------------------------------------------------------
     // 10. Internet stack with AODV
     // ------------------------------------------------------------------------
@@ -859,8 +1166,28 @@ main (int argc, char *argv[])
     ipv4.SetBase ("10.1.0.0", "255.255.0.0");
     Ipv4InterfaceContainer utIf = ipv4.Assign (utNet);
 
+    // [MODIFIED] After resolving targetSatIndex / targetSat / targetAddr,
+    //            populate the globals that callbacks rely on.
     Ipv4Address targetAddr = targetSat->GetObject<Ipv4> ()
                                  ->GetAddress (1, 0).GetLocal ();
+
+    // [Step-2] Populate simulation context (read-only after this point)
+    g_ctx.uavNode    = mainUav;
+    g_ctx.satellites = satellites;
+    g_ctx.utNet      = utNet;
+    g_ctx.utIf       = utIf;
+    g_ctx.band       = band;
+    g_ctx.port       = port;
+    g_ctx.maxBytes   = maxBytes;
+    g_ctx.sendSize   = sendSize;
+
+    // [Step-2] Bootstrap the active target with the initial selection
+    g_active.satNode        = targetSat;
+    g_active.satIdx         = (uint32_t) targetSatIndex;
+    g_active.ipAddr         = targetAddr;
+    g_active.connectTimeSec = 0.0;
+
+    BeginWindow ((uint32_t) targetSatIndex);   // [Step-3] window 1
 
     // ------------------------------------------------------------------------
     // 12. Applications: BulkSend on UAV, PacketSink on every satellite
@@ -886,13 +1213,11 @@ main (int argc, char *argv[])
     // ------------------------------------------------------------------------
     // 13. Schedule trace hookup and adaptive rate updates
     // ------------------------------------------------------------------------
-    Simulator::Schedule (Seconds (1e-7), &connect);
+    Simulator::Schedule (Seconds (1e-7), &connectInitial);
 
     for (double t = rateInterval; t <= duration; t += rateInterval)
     {
-        Simulator::Schedule (Seconds (t), &UpdateAdaptiveRate,
-                             mainUav, targetSat, utNet, band,
-                             (uint32_t) targetSatIndex);
+        Simulator::Schedule (Seconds (t), &UpdateAdaptiveRate);
     }
 
     // ------------------------------------------------------------------------
@@ -916,15 +1241,101 @@ main (int argc, char *argv[])
     NS_LOG_INFO ("Run Simulation.");
     Simulator::Stop (Seconds (duration));
     Simulator::Run ();
+
+    // [Step-3] If the simulation ended while a window was still open (no
+    //          link-down ever fired for the last sat before t=duration),
+    //          close it now using the simulation end time.
+    if (g_windowOpen) CloseWindow (Simulator::Now ().GetSeconds ());
+
     Simulator::Destroy ();
-    NS_LOG_INFO ("Done.");
+
+    // [Step-3] Per-window summary (CSV export comes in Step 4)
+    std::cout << "\n--- Per-Window Effective Throughput ---" << std::endl;
+    std::cout << std::left
+              << std::setw(4)  << "id"   << std::setw(8)  << "sat"
+              << std::setw(12) << "start" << std::setw(12) << "end"
+              << std::setw(11) << "dur"   << std::setw(13) << "rx_bytes"
+              << std::setw(11) << "eff_Mbps" << std::endl;
+    for (auto &w : g_windows)
+    {
+        std::cout << std::left << std::fixed << std::setprecision(2)
+                  << std::setw(4)  << w.windowId
+                  << std::setw(8)  << w.satIdx
+                  << std::setw(12) << w.startTimeSec
+                  << std::setw(12) << w.endTimeSec
+                  << std::setw(11) << (w.endTimeSec - w.startTimeSec)
+                  << std::setw(13) << w.totalRxBytes
+                  << std::setw(11) << std::setprecision(1) << w.avgEffMbps
+                  << std::endl;
+    }
 
     // ------------------------------------------------------------------------
-    // 16. Output results
+    // 16. Compute summary metrics
     // ------------------------------------------------------------------------
     Ptr<PacketSink> pktSink = DynamicCast<PacketSink> (sinkApps.Get (0));
     uint64_t totalRx = pktSink->GetTotalRx ();
 
+    double initBfGain = CalcBeamformingGain (initElevDeg, band.nAnt, band.nRF);
+
+    // Per-packet delay stats
+    double avgDelayMs = 0.0, minDelayMs = 0.0, maxDelayMs = 0.0;
+    int    delayCount = 0;
+    if (!delay.empty ())
+    {
+        double total = 0.0, mn = 1e9, mx = 0.0;
+        for (auto &[uid, d] : delay)
+        {
+            total += d;
+            if (d < mn) mn = d;
+            if (d > mx) mx = d;
+        }
+        delayCount  = (int) delay.size ();
+        avgDelayMs  = (total / delayCount) * 1000.0;
+        minDelayMs  = mn * 1000.0;
+        maxDelayMs  = mx * 1000.0;
+    }
+
+    // Effective throughput (application-layer, computed from Tx/Rx hooks)
+    double effMbps     = 0.0;
+    double measSec     = 0.0;
+    double shannonRef  = shannonMbps;
+    double efficiency  = 0.0;
+    bool   tputValid   = (g_tput.firstTxSec >= 0.0
+                          && g_tput.lastRxSec > g_tput.firstTxSec
+                          && g_tput.totalRxBytes > 0);
+    if (tputValid)
+    {
+        measSec = g_tput.lastRxSec - g_tput.firstTxSec;
+        effMbps = (g_tput.totalRxBytes * 8.0) / (measSec * 1e6);
+
+        double sum = 0.0;
+        int    count = 0;
+        for (auto &r : g_rateLog)
+        {
+            if (r.timeSec >= g_tput.firstTxSec
+                && r.timeSec <= g_tput.lastRxSec
+                && r.rateMbps > 0.001)
+            {
+                sum += r.rateMbps;
+                count++;
+            }
+        }
+        if (count > 0) shannonRef = sum / count;
+        if (shannonRef > 0.0) efficiency = effMbps / shannonRef * 100.0;
+    }
+
+    // Visible time window (first OK→DOWN transition observed in g_rateLog)
+    double visStart = -1.0, visEnd = -1.0;
+    for (auto &r : g_rateLog)
+    {
+        bool down = (r.elevDeg < band.elevAngleDeg);
+        if (!down && visStart < 0)      visStart = r.timeSec;
+        else if (down && visEnd  < 0)   visEnd   = r.timeSec;
+    }
+
+    // ------------------------------------------------------------------------
+    // 17. Terminal output
+    // ------------------------------------------------------------------------
     std::cout << "\n========== UAV-to-LEO Simulation Results ==========" << std::endl;
     std::cout << "UAV node " << mainUav->GetId ()
               << " -> Sat[" << targetSatIndex << "] node "
@@ -933,7 +1344,6 @@ main (int argc, char *argv[])
               << " (" << band.freqGHz << " GHz, BW=" << band.bandwidthGHz * 1000.0
               << " MHz)" << std::endl;
 
-    double initBfGain = CalcBeamformingGain (initElevDeg, band.nAnt, band.nRF);
     if (band.nAnt > 1)
     {
         std::cout << "Beamforming:    nAnt=" << band.nAnt << " nRF=" << band.nRF
@@ -953,7 +1363,6 @@ main (int argc, char *argv[])
     std::cout << "Elev cutoff:    " << band.elevAngleDeg
               << " deg  <-- decides LINK DOWN (from " << band.name << " band spec)"
               << std::endl;
-
     std::cout << "Init link:      dist=" << std::fixed << std::setprecision(1)
               << initDistKm << " km, elev=" << initElevDeg
               << " deg, FSPL=" << fsplDb << " dB, SNR=" << snrDb
@@ -964,40 +1373,33 @@ main (int argc, char *argv[])
 
     if (duration > 0)
     {
-        double throughputMbps = (totalRx * 8.0) / (duration * 1e6);
-        std::cout << "Avg throughput: " << throughputMbps << " Mbps" << std::endl;
+        double avgMbps = (totalRx * 8.0) / (duration * 1e6);
+        std::cout << "Avg throughput: " << avgMbps << " Mbps" << std::endl;
     }
 
-    if (!delay.empty ())
+    if (delayCount > 0)
     {
-        double totalDelay = 0.0, minDelay = 1e9, maxDelay = 0.0, nums = 0;
-        for (auto &[uid, d] : delay)
-        {
-            totalDelay += d; nums += 1;
-            if (d < minDelay) minDelay = d;
-            if (d > maxDelay) maxDelay = d;
-        }
-        std::cout << "Delay:          avg=" << (totalDelay / nums) * 1000.0
-                  << " ms, min=" << minDelay * 1000.0
-                  << " ms, max=" << maxDelay * 1000.0
-                  << " ms (" << (int) nums << " pkts)" << std::endl;
+        std::cout << "Delay:          avg=" << avgDelayMs
+                  << " ms, min=" << minDelayMs
+                  << " ms, max=" << maxDelayMs
+                  << " ms (" << delayCount << " pkts)" << std::endl;
     }
+
+    std::cout << "\n--- Visible Time Window ---" << std::endl;
+    std::cout << "Cutoff:              " << std::fixed << std::setprecision(1)
+              << band.elevAngleDeg << " deg" << std::endl;
+    std::cout << "Rate-log interval:   " << rateInterval << " s" << std::endl;
+    std::cout << "Window start:        " << visStart << " s" << std::endl;
+    std::cout << "Window end:          " << visEnd   << " s" << std::endl;
 
     std::cout << "\n--- Effective Throughput Measurement ---" << std::endl;
     std::cout << "Mode:                "
               << (g_fixedVolume ? "fixed-volume (stop on maxBytes)"
                                 : "fixed-time (run full duration)")
               << std::endl;
-    
 
-    double effMbps;
-    if (g_tput.firstTxSec >= 0.0
-        && g_tput.lastRxSec  >  g_tput.firstTxSec
-        && g_tput.totalRxBytes > 0)
+    if (tputValid)
     {
-        double measSec = g_tput.lastRxSec - g_tput.firstTxSec;
-        effMbps = (g_tput.totalRxBytes * 8.0) / (measSec * 1e6);
-
         std::cout << std::fixed;
         std::cout << "Total Tx bytes:      " << g_tput.totalTxBytes << std::endl;
         std::cout << "Total Rx bytes:      " << g_tput.totalRxBytes << std::endl;
@@ -1008,31 +1410,12 @@ main (int argc, char *argv[])
                                               << measSec * 1000.0 << " ms" << std::endl;
         std::cout << "Effective throughput:" << std::setprecision(3)
                                               << effMbps << " Mbps" << std::endl;
-
-        double shannonRef = shannonMbps;
-        {
-            double sum = 0.0;
-            int    count = 0;
-            for (auto &r : g_rateLog)
-            {
-                if (r.timeSec >= g_tput.firstTxSec
-                    && r.timeSec <= g_tput.lastRxSec
-                    && r.rateMbps > 0.001)
-                {
-                    sum += r.rateMbps;
-                    count++;
-                }
-            }
-            if (count > 0) shannonRef = sum / count;
-        }
-
         if (shannonRef > 0.0)
         {
             std::cout << "Shannon (theoretical):"
                       << std::setprecision(3) << shannonRef << " Mbps" << std::endl;
             std::cout << "Efficiency (eff/Shannon): "
-                      << std::setprecision(1) << (effMbps / shannonRef * 100.0)
-                      << " %" << std::endl;
+                      << std::setprecision(1) << efficiency << " %" << std::endl;
         }
     }
     else
@@ -1045,67 +1428,68 @@ main (int argc, char *argv[])
     std::cout << "=====================================================" << std::endl;
 
     // ------------------------------------------------------------------------
-    // 16. CSV outputs
+    // 18. CSV outputs
     // ------------------------------------------------------------------------
-    // std::filesystem::
-    std::string outputDir = "outputs";
-    if (!std::filesystem::exists(outputDir))
-    {
-        std::filesystem::create_directories(outputDir);
-    }
+    const std::string outputDir = "outputs";
+    if (!std::filesystem::exists (outputDir))
+        std::filesystem::create_directories (outputDir);
 
-    double visStart=-1.0, visEnd=-1.0;
+    // 18a. Per-interval adaptive rate log
     if (!g_rateLog.empty ())
     {
-        std::ofstream rateLogFile;
-        rateLogFile.open(outputDir+"/adaptiveRateLog.csv", std::ios::out);
-        rateLogFile << "Adaptive Rate Log (interval="
-                    << rateInterval << "s)" << std::endl;
-        rateLogFile << "Time,"
-                    << "Dist(km),"
-                    << "Elev,"
-                    << "BF(dB),"
-                    << "SNR,"
-                    << "Rate(Mbps),"
-                    << "Status"
-                    << std::endl;
+        std::ofstream rateLogFile (outputDir + "/adaptiveRateLog.csv");
+        rateLogFile << "Adaptive Rate Log (interval=" << rateInterval << "s)" << std::endl;
+        rateLogFile << "Time,Dist(km),Elev,BF(dB),SNR,Rate(Mbps),Status" << std::endl;
         for (auto &r : g_rateLog)
         {
             bool down = (r.elevDeg < band.elevAngleDeg);
-            if (!down && visStart < 0) visStart = r.timeSec;
-            else if (down && visEnd < 0) visEnd = r.timeSec;
-            
             rateLogFile << std::fixed << std::setprecision(2)
-                        << std::setw(6) << r.timeSec << "s,"
-                        << std::setw(10) << r.distKm << ","
-                        << std::setw(8) << r.elevDeg << "°,"
-                        << std::setw(7) << r.bfGainDb << ","
-                        << std::setw(8) << r.snrDb << " dB,"
+                        << std::setw(6)  << r.timeSec << "s,"
+                        << std::setw(10) << r.distKm  << ","
+                        << std::setw(8)  << r.elevDeg << "°,"
+                        << std::setw(7)  << r.bfGainDb << ","
+                        << std::setw(8)  << r.snrDb << " dB,"
                         << std::setw(11) << r.rateMbps << ","
                         << "  " << (down ? "[DOWN <" : "[OK   >=")
                         << band.elevAngleDeg << "°]" << std::endl;
         }
-        rateLogFile.close();
+        rateLogFile.close ();
     }
 
+    // 18b. Single-row summary of headline metrics
     {
-        std::ofstream resultFile;
-        resultFile.open(outputDir+"/uav-to-leo_result.csv", std::ios::out);
-
+        std::ofstream resultFile (outputDir + "/uav-to-leo_result.csv");
         resultFile << "Effective Throughput (Mbps),"
-                << "Elevation Cutoff (Deg),"
-                << "Visible Time Window Start (s),"
-                << "Visible Time Window End (s)"
-                << std::endl;
-
+                   << "Elevation Cutoff (Deg),"
+                   << "Visible Time Window Start (s),"
+                   << "Visible Time Window End (s)" << std::endl;
         resultFile << std::fixed << std::setprecision(6)
-                << effMbps << ","
-                << band.elevAngleDeg << ","
-                << visStart << ","
-                << visEnd
-                << std::endl;
+                   << effMbps           << ","
+                   << band.elevAngleDeg << ","
+                   << visStart          << ","
+                   << visEnd            << std::endl;
+        resultFile.close ();
+    }
 
-        resultFile.close();
+    // [Step-4] 18c. Per-window visibility log (one row per UAV-satellite
+    //               connection). window_id is the chronological order of
+    //               connections; matches the WindowRecord populated in Step 3.
+    {
+        std::ofstream winFile (outputDir + "/visibility_windows.csv");
+        winFile << "window_id,start_time_sec,end_time_sec,avg_eff_throughput_mbps"
+                << std::endl;
+        for (auto &w : g_windows)
+        {
+            winFile << std::fixed
+                    << w.windowId << ","
+                    << std::setprecision(1) << w.startTimeSec << ","
+                    << std::setprecision(1) << w.endTimeSec   << ","
+                    << std::setprecision(1) << w.avgEffMbps   << std::endl;
+        }
+        winFile.close ();
+        std::cerr << "[Step-4] Wrote " << g_windows.size ()
+                << " visibility windows to " << outputDir
+                << "/visibility_windows.csv" << std::endl;
     }
 
     if (out.is_open ())
