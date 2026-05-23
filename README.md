@@ -24,7 +24,7 @@ Validated inputs so far:
 
 - `schedule_trace.json` — simple topology
 - `topo1.json` — larger topology
-- `topo2.json` — next target
+- `topo2.json` — larger topology
 
 Current repo role:
 
@@ -45,6 +45,37 @@ Main functions:
 - replay sensor upload and slave forwarding tasks
 - maintain UAV buffer dependency
 - report mission summary
+
+#### Master Buffer Trace Handoff:
+Currently, `uav-vanet.cc` is outputting `master_buffer_trace.csv`.
+
+This file contains a **chunk-level trace of data received by the Master/CH UAV**, which can be used as input for the subsequent `Master/CH UAV → LEO` upload phase.
+
+Each column represents a chunk actually received by the Master/CH at a specific point in time.
+
+Currently, LEO upload is not yet integrated, so `masterBufferBytes` will only accumulate and will not decrease due to uploads to LEO.
+
+---
+
+#### CSV Column Format
+
+```csv
+timeSec,event,taskId,type,src,dstMaster,bytesArrived,masterBufferBytes,masterArrivedBytes,totalMasterArrivedBytes
+```
+
+| Column | Meaning |
+|---|---|
+| `timeSec` | NS-3 simulation time, in seconds |
+| `event` | Master buffer event, e.g., `SLAVE_TO_MASTER_RX` or `SENSOR_TO_MASTER_RX` |
+| `taskId` | Transfer task ID from the corresponding schedule JSON |
+| `type` | Original transfer type, e.g., `SLAVE_TO_MASTER` / `SENSOR_TO_UAV` |
+| `src` | Source of data, e.g., `UAV_0` or `Sensor_458` |
+| `dstMaster` | Data received Master/CH UAV |
+| `bytesArrived` | The actual number of bytes received in this chunk |
+| `masterBufferBytes` | The buffer bytes currently accumulated by this Master that have not yet been uploaded to LEO |
+| `masterArrivedBytes` | The total number of bytes accumulated by this Master since the simulation started |
+| `totalMasterArrivedBytes` | The total number of bytes accumulated by all Masters/CHs |
+---
 
 ### `ns3/contrib/leo/examples/calculate_delay.cc`
 Earlier LEO / delay / SNR-rate line.  
