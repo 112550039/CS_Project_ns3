@@ -165,6 +165,25 @@ From the NS-3 root:
   --outFile=/home/demo/Desktop/output_topo1_v1.txt"
 ```
 
+### `uav-vanet` with `topo1.json` with output format of MASTER UAV
+```bash
+./waf --run "uav-vanet \
+  --scheduleFile=/home/demo/ns3/ns-3.35/contrib/leo/examples/topo1.json \
+  --simTime=9000 \
+  --uavAltitude=50 \
+  --accessRange3d=250 \
+  --backhaulRange3d=1500 \
+  --wifiFreqHz=2490000000 \
+  --txPowerDbm=20 \
+  --backhaulBandwidthHz=20000000 \
+  --backhaulNoiseFigureDb=6 \
+  --taskChunkBytes=1024 \
+  --taskGapUs=5000 \
+  --masterUavId=-1 \
+  --masterTraceFile=/home/demo/Desktop/master_buffer_trace.csv \
+  --outFile=/home/demo/Desktop/output_masterbuf_topo1.txt"
+```
+
 ### `uav-link-probe`
 ```bash
 ./waf --run "uav-link-probe \
@@ -184,6 +203,7 @@ From the NS-3 root:
   --outFile=/home/demo/Desktop/uav_link_probe.txt \
   --csvOutFile=/home/demo/Desktop/uav_link_probe.csv"
 ```
+
 ### `uav-to-leo`
 ```bash
 ./waf --run "uav-to-leo \

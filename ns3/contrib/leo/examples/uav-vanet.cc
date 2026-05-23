@@ -107,6 +107,23 @@ static std::map<uint32_t, uint64_t> g_taskRemainingBytes;
 // 每台 UAV 目前「已經從 sensor 收到、可再往上送」的 buffer bytes
 static std::map<uint32_t, uint64_t> g_uavBufferedBytes;
 
+// 每台 Master/CH UAV 目前已經收集好、準備往 LEO 上傳的 buffer bytes
+static std::map<uint32_t, uint64_t> g_masterBufferedBytes;
+
+// 每台 Master/CH UAV 累積收到過的總 bytes，之後可用來和 LEO upload total 對照
+static std::map<uint32_t, uint64_t> g_masterArrivedBytes;
+
+// 所有 Master/CH 累積收到過的總 bytes
+static uint64_t g_totalMasterArrivedBytes = 0;
+
+// 若 >= 0，強制指定某台 UAV 是 master。
+// 若 = -1，則依 ROLE_SET 中的 CH / MASTER 判斷。
+static int32_t g_forcedMasterUavId = -1;
+
+// Master buffer trace CSV
+static std::string g_masterTraceFile = "";
+static std::ofstream g_masterTraceCsv;
+
 // 角色紀錄（ROLE_SET）
 static std::map<uint32_t, std::string> g_uavRoles;
 
@@ -268,6 +285,110 @@ UavRoleIsSlave(uint32_t uavId)
   return (it != g_uavRoles.end() && it->second == "SLAVE");
 }
 
+static bool
+UavRoleIsMaster(uint32_t uavId)
+{
+  if (g_forcedMasterUavId >= 0 &&
+      static_cast<uint32_t>(g_forcedMasterUavId) == uavId)
+  {
+    return true;
+  }
+
+  auto it = g_uavRoles.find(uavId);
+  if (it == g_uavRoles.end())
+  {
+    return false;
+  }
+
+  const std::string& role = it->second;
+  return role == "CH" ||
+         role == "MASTER" ||
+         role == "Master" ||
+         role == "master" ||
+         role == "CLUSTER_HEAD";
+}
+
+static void
+OpenMasterTraceFile(const std::string& path)
+{
+  if (path.empty())
+  {
+    return;
+  }
+
+  g_masterTraceCsv.open(path.c_str(), std::ios::out | std::ios::trunc);
+  if (!g_masterTraceCsv.is_open())
+  {
+    std::cerr << "[WARN] Cannot open masterTraceFile=" << path << "\n";
+    return;
+  }
+
+  g_masterTraceCsv
+      << "timeSec,event,taskId,type,src,dstMaster,"
+      << "bytesArrived,masterBufferBytes,masterArrivedBytes,totalMasterArrivedBytes\n";
+}
+
+static void
+CloseMasterTraceFile()
+{
+  if (g_masterTraceCsv.is_open())
+  {
+    g_masterTraceCsv.close();
+  }
+}
+
+static void
+AccountMasterRxBytes(const ReplayTaskState& st, uint64_t bytesArrived)
+{
+  if (bytesArrived == 0)
+  {
+    return;
+  }
+
+  bool shouldAccount = false;
+  std::string eventName = "";
+
+  // slave -> master：destination 一定視為 master/CH 收到資料
+  if (IsSlaveTask(st))
+  {
+    shouldAccount = true;
+    eventName = "SLAVE_TO_MASTER_RX";
+  }
+  // sensor -> UAV：只有 dst 目前是 CH/master，或由 masterUavId 強制指定時，才算進 master buffer
+  else if (IsSensorTask(st) && UavRoleIsMaster(st.dstIndex))
+  {
+    shouldAccount = true;
+    eventName = "SENSOR_TO_MASTER_RX";
+  }
+
+  if (!shouldAccount)
+  {
+    return;
+  }
+
+  uint32_t masterId = st.dstIndex;
+
+  g_masterBufferedBytes[masterId] += bytesArrived;
+  g_masterArrivedBytes[masterId] += bytesArrived;
+  g_totalMasterArrivedBytes += bytesArrived;
+
+  if (g_masterTraceCsv.is_open())
+  {
+    g_masterTraceCsv
+        << Simulator::Now().GetSeconds() << ","
+        << eventName << ","
+        << st.id << ","
+        << st.type << ","
+        << st.srcName << ","
+        << "UAV_" << masterId << ","
+        << bytesArrived << ","
+        << g_masterBufferedBytes[masterId] << ","
+        << g_masterArrivedBytes[masterId] << ","
+        << g_totalMasterArrivedBytes
+        << "\n";
+  }
+}
+
 static void
 ApplyMove(Ptr<MobilityModel> mob, uint32_t uavId, Vector target)
 {
@@ -411,14 +532,31 @@ CountReplayTaskRx(uint32_t taskId, Ptr<const Packet> pkt, const Address& from)
     return;
   }
 
-  uint32_t sz = pkt->GetSize();
-  st.rxBytes += sz;
+  uint64_t pktSize = pkt->GetSize();
+
+  // 避免極端情況下 rxBytes 超過 targetBytes，後面 buffer accounting 也只計有效 bytes
+  uint64_t missingBeforeRx = 0;
+  if (st.rxBytes < st.targetBytes)
+  {
+    missingBeforeRx = st.targetBytes - st.rxBytes;
+  }
+
+  uint64_t acceptedBytes = std::min<uint64_t>(pktSize, missingBeforeRx);
+  if (acceptedBytes == 0)
+  {
+    return;
+  }
+
+  st.rxBytes += acceptedBytes;
 
   // 如果是 sensor->uav，代表 UAV 真的拿到資料了，buffer 才增加
   if (IsSensorTask(st))
   {
-    g_uavBufferedBytes[st.dstIndex] += sz;
+    g_uavBufferedBytes[st.dstIndex] += acceptedBytes;
   }
+
+  // 新增：若資料已到 CH/master，記到 master buffer，之後可作為 LEO upload input
+  AccountMasterRxBytes(st, acceptedBytes);
 
   if (st.rxBytes >= st.targetBytes)
   {
@@ -765,7 +903,7 @@ int main (int argc, char *argv[])
         double   areaSize = 500.0;   // 地面節點灑點區域邊長（公尺）
 
         // 拓樸控制
-        uint32_t masterUavId = 0;         // 哪一台 UAV 當 master
+        int32_t masterUavId = -1;         // -1 = use ROLE_SET; >=0 = force this UAV as master/CH
         uint32_t maxActiveRelayUavs = 0;  // 0 = 所有非 master UAV 都可 relay；1 = 只開一台；2 = 開兩台...
         bool     relayOnlyTraffic = false; // true = 只讓「啟用 relay 的 UAV 所屬地面節點」送流量
 
@@ -797,6 +935,8 @@ int main (int argc, char *argv[])
         std::string scheduleFile = "";
         uint32_t taskChunkBytes = 1024;   // 每次送出的 payload 大小
         double   taskGapUs = 100.0;       // 每次送 chunk 的間隔 (microseconds)
+        
+        std::string masterTraceFile = "";
 
     CommandLine cmd;
     cmd.AddValue("outFile", "Write all stdout/stderr to this file (empty = console)", outFile);
@@ -814,7 +954,6 @@ int main (int argc, char *argv[])
     cmd.AddValue("backhaulBandwidthHz", "Backhaul bandwidth in Hz for Shannon rate", backhaulBandwidthHz);
     cmd.AddValue("backhaulNoiseFigureDb", "Backhaul noise figure in dB", backhaulNoiseFigureDb);
   
-    cmd.AddValue("masterUavId", "Which UAV acts as the master", masterUavId);
     cmd.AddValue("maxActiveRelayUavs",
              "0=all non-master UAVs relay, 1=only first relay UAV enabled, 2=first two enabled, ...",
              maxActiveRelayUavs);
@@ -832,6 +971,14 @@ int main (int argc, char *argv[])
     cmd.AddValue("scheduleFile", "Path to schedule_trace.json (empty = use old baseline mode)", scheduleFile);
     cmd.AddValue("taskChunkBytes", "Chunk size for each replay task", taskChunkBytes);
     cmd.AddValue("taskGapUs", "Gap (microseconds) between replay chunks", taskGapUs);
+    
+    cmd.AddValue("masterTraceFile",
+             "Optional CSV file for Master/CH buffer arrivals",
+             masterTraceFile);
+
+    cmd.AddValue("masterUavId",
+             "Force a UAV id as Master/CH for master buffer accounting (-1 = use ROLE_SET)",
+             masterUavId);
 
 cmd.Parse(argc, argv);
 
@@ -860,6 +1007,10 @@ if (!outFile.empty())
     std::cerr << "[WARN] Cannot open outFile=" << outFile << ", fallback to console\n";
   }
 }
+
+g_forcedMasterUavId = masterUavId;
+g_masterTraceFile = masterTraceFile;
+OpenMasterTraceFile(g_masterTraceFile);
 
 ScheduleTrace schedule = LoadScheduleTrace(scheduleFile);
 bool useScheduleReplay = true;
@@ -1174,6 +1325,7 @@ std::cout << "[DBG-1] Simulator::Run() START"
 Simulator::Run();
 
 PrintMissionSummary(schedule.missionDeadlineSec);
+CloseMasterTraceFile();
 
 std::cout << "[DBG-END] Simulator::Destroy() BEGIN\n" << std::flush;
 Simulator::Destroy();
