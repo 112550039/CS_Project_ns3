@@ -50,7 +50,7 @@ struct SatBandParams
 };
 
 static const SatBandParams BAND_KU_USER = {
-    "Ku-User", 13.5, 0.25, 64.6, 38.3, 0.0, 0.41, 0.76, 350.1, 55.0, 1, 1
+    "Ku-User", 13.5, 0.25, 64.6, 38.3, 0.0, 0.41, 0.76, 350.1, 40.0, 1, 1
 };
 
 static const SatBandParams BAND_KA_GATEWAY = {
@@ -595,6 +595,18 @@ connect ()
     connectInitial ();
 }
 
+// [Step-5] Sinks-only hookup. Used at t=1e-7 when --csvFile defers the upload:
+//          connectInitial would throw because no BulkSendApplication exists yet
+//          for its wildcard to match. SelectAndStartUpload handles BulkSend +
+//          TCP socket hookups later via connectAfterHandoff.
+void
+connectSinksOnly ()
+{
+    Config::ConnectWithoutContext (
+        "/NodeList/*/ApplicationList/*/$ns3::PacketSink/Rx",
+        MakeCallback (&AppRxTrace));
+}
+
 // ============================================================================
 // Coordinate conversion (geodetic ↔ ECEF)
 // ============================================================================
@@ -735,6 +747,24 @@ struct ActiveTarget
     double         connectTimeSec  = 0.0;
 };
 static ActiveTarget g_active;
+
+// [Step-6] CSV-driven upload-trigger observability. Populated only when
+//          --csvFile is given; consumed by the "--- CSV Upload Trigger ---"
+//          terminal section and csv_trigger.csv for post-run inspection.
+struct CsvTriggerInfo
+{
+    bool        enabled        = false;
+    std::string csvFile;
+    uint64_t    threshold      = 0;
+    double      triggerTimeSec = 0.0;
+    bool        crossed        = false;  ///< true=threshold crossed, false=fell back to last row
+    uint64_t    bytesAtTrigger = 0;
+    int32_t     initialSatIdx  = -1;     ///< t=0 closest pick
+    int32_t     selectedSatIdx = -1;     ///< re-selected at trigger time
+    double      selectedElev   = 0.0;
+    double      selectedDist   = 0.0;
+};
+static CsvTriggerInfo g_csvTrig;
 
 // [Step-2] Forward declaration; defined after UpdateAdaptiveRate.
 static void PerformHandoff ();
@@ -921,6 +951,81 @@ PerformHandoff ()
     Simulator::Schedule (Seconds (2e-7), &UpdateAdaptiveRate);
 }
 
+// [Step-5] Re-evaluate the best visible satellite at trigger time and install
+//          the initial BulkSend against it. Called only when --csvFile defers
+//          the upload to triggerTimeSec > 0, where the t=0 pick is typically
+//          out of view by the time we actually start transmitting.
+static void
+SelectAndStartUpload ()
+{
+    Vector uavPos = g_ctx.uavNode->GetObject<MobilityModel> ()->GetPosition ();
+
+    int32_t bestIdx = -1;
+    double  bestElev = -90.0, bestDist = 0.0;
+    for (uint32_t i = 0; i < g_ctx.satellites.GetN (); i++)
+    {
+        Vector pos = g_ctx.satellites.Get (i)->GetObject<MobilityModel> ()
+                                              ->GetPosition ();
+        double e = ComputeElevationAngle (uavPos, pos);
+        if (e >= g_ctx.band.elevAngleDeg && e > bestElev)
+        {
+            bestElev = e;
+            bestIdx  = (int32_t) i;
+            bestDist = EcefDistance (uavPos, pos) / 1000.0;
+        }
+    }
+
+    double now = Simulator::Now ().GetSeconds ();
+
+    if (bestIdx < 0)
+    {
+        std::cerr << "[CSV] t=" << std::fixed << std::setprecision (2) << now
+                  << "s: WARNING no satellite >= " << g_ctx.band.elevAngleDeg
+                  << "° elev; using stale t=0 pick Sat[" << g_active.satIdx
+                  << "]" << std::endl;
+        bestIdx = (int32_t) g_active.satIdx;
+    }
+    else if ((uint32_t) bestIdx != g_active.satIdx)
+    {
+        std::cerr << "[CSV] t=" << std::fixed << std::setprecision (2) << now
+                  << "s: re-selected target Sat[" << g_active.satIdx
+                  << "] -> Sat[" << bestIdx << "] (elev="
+                  << std::setprecision (2) << bestElev << "°, dist="
+                  << std::setprecision (1) << bestDist << " km)" << std::endl;
+    }
+    else
+    {
+        std::cerr << "[CSV] t=" << std::fixed << std::setprecision (2) << now
+                  << "s: initial pick Sat[" << bestIdx << "] still optimal "
+                  << "(elev=" << std::setprecision (2) << bestElev << "°)"
+                  << std::endl;
+    }
+
+    g_csvTrig.selectedSatIdx = bestIdx;        // [Step-6] record re-selection
+    g_csvTrig.selectedElev   = bestElev;
+    g_csvTrig.selectedDist   = bestDist;
+
+    Ptr<Node> newSat = g_ctx.satellites.Get ((uint32_t) bestIdx);
+    Ipv4Address newAddr = newSat->GetObject<Ipv4> ()
+                                ->GetAddress (1, 0).GetLocal ();
+    g_active.satNode        = newSat;
+    g_active.satIdx         = (uint32_t) bestIdx;
+    g_active.ipAddr         = newAddr;
+    g_active.connectTimeSec = now;
+
+    BulkSendHelper sender ("ns3::TcpSocketFactory",
+                           InetSocketAddress (newAddr, g_ctx.port));
+    sender.SetAttribute ("MaxBytes", UintegerValue (g_ctx.maxBytes));
+    sender.SetAttribute ("SendSize", UintegerValue (g_ctx.sendSize));
+    ApplicationContainer newApp = sender.Install (g_ctx.uavNode);
+    newApp.Start (Seconds (0.0));
+
+    BeginWindow ((uint32_t) bestIdx);
+
+    Ptr<Application> newAppPtr = newApp.Get (0);
+    Simulator::Schedule (Seconds (1e-7), &connectAfterHandoff, newAppPtr);
+}
+
 // ============================================================================
 // Helpers
 // ============================================================================
@@ -933,6 +1038,89 @@ PrintUavPosition (Ptr<Node> uavNode)
     EcefToGeo (pos, lat, lon, altKm);
     std::cerr << "  UAV   lat=" << lat << " lon=" << lon
               << " alt=" << altKm * 1000.0 << " m" << std::endl;
+}
+
+// ============================================================================
+// master_buffer_trace.csv parsing (integration with uav-vanet.cc)
+// ============================================================================
+
+/**
+ * \brief Resolve the LEO upload trigger time from the master buffer trace.
+ *
+ * Scans the CSV for the first row where masterBufferBytes (column 7)
+ * exceeds \p threshold and returns that row's timeSec (column 0).
+ * If no row crosses the threshold, returns the LAST row's timeSec so
+ * the upload still happens, just batched to the end of the trace.
+ * Aborts via exit(1) on file-open failure or empty data.
+ */
+static double
+ResolveUploadTriggerTime (const std::string &csvFile, uint64_t threshold)
+{
+    std::ifstream f (csvFile);
+    if (!f.is_open ())
+    {
+        std::cerr << "[CSV] ERROR: cannot open '" << csvFile << "'" << std::endl;
+        std::exit (1);
+    }
+
+    std::string line;
+    bool sawHeader = false;
+    double lastTimeSec = -1.0;
+    uint64_t dataRows = 0;
+
+    while (std::getline (f, line))
+    {
+        if (line.empty ()) continue;
+
+        if (!sawHeader && line.compare (0, 7, "timeSec") == 0)
+        {
+            sawHeader = true;
+            continue;
+        }
+
+        std::vector<std::string> cols;
+        size_t start = 0;
+        while (true)
+        {
+            size_t comma = line.find (',', start);
+            if (comma == std::string::npos)
+            {
+                cols.push_back (line.substr (start));
+                break;
+            }
+            cols.push_back (line.substr (start, comma - start));
+            start = comma + 1;
+        }
+        if (cols.size () < 8) continue;
+
+        double   timeSec = std::stod (cols[0]);
+        uint64_t bytes   = std::stoull (cols[7]);
+        dataRows++;
+        lastTimeSec = timeSec;
+
+        if (bytes > threshold)
+        {
+            std::cerr << "[CSV] threshold " << threshold
+                      << " B crossed at t=" << std::fixed << std::setprecision(3)
+                      << timeSec << " s (bytes=" << bytes << ")" << std::endl;
+            g_csvTrig.crossed        = true;
+            g_csvTrig.bytesAtTrigger = bytes;
+            return timeSec;
+        }
+    }
+
+    if (dataRows == 0)
+    {
+        std::cerr << "[CSV] ERROR: no data rows in '" << csvFile << "'" << std::endl;
+        std::exit (1);
+    }
+
+    std::cerr << "[CSV] threshold " << threshold
+              << " B never crossed (max buffer < threshold). Falling back to "
+              << "last row t=" << std::fixed << std::setprecision(3)
+              << lastTimeSec << " s." << std::endl;
+    g_csvTrig.crossed = false;
+    return lastTimeSec;
 }
 
 NS_LOG_COMPONENT_DEFINE ("UavToLeoExample");
@@ -972,6 +1160,9 @@ main (int argc, char *argv[])
     int         nRF  = 4;
     bool        fixedVolume = true;
 
+    std::string csvFile;
+    uint64_t    bufferThreshold = 10000;   // bytes; upload triggers once master buffer exceeds this
+
     // ------------------------------------------------------------------------
     // 2. Parse command line
     // ------------------------------------------------------------------------
@@ -998,7 +1189,33 @@ main (int argc, char *argv[])
     cmd.AddValue ("fixedVolume",    "Stop simulation when maxBytes received "
                                     "(default true; pass false to run full duration)",
                                     fixedVolume);
+    cmd.AddValue ("csvFile",        "master_buffer_trace.csv from uav-vanet "
+                                    "(empty = start at t=0)", csvFile);
+    cmd.AddValue ("bufferThreshold","Trigger upload once masterBufferBytes "
+                                    "exceeds this (bytes); falls back to last "
+                                    "row if never crossed", bufferThreshold);
     cmd.Parse (argc, argv);
+
+    double triggerTimeSec = 0.0;
+    if (!csvFile.empty ())
+    {
+        triggerTimeSec = ResolveUploadTriggerTime (csvFile, bufferThreshold);
+        std::cerr << "[CSV] Upload trigger time: "
+                  << std::fixed << std::setprecision(3)
+                  << triggerTimeSec << " s (threshold=" << bufferThreshold
+                  << " B)" << std::endl;
+        if (triggerTimeSec >= duration)
+        {
+            std::cerr << "ERROR: triggerTimeSec (" << triggerTimeSec
+                      << ") >= duration (" << duration
+                      << "). Increase --duration." << std::endl;
+            return 1;
+        }
+        g_csvTrig.enabled        = true;     // [Step-6] observability
+        g_csvTrig.csvFile        = csvFile;
+        g_csvTrig.threshold      = bufferThreshold;
+        g_csvTrig.triggerTimeSec = triggerTimeSec;
+    }
 
     g_fixedVolume = fixedVolume;
     g_volumeBytes = maxBytes;
@@ -1102,6 +1319,7 @@ main (int argc, char *argv[])
 
     Ptr<Node> targetSat = satellites.Get ((uint32_t) targetSatIndex);
     std::cerr << "  Selected: Sat[" << targetSatIndex << "]" << std::endl;
+    g_csvTrig.initialSatIdx = targetSatIndex;   // [Step-6] t=0 pick for comparison
 
     // ------------------------------------------------------------------------
     // 9. Initial link budget + LEO channel setup
@@ -1187,17 +1405,26 @@ main (int argc, char *argv[])
     g_active.ipAddr         = targetAddr;
     g_active.connectTimeSec = 0.0;
 
-    BeginWindow ((uint32_t) targetSatIndex);   // [Step-3] window 1
-
     // ------------------------------------------------------------------------
     // 12. Applications: BulkSend on UAV, PacketSink on every satellite
     // ------------------------------------------------------------------------
-    BulkSendHelper sender ("ns3::TcpSocketFactory",
-                           InetSocketAddress (targetAddr, port));
-    sender.SetAttribute ("MaxBytes", UintegerValue (maxBytes));
-    sender.SetAttribute ("SendSize", UintegerValue (sendSize));
-    ApplicationContainer sourceApps = sender.Install (mainUav);
-    sourceApps.Start (Seconds (0.0));
+    if (triggerTimeSec > 0.0)
+    {
+        // [Step-5] Defer target re-selection + BulkSend install to trigger
+        //          time; the t=0 pick is typically out of view by then.
+        Simulator::Schedule (Seconds (triggerTimeSec), &SelectAndStartUpload);
+    }
+    else
+    {
+        BeginWindow ((uint32_t) targetSatIndex);   // [Step-3] window 1
+
+        BulkSendHelper sender ("ns3::TcpSocketFactory",
+                               InetSocketAddress (targetAddr, port));
+        sender.SetAttribute ("MaxBytes", UintegerValue (maxBytes));
+        sender.SetAttribute ("SendSize", UintegerValue (sendSize));
+        ApplicationContainer sourceApps = sender.Install (mainUav);
+        sourceApps.Start (Seconds (0.0));
+    }
 
     ApplicationContainer sinkApps;
     PacketSinkHelper sinkHelper ("ns3::TcpSocketFactory",
@@ -1206,16 +1433,18 @@ main (int argc, char *argv[])
     {
         ApplicationContainer app = sinkHelper.Install (satellites.Get (i));
         app.Start (Seconds (0.0));
-        if (i == (uint32_t) targetSatIndex)
-            sinkApps.Add (app);
+        sinkApps.Add (app);  // [Step-5] track all sinks: handoffs spread Rx
     }
 
     // ------------------------------------------------------------------------
     // 13. Schedule trace hookup and adaptive rate updates
     // ------------------------------------------------------------------------
-    Simulator::Schedule (Seconds (1e-7), &connectInitial);
+    if (triggerTimeSec > 0.0)
+        Simulator::Schedule (Seconds (1e-7), &connectSinksOnly);
+    else
+        Simulator::Schedule (Seconds (1e-7), &connectInitial);
 
-    for (double t = rateInterval; t <= duration; t += rateInterval)
+    for (double t = triggerTimeSec + rateInterval; t <= duration; t += rateInterval)
     {
         Simulator::Schedule (Seconds (t), &UpdateAdaptiveRate);
     }
@@ -1272,8 +1501,12 @@ main (int argc, char *argv[])
     // ------------------------------------------------------------------------
     // 16. Compute summary metrics
     // ------------------------------------------------------------------------
-    Ptr<PacketSink> pktSink = DynamicCast<PacketSink> (sinkApps.Get (0));
-    uint64_t totalRx = pktSink->GetTotalRx ();
+    uint64_t totalRx = 0;
+    for (uint32_t i = 0; i < sinkApps.GetN (); i++)
+    {
+        Ptr<PacketSink> ps = DynamicCast<PacketSink> (sinkApps.Get (i));
+        if (ps) totalRx += ps->GetTotalRx ();
+    }
 
     double initBfGain = CalcBeamformingGain (initElevDeg, band.nAnt, band.nRF);
 
@@ -1368,8 +1601,8 @@ main (int argc, char *argv[])
               << " deg, FSPL=" << fsplDb << " dB, SNR=" << snrDb
               << " dB, Shannon=" << shannonMbps << " Mbps" << std::endl;
     std::cout << "Duration:       " << duration << " s" << std::endl;
-    std::cout << "Bytes:          " << totalRx << " / " << maxBytes << " received"
-              << std::endl;
+    std::cout << "Bytes received: " << totalRx
+              << " (across all sat sinks)" << std::endl;
 
     if (duration > 0)
     {
@@ -1383,6 +1616,29 @@ main (int argc, char *argv[])
                   << " ms, min=" << minDelayMs
                   << " ms, max=" << maxDelayMs
                   << " ms (" << delayCount << " pkts)" << std::endl;
+    }
+
+    if (g_csvTrig.enabled)
+    {
+        std::cout << "\n--- CSV Upload Trigger ---" << std::endl;
+        std::cout << "Source CSV:          " << g_csvTrig.csvFile << std::endl;
+        std::cout << "Buffer threshold:    " << g_csvTrig.threshold
+                  << " B" << std::endl;
+        std::cout << "Trigger time:        " << std::fixed << std::setprecision(3)
+                  << g_csvTrig.triggerTimeSec << " s ("
+                  << (g_csvTrig.crossed
+                        ? "threshold crossed"
+                        : "never crossed -> last CSV row")
+                  << ")" << std::endl;
+        if (g_csvTrig.crossed)
+            std::cout << "Buffer at trigger:   " << g_csvTrig.bytesAtTrigger
+                      << " B" << std::endl;
+        std::cout << "Initial (t=0) pick:  Sat[" << g_csvTrig.initialSatIdx
+                  << "]" << std::endl;
+        std::cout << "Re-selected target:  Sat[" << g_csvTrig.selectedSatIdx
+                  << "] (elev=" << std::setprecision(2) << g_csvTrig.selectedElev
+                  << " deg, dist=" << std::setprecision(1) << g_csvTrig.selectedDist
+                  << " km)" << std::endl;
     }
 
     std::cout << "\n--- Visible Time Window ---" << std::endl;
@@ -1490,6 +1746,30 @@ main (int argc, char *argv[])
         std::cerr << "[Step-4] Wrote " << g_windows.size ()
                 << " visibility windows to " << outputDir
                 << "/visibility_windows.csv" << std::endl;
+    }
+
+    // [Step-6] 18d. CSV-trigger outcome (one row; for the shell pipeline /
+    //               post-run inspection). Written only when --csvFile is used.
+    if (g_csvTrig.enabled)
+    {
+        std::ofstream trigFile (outputDir + "/csv_trigger.csv");
+        trigFile << "source_csv,threshold_bytes,trigger_time_sec,"
+                    "threshold_crossed,buffer_at_trigger_bytes,"
+                    "initial_sat,selected_sat,selected_elev_deg,selected_dist_km"
+                 << std::endl;
+        trigFile << g_csvTrig.csvFile << ","
+                 << g_csvTrig.threshold << ","
+                 << std::fixed << std::setprecision(3)
+                 << g_csvTrig.triggerTimeSec << ","
+                 << (g_csvTrig.crossed ? 1 : 0) << ","
+                 << g_csvTrig.bytesAtTrigger << ","
+                 << g_csvTrig.initialSatIdx << ","
+                 << g_csvTrig.selectedSatIdx << ","
+                 << std::setprecision(2) << g_csvTrig.selectedElev << ","
+                 << std::setprecision(1) << g_csvTrig.selectedDist << std::endl;
+        trigFile.close ();
+        std::cerr << "[Step-6] Wrote CSV-trigger summary to "
+                  << outputDir << "/csv_trigger.csv" << std::endl;
     }
 
     if (out.is_open ())
