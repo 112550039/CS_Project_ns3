@@ -13,6 +13,8 @@ Current focus:
 Current mainline components:
 - **`uav-vanet.cc`** — schedule-driven replay / verification engine
 - **`uav-link-probe.cc`** — UAV-to-UAV probing tool for slave-to-master link measurement
+- **`uav-to-leo.cc`** — Master/CH UAV to LEO uplink simulator
+- **`run_e2e_batch.sh` / `make_e2e_summary.py`** — first-stage batch pipeline scripts
 
 It is no longer the old random baseline simulator. It now acts as a **schedule-driven replay / verification engine**.
 
@@ -30,7 +32,9 @@ Current repo role:
 
 - **implemented:** schedule replay / mission verification
 - **implemented (initial):** UAV-to-UAV probing for slave-to-master links
-- **not yet complete:** UAV-to-LEO integration, beamforming comparison, full scheduler feedback loop
+- **implemented (initial):** Master buffer trace handoff from `uav-vanet.cc` to `uav-to-leo.cc`
+- **partially connected:** first-stage batch pipeline through CSV handoff
+- **not yet complete:** fully synchronized end-to-end NS-3 pipeline, slot-based progress observation, full scheduler feedback loop
 
 ---
 
@@ -93,6 +97,24 @@ Main functions:
 Current note:
 - conservative probe pacing can under-drive the link, so throughput results should be re-tested with more aggressive probing intervals before final use in scheduling
 
+### `ns3/contrib/leo/examples/run_e2e_batch.sh`
+First-stage batch pipeline script.
+
+Main flow:
+- run `uav-vanet` with a schedule JSON
+- generate `master_buffer_trace.csv`
+- extract `totalMasterArrivedBytes`
+- pass the total volume and CSV trigger file to `uav-to-leo`
+- generate a short `pipeline_summary.csv`
+
+Current note:
+- this is a **file-based batch handoff**, not a fully synchronized single-simulator pipeline yet
+- recent testing shows `uav-vanet` finishes normally, but `uav-to-leo` fixed-volume termination / handoff behavior still needs further debugging when running the full batch pipeline
+
+### `ns3/contrib/leo/examples/make_e2e_summary.py`
+Helper script used by `run_e2e_batch.sh`.
+It parses `output_vanet.txt`, `master_buffer_trace.csv`, `output_uav_to_leo.txt`, and available LEO CSV outputs, then writes `pipeline_summary.csv`.
+
 ### JSON inputs
 - `schedule_trace.json`
 - `topo1.json`
@@ -144,6 +166,8 @@ repo/
 │     ├─ uav-vanet.cc
 │     ├─ uav-link-probe.cc
 │     ├─ uav-to-leo.cc
+│     ├─ run_e2e_batch.sh
+│     ├─ make_e2e_summary.py
 │     ├─ wscript
 │     ├─ schedule_trace.json
 │     ├─ topo1.json
@@ -276,3 +300,31 @@ From the NS-3 root:
 - project thesis slides: *Hierarchical Deadline-Aware Data Collection in UAV-Assisted SAGIN*
 - `calculate_delay.cc`
 - `uav-vanet.cc`
+
+
+### First-stage E2E batch pipeline
+
+The helper scripts are currently placed under `contrib/leo/examples/`.
+`wscript` does not need to register `.sh` or `.py` files; it only needs the C++ programs such as `uav-vanet`, `uav-link-probe`, and `uav-to-leo`.
+
+```bash
+cd ~/ns3/ns-3.35
+chmod +x contrib/leo/examples/run_e2e_batch.sh
+chmod +x contrib/leo/examples/make_e2e_summary.py
+./contrib/leo/examples/run_e2e_batch.sh contrib/leo/examples/topo1.json topo1
+```
+
+Expected output directory:
+
+```text
+outputs/e2e_topo1_<timestamp>/
+├─ output_vanet.txt
+├─ master_buffer_trace.csv
+├─ output_uav_to_leo.txt
+└─ pipeline_summary.csv
+```
+
+Current known issue:
+- `uav-vanet` output and `master_buffer_trace.csv` are generated correctly in the current tests.
+- `uav-to-leo` may still run for too long in the full batch pipeline; the fixed-volume stop condition / dynamic handoff behavior is under debugging.
+

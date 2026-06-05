@@ -12,9 +12,9 @@ Current goal:
 
 Current task flow:
 
-**Sensor -> Slave UAV -> CH / Master UAV**
+**Sensor -> Slave UAV -> CH / Master UAV -> LEO**
 
-At this stage, the code is mainly the **NS-3-side replay / verifier**.
+At this stage, `uav-vanet.cc` is the **NS-3-side replay / verifier** for the UAV-side collection path, and `uav-to-leo.cc` is the separate Master/CH UAV to LEO uplink simulator. A first-stage batch handoff between the two has been added through CSV files, but the fully synchronized end-to-end simulator is not complete yet.
 
 ---
 
@@ -36,6 +36,11 @@ The project started from the Lab2 / LEO setup:
 - replays `SENSOR_TO_UAV`
 - replays `SLAVE_TO_MASTER`
 - tracks task completion and mission finish times
+
+Recent update:
+- `uav-vanet.cc` now outputs `master_buffer_trace.csv`, recording chunk-level data arrival at the Master/CH UAV.
+- `uav-to-leo.cc` has been added to the build through `wscript` and can consume the master buffer CSV as the first handoff input.
+- `run_e2e_batch.sh` and `make_e2e_summary.py` were added under `contrib/leo/examples/` to run the first-stage batch pipeline and summarize outputs.
 
 Important internal logic:
 - transfer events become replay tasks
@@ -64,6 +69,14 @@ Next topology to test.
 
 ### `uav-link-probe.cc`
 Current UAV-to-UAV probing tool.
+
+### `uav-to-leo.cc`
+Master/CH UAV to LEO uplink simulator.
+It computes satellite link budget / capacity and is now used after `uav-vanet` through the master buffer CSV handoff.
+
+### `run_e2e_batch.sh` / `make_e2e_summary.py`
+First-stage batch pipeline helper scripts.
+They run `uav-vanet`, extract the master-arrived bytes, invoke `uav-to-leo`, and generate `pipeline_summary.csv`.
 
 ---
 
@@ -94,6 +107,19 @@ Current limitation:
 - with conservative probe pacing, measured throughput may be limited by application sending interval rather than the actual wireless link capacity
 - further parameter sweeps are still needed before producing the final throughput table for scheduling
 
+### Master buffer handoff / batch E2E test
+`uav-vanet.cc` can now generate `master_buffer_trace.csv`, which records Master/CH-side received data for the next LEO upload phase.
+
+A first-stage batch pipeline has been added:
+
+```text
+uav-vanet -> master_buffer_trace.csv -> uav-to-leo -> pipeline_summary.csv
+```
+
+Current observed status:
+- `uav-vanet` finishes and generates `output_vanet.txt` / `master_buffer_trace.csv` correctly.
+- `uav-to-leo` can read the CSV trigger information, but the full batch run may still take too long; fixed-volume termination and dynamic handoff behavior need further debugging.
+
 ---
 
 ## 5. Current limitations
@@ -103,8 +129,10 @@ Still missing or not fully integrated yet:
 1. initial slave-to-master probing throughput mode is implemented, but still needs:
    - parameter tuning for more discriminative throughput measurement
    - final teammate-aligned output format confirmation
-2. UAV-to-LEO / beamforming integration
-3. full scheduler feedback loop
+2. UAV-to-LEO / beamforming line exists, but its full batch-pipeline termination behavior still needs debugging
+3. fully synchronized single-simulator E2E pipeline is not complete yet
+4. slot-based progress trace is not implemented yet
+5. full scheduler feedback loop
 
 So the current repo should be described as:
 
@@ -114,9 +142,11 @@ So the current repo should be described as:
 
 ## 6. Immediate next steps
 
-1. refine `uav-link-probe.cc` probing parameters and validate more discriminative throughput results
-2. align final scheduler input/output format with teammates
-3. later connect the UAV-side replay with the UAV-to-LEO / beamforming line
+1. continue debugging `uav-to-leo.cc` fixed-volume completion / handoff behavior in the batch pipeline
+2. keep the current CSV handoff as the short-term integration path
+3. add slot-based progress output later: arrived bytes, uploaded bytes, remaining bytes per slot
+4. align final scheduler input/output format with teammates
+5. later merge the two simulator lines into a synchronized E2E NS-3 program if needed
 
 ---
 
@@ -126,4 +156,4 @@ If continuing from this repo:
 
 - treat `uav-vanet.cc` as the current mainline
 - use `schedule_trace.json` and `topo1.json` as reference inputs
-- keep future changes focused on schedule-driven replay, throughput probing, and LEO integration
+- keep future changes focused on schedule-driven replay, throughput probing, LEO integration, and slot-based progress reporting
