@@ -1,2 +1,2 @@
 source_csv,threshold_bytes,trigger_time_sec,threshold_crossed,buffer_at_trigger_bytes,initial_sat,selected_sat,selected_elev_deg,selected_dist_km
-/home/demo/ns3/ns-3.35/outputs/e2e_scheduler_ta_20260613_115947/master_buffer_trace.csv,0,78.862,1,1024,38,38,56.75,1388.7
+/home/demo/ns3/ns-3.35/outputs/e2e_scheduler_new_20260614_001944/master_buffer_trace.csv,0,123.999,1,362,38,142,52.84,1442.2

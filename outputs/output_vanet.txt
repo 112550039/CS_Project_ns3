@@ -1,0 +1,1618 @@
+[SCHEDULE] file=contrib/leo/examples/scheduler_trace_vanet.json uavs=4 sensors=499 transfers=619 moves=156 roles=833 missionDeadlineSec=3600 lastEventSec=3580.83 latestTransferAbsDeadlineSec=11532.4 simTime=11592.4
+Total ground nodes: 499
+Schedule-driven mode: loaded exact sensor positions from JSON
+[IP-PLAN] accessHosts=503 accessPrefix=/23 backhaulHosts=4 backhaulPrefix=/29
+[ReplayMode] transfers=619 sensorTasks=405 slaveTasks=214 taskChunkBytes=1024 taskGapUs=5000
+[DBG-1] Simulator::Run() START (scheduleMode=1, simTime=11592.4, nUav=4, nGround=499, transfers=619, taskChunkBytes=1024, taskGapUs=5000)
+[MOVE] t=72.5645 UAV[0] -> (714.621, 821.023, 50)
+[MOVE] t=72.5645 UAV[1] -> (714.621, 821.023, 50)
+[MOVE] t=72.5645 UAV[2] -> (714.621, 821.023, 50)
+[MOVE] t=72.5645 UAV[3] -> (714.621, 821.023, 50)
+[ROLE] t=123.667 UAV[0] = SLAVE
+[TASK-DONE] id=1 type=SENSOR_TO_UAV Sensor_488->UAV_0 bytes=362 finishSec=123.675 durationSec=0.0077905 metDeadline=YES
+[ROLE] t=123.992 UAV[0] = SLAVE
+[ROLE] t=123.992 UAV[1] = MASTER
+[TASK-DONE] id=2 type=SLAVE_TO_MASTER UAV_0->UAV_1 bytes=362 finishSec=123.999 durationSec=0.00691 metDeadline=YES
+[ROLE] t=124.038 UAV[0] = SLAVE
+[TASK-DONE] id=3 type=SENSOR_TO_UAV Sensor_0->UAV_0 bytes=1550 finishSec=124.05 durationSec=0.0122868 metDeadline=YES
+[ROLE] t=125.274 UAV[0] = SLAVE
+[ROLE] t=125.274 UAV[1] = MASTER
+[TASK-DONE] id=4 type=SLAVE_TO_MASTER UAV_0->UAV_1 bytes=1550 finishSec=125.28 durationSec=0.005868 metDeadline=YES
+[ROLE] t=125.469 UAV[0] = SLAVE
+[TASK-DONE] id=5 type=SENSOR_TO_UAV Sensor_232->UAV_0 bytes=1500 finishSec=125.482 durationSec=0.0126468 metDeadline=YES
+[ROLE] t=126.804 UAV[0] = SLAVE
+[ROLE] t=126.804 UAV[1] = MASTER
+[TASK-DONE] id=6 type=SLAVE_TO_MASTER UAV_0->UAV_1 bytes=1500 finishSec=126.81 durationSec=0.0058 metDeadline=YES
+[ROLE] t=129.494 UAV[3] = SLAVE
+[TASK-DONE] id=7 type=SENSOR_TO_UAV Sensor_388->UAV_3 bytes=1150 finishSec=129.5 durationSec=0.00533617 metDeadline=YES
+[ROLE] t=129.992 UAV[0] = MASTER
+[TASK-DONE] id=8 type=SENSOR_TO_UAV Sensor_494->UAV_0 bytes=1295 finishSec=129.998 durationSec=0.00552817 metDeadline=YES
+[ROLE] t=130.328 UAV[3] = SLAVE
+[ROLE] t=130.328 UAV[1] = MASTER
+[TASK-DONE] id=9 type=SLAVE_TO_MASTER UAV_3->UAV_1 bytes=1150 finishSec=130.333 durationSec=0.00531 metDeadline=YES
+[ROLE] t=130.472 UAV[3] = SLAVE
+[TASK-DONE] id=10 type=SENSOR_TO_UAV Sensor_487->UAV_3 bytes=1200 finishSec=130.478 durationSec=0.00540017 metDeadline=YES
+[ROLE] t=131.01 UAV[0] = MASTER
+[TASK-DONE] id=11 type=SENSOR_TO_UAV Sensor_193->UAV_0 bytes=1480 finishSec=131.018 durationSec=0.00834683 metDeadline=YES
+[ROLE] t=131.33 UAV[3] = SLAVE
+[ROLE] t=131.33 UAV[1] = MASTER
+[TASK-DONE] id=12 type=SLAVE_TO_MASTER UAV_3->UAV_1 bytes=1200 finishSec=131.336 durationSec=0.0054 metDeadline=YES
+[ROLE] t=131.481 UAV[3] = SLAVE
+[TASK-DONE] id=13 type=SENSOR_TO_UAV Sensor_305->UAV_3 bytes=1565 finishSec=131.495 durationSec=0.0133268 metDeadline=YES
+[ROLE] t=131.55 UAV[1] = MASTER
+[TASK-DONE] id=14 type=SENSOR_TO_UAV Sensor_41->UAV_1 bytes=1250 finishSec=131.556 durationSec=0.00554284 metDeadline=YES
+[ROLE] t=131.889 UAV[2] = SLAVE
+[TASK-DONE] id=15 type=SENSOR_TO_UAV Sensor_15->UAV_2 bytes=383 finishSec=131.892 durationSec=0.0029185 metDeadline=YES
+[ROLE] t=132.172 UAV[0] = MASTER
+[ROLE] t=132.178 UAV[2] = SLAVE
+[ROLE] t=132.178 UAV[1] = MASTER
+[TASK-DONE] id=17 type=SLAVE_TO_MASTER UAV_2->UAV_1 bytes=383 finishSec=132.18 durationSec=0.001798 metDeadline=YES
+[TASK-DONE] id=16 type=SENSOR_TO_UAV Sensor_255->UAV_0 bytes=1495 finishSec=132.186 durationSec=0.0136068 metDeadline=YES
+[ROLE] t=132.226 UAV[2] = SLAVE
+[TASK-DONE] id=18 type=SENSOR_TO_UAV Sensor_431->UAV_2 bytes=972 finishSec=132.233 durationSec=0.0066865 metDeadline=YES
+[ROLE] t=132.479 UAV[1] = MASTER
+[TASK-DONE] id=19 type=SENSOR_TO_UAV Sensor_180->UAV_1 bytes=1310 finishSec=132.489 durationSec=0.0105068 metDeadline=YES
+[ROLE] t=132.626 UAV[3] = SLAVE
+[ROLE] t=132.626 UAV[1] = MASTER
+[TASK-DONE] id=20 type=SLAVE_TO_MASTER UAV_3->UAV_1 bytes=1565 finishSec=132.632 durationSec=0.005888 metDeadline=YES
+[ROLE] t=132.915 UAV[2] = SLAVE
+[ROLE] t=132.915 UAV[1] = MASTER
+[TASK-DONE] id=21 type=SLAVE_TO_MASTER UAV_2->UAV_1 bytes=972 finishSec=132.917 durationSec=0.001464 metDeadline=YES
+[ROLE] t=133.037 UAV[2] = SLAVE
+[TASK-DONE] id=22 type=SENSOR_TO_UAV Sensor_53->UAV_2 bytes=1475 finishSec=133.043 durationSec=0.00580283 metDeadline=YES
+[ROLE] t=133.415 UAV[1] = MASTER
+[TASK-DONE] id=23 type=SENSOR_TO_UAV Sensor_478->UAV_1 bytes=1505 finishSec=133.425 durationSec=0.0103668 metDeadline=YES
+[ROLE] t=134.115 UAV[2] = SLAVE
+[ROLE] t=134.115 UAV[1] = MASTER
+[TASK-DONE] id=24 type=SLAVE_TO_MASTER UAV_2->UAV_1 bytes=1475 finishSec=134.121 durationSec=0.005768 metDeadline=YES
+[ROLE] t=134.301 UAV[2] = SLAVE
+[TASK-DONE] id=25 type=SENSOR_TO_UAV Sensor_58->UAV_2 bytes=1570 finishSec=134.313 durationSec=0.0115268 metDeadline=YES
+[ROLE] t=134.538 UAV[1] = MASTER
+[TASK-DONE] id=26 type=SENSOR_TO_UAV Sensor_442->UAV_1 bytes=1675 finishSec=134.544 durationSec=0.00603617 metDeadline=YES
+[ROLE] t=135.48 UAV[2] = SLAVE
+[ROLE] t=135.48 UAV[1] = MASTER
+[TASK-DONE] id=27 type=SLAVE_TO_MASTER UAV_2->UAV_1 bytes=1570 finishSec=135.486 durationSec=0.005896 metDeadline=YES
+[ROLE] t=143.122 UAV[1] = SLAVE
+[TASK-DONE] id=28 type=SENSOR_TO_UAV Sensor_142->UAV_1 bytes=1395 finishSec=143.135 durationSec=0.0133668 metDeadline=YES
+[ROLE] t=144.476 UAV[1] = SLAVE
+[ROLE] t=144.476 UAV[0] = MASTER
+[TASK-DONE] id=29 type=SLAVE_TO_MASTER UAV_1->UAV_0 bytes=1395 finishSec=144.482 durationSec=0.00566 metDeadline=YES
+[ROLE] t=144.652 UAV[1] = SLAVE
+[TASK-DONE] id=30 type=SENSOR_TO_UAV Sensor_324->UAV_1 bytes=1475 finishSec=144.658 durationSec=0.00576817 metDeadline=YES
+[ROLE] t=146.012 UAV[1] = SLAVE
+[ROLE] t=146.012 UAV[0] = MASTER
+[TASK-DONE] id=31 type=SLAVE_TO_MASTER UAV_1->UAV_0 bytes=1475 finishSec=146.018 durationSec=0.005768 metDeadline=YES
+[ROLE] t=146.198 UAV[1] = SLAVE
+[TASK-DONE] id=32 type=SENSOR_TO_UAV Sensor_399->UAV_1 bytes=1695 finishSec=146.204 durationSec=0.00606017 metDeadline=YES
+[ROLE] t=147.844 UAV[1] = SLAVE
+[ROLE] t=147.844 UAV[0] = MASTER
+[TASK-DONE] id=33 type=SLAVE_TO_MASTER UAV_1->UAV_0 bytes=1695 finishSec=147.85 durationSec=0.00606 metDeadline=YES
+[ROLE] t=206.221 UAV[2] = MASTER
+[TASK-DONE] id=34 type=SENSOR_TO_UAV Sensor_429->UAV_2 bytes=1106 finishSec=206.234 durationSec=0.0136468 metDeadline=YES
+[ROLE] t=249.041 UAV[3] = MASTER
+[TASK-DONE] id=35 type=SENSOR_TO_UAV Sensor_159->UAV_3 bytes=369 finishSec=249.05 durationSec=0.0089025 metDeadline=YES
+[ROLE] t=249.393 UAV[3] = MASTER
+[TASK-DONE] id=36 type=SENSOR_TO_UAV Sensor_211->UAV_3 bytes=1080 finishSec=249.407 durationSec=0.0135068 metDeadline=YES
+[ROLE] t=250.289 UAV[3] = MASTER
+[TASK-DONE] id=37 type=SENSOR_TO_UAV Sensor_339->UAV_3 bytes=1130 finishSec=250.301 durationSec=0.0124268 metDeadline=YES
+[ROLE] t=251.294 UAV[3] = MASTER
+[TASK-DONE] id=38 type=SENSOR_TO_UAV Sensor_482->UAV_3 bytes=1585 finishSec=251.3 durationSec=0.00591617 metDeadline=YES
+[ROLE] t=252.593 UAV[3] = MASTER
+[TASK-DONE] id=39 type=SENSOR_TO_UAV Sensor_43->UAV_3 bytes=1520 finishSec=252.598 durationSec=0.00582817 metDeadline=YES
+[MOVE] t=263.441 UAV[0] -> (849.704, 861.392, 50)
+[MOVE] t=263.441 UAV[1] -> (849.704, 861.392, 50)
+[MOVE] t=263.441 UAV[2] -> (849.704, 861.392, 50)
+[MOVE] t=263.441 UAV[3] -> (849.704, 861.392, 50)
+[ROLE] t=265.863 UAV[0] = SLAVE
+[TASK-DONE] id=40 type=SENSOR_TO_UAV Sensor_226->UAV_0 bytes=1218 finishSec=265.868 durationSec=0.00542417 metDeadline=YES
+[ROLE] t=266.714 UAV[0] = SLAVE
+[ROLE] t=266.714 UAV[1] = MASTER
+[TASK-DONE] id=41 type=SLAVE_TO_MASTER UAV_0->UAV_1 bytes=1218 finishSec=266.719 durationSec=0.005424 metDeadline=YES
+[ROLE] t=272.271 UAV[1] = MASTER
+[TASK-DONE] id=42 type=SENSOR_TO_UAV Sensor_98->UAV_1 bytes=1013 finishSec=272.278 durationSec=0.0066785 metDeadline=YES
+[ROLE] t=273.041 UAV[1] = MASTER
+[TASK-DONE] id=43 type=SENSOR_TO_UAV Sensor_382->UAV_1 bytes=1395 finishSec=273.051 durationSec=0.0102868 metDeadline=YES
+[ROLE] t=279.026 UAV[2] = SLAVE
+[TASK-DONE] id=44 type=SENSOR_TO_UAV Sensor_179->UAV_2 bytes=1435 finishSec=279.037 durationSec=0.0115268 metDeadline=YES
+[ROLE] t=280.056 UAV[2] = SLAVE
+[ROLE] t=280.056 UAV[1] = MASTER
+[TASK-DONE] id=45 type=SLAVE_TO_MASTER UAV_2->UAV_1 bytes=1435 finishSec=280.065 durationSec=0.009406 metDeadline=YES
+[ROLE] t=280.237 UAV[2] = SLAVE
+[TASK-DONE] id=46 type=SENSOR_TO_UAV Sensor_280->UAV_2 bytes=1490 finishSec=280.248 durationSec=0.0113468 metDeadline=YES
+[ROLE] t=281.307 UAV[2] = SLAVE
+[ROLE] t=281.307 UAV[1] = MASTER
+[TASK-DONE] id=47 type=SLAVE_TO_MASTER UAV_2->UAV_1 bytes=1490 finishSec=281.312 durationSec=0.005788 metDeadline=YES
+[ROLE] t=282.215 UAV[3] = SLAVE
+[TASK-DONE] id=48 type=SENSOR_TO_UAV Sensor_160->UAV_3 bytes=412 finishSec=282.217 durationSec=0.0019585 metDeadline=YES
+[ROLE] t=282.523 UAV[3] = SLAVE
+[ROLE] t=282.523 UAV[1] = MASTER
+[TASK-DONE] id=49 type=SLAVE_TO_MASTER UAV_3->UAV_1 bytes=412 finishSec=282.529 durationSec=0.005938 metDeadline=YES
+[ROLE] t=282.575 UAV[3] = SLAVE
+[TASK-DONE] id=50 type=SENSOR_TO_UAV Sensor_258->UAV_3 bytes=1325 finishSec=282.585 durationSec=0.00924684 metDeadline=YES
+[ROLE] t=283.591 UAV[3] = SLAVE
+[ROLE] t=283.591 UAV[1] = MASTER
+[TASK-DONE] id=51 type=SLAVE_TO_MASTER UAV_3->UAV_1 bytes=1325 finishSec=283.596 durationSec=0.005568 metDeadline=YES
+[ROLE] t=283.758 UAV[3] = SLAVE
+[TASK-DONE] id=52 type=SENSOR_TO_UAV Sensor_222->UAV_3 bytes=1745 finishSec=283.764 durationSec=0.00612817 metDeadline=YES
+[ROLE] t=285.037 UAV[3] = SLAVE
+[ROLE] t=285.037 UAV[1] = MASTER
+[TASK-DONE] id=53 type=SLAVE_TO_MASTER UAV_3->UAV_1 bytes=1745 finishSec=285.043 durationSec=0.006128 metDeadline=YES
+[ROLE] t=290.739 UAV[0] = SLAVE
+[TASK-DONE] id=54 type=SENSOR_TO_UAV Sensor_283->UAV_0 bytes=1341 finishSec=290.75 durationSec=0.0112668 metDeadline=YES
+[ROLE] t=291.676 UAV[0] = SLAVE
+[ROLE] t=291.676 UAV[1] = MASTER
+[TASK-DONE] id=55 type=SLAVE_TO_MASTER UAV_0->UAV_1 bytes=1341 finishSec=291.685 durationSec=0.008666 metDeadline=YES
+[ROLE] t=301.152 UAV[1] = MASTER
+[TASK-DONE] id=56 type=SENSOR_TO_UAV Sensor_369->UAV_1 bytes=890 finishSec=301.159 durationSec=0.0076145 metDeadline=YES
+[ROLE] t=317.733 UAV[2] = SLAVE
+[TASK-DONE] id=57 type=SENSOR_TO_UAV Sensor_366->UAV_2 bytes=1118 finishSec=317.744 durationSec=0.0112468 metDeadline=YES
+[ROLE] t=318.515 UAV[2] = SLAVE
+[ROLE] t=318.515 UAV[1] = MASTER
+[TASK-DONE] id=58 type=SLAVE_TO_MASTER UAV_2->UAV_1 bytes=1118 finishSec=318.52 durationSec=0.005292 metDeadline=YES
+[ROLE] t=342.667 UAV[3] = MASTER
+[TASK-DONE] id=59 type=SENSOR_TO_UAV Sensor_296->UAV_3 bytes=1010 finishSec=342.675 durationSec=0.0075945 metDeadline=YES
+[ROLE] t=355.23 UAV[1] = MASTER
+[TASK-DONE] id=60 type=SENSOR_TO_UAV Sensor_95->UAV_1 bytes=782 finishSec=355.24 durationSec=0.0103105 metDeadline=YES
+[ROLE] t=358.55 UAV[0] = SLAVE
+[TASK-DONE] id=61 type=SENSOR_TO_UAV Sensor_12->UAV_0 bytes=851 finishSec=358.558 durationSec=0.0075825 metDeadline=YES
+[ROLE] t=359.145 UAV[0] = SLAVE
+[ROLE] t=359.145 UAV[3] = MASTER
+[TASK-DONE] id=62 type=SLAVE_TO_MASTER UAV_0->UAV_3 bytes=851 finishSec=359.155 durationSec=0.009462 metDeadline=YES
+[ROLE] t=371.895 UAV[3] = MASTER
+[TASK-DONE] id=63 type=SENSOR_TO_UAV Sensor_444->UAV_3 bytes=998 finishSec=371.904 durationSec=0.0086385 metDeadline=YES
+[ROLE] t=392.054 UAV[1] = MASTER
+[TASK-DONE] id=64 type=SENSOR_TO_UAV Sensor_172->UAV_1 bytes=999 finishSec=392.061 durationSec=0.0065225 metDeadline=YES
+[ROLE] t=394.043 UAV[2] = MASTER
+[TASK-DONE] id=65 type=SENSOR_TO_UAV Sensor_56->UAV_2 bytes=1199 finishSec=394.048 durationSec=0.00540017 metDeadline=YES
+[MOVE] t=484.245 UAV[0] -> (1765.71, 1840.05, 50)
+[MOVE] t=484.245 UAV[1] -> (1765.71, 1840.05, 50)
+[MOVE] t=484.245 UAV[2] -> (1765.71, 1840.05, 50)
+[MOVE] t=484.245 UAV[3] -> (1765.71, 1840.05, 50)
+[ROLE] t=580.988 UAV[1] = SLAVE
+[TASK-DONE] id=66 type=SENSOR_TO_UAV Sensor_33->UAV_1 bytes=1500 finishSec=581.001 durationSec=0.0134868 metDeadline=YES
+[ROLE] t=581.147 UAV[0] = MASTER
+[TASK-DONE] id=67 type=SENSOR_TO_UAV Sensor_288->UAV_0 bytes=1160 finishSec=581.152 durationSec=0.00534817 metDeadline=YES
+[ROLE] t=581.241 UAV[3] = SLAVE
+[TASK-DONE] id=68 type=SENSOR_TO_UAV Sensor_347->UAV_3 bytes=985 finishSec=581.247 durationSec=0.0056825 metDeadline=YES
+[ROLE] t=581.981 UAV[3] = SLAVE
+[ROLE] t=581.981 UAV[0] = MASTER
+[TASK-DONE] id=69 type=SLAVE_TO_MASTER UAV_3->UAV_0 bytes=985 finishSec=581.985 durationSec=0.003762 metDeadline=YES
+[ROLE] t=582.055 UAV[1] = SLAVE
+[ROLE] t=582.055 UAV[0] = MASTER
+[TASK-DONE] id=70 type=SLAVE_TO_MASTER UAV_1->UAV_0 bytes=1500 finishSec=582.067 durationSec=0.012226 metDeadline=YES
+[ROLE] t=582.07 UAV[0] = MASTER
+[TASK-DONE] id=71 type=SENSOR_TO_UAV Sensor_270->UAV_0 bytes=1435 finishSec=582.078 durationSec=0.00848684 metDeadline=YES
+[ROLE] t=582.105 UAV[3] = SLAVE
+[TASK-DONE] id=72 type=SENSOR_TO_UAV Sensor_198->UAV_3 bytes=1515 finishSec=582.118 durationSec=0.0126068 metDeadline=YES
+[ROLE] t=582.244 UAV[1] = SLAVE
+[TASK-DONE] id=73 type=SENSOR_TO_UAV Sensor_356->UAV_1 bytes=1740 finishSec=582.25 durationSec=0.00612017 metDeadline=YES
+[ROLE] t=583.278 UAV[0] = MASTER
+[TASK-DONE] id=74 type=SENSOR_TO_UAV Sensor_66->UAV_0 bytes=1730 finishSec=583.288 durationSec=0.00934683 metDeadline=YES
+[ROLE] t=583.482 UAV[1] = SLAVE
+[ROLE] t=583.482 UAV[0] = MASTER
+[TASK-DONE] id=75 type=SLAVE_TO_MASTER UAV_1->UAV_0 bytes=1740 finishSec=583.488 durationSec=0.00612 metDeadline=YES
+[ROLE] t=583.521 UAV[3] = SLAVE
+[ROLE] t=583.521 UAV[0] = MASTER
+[TASK-DONE] id=76 type=SLAVE_TO_MASTER UAV_3->UAV_0 bytes=1515 finishSec=583.526 durationSec=0.00582 metDeadline=YES
+[ROLE] t=583.711 UAV[3] = SLAVE
+[TASK-DONE] id=77 type=SENSOR_TO_UAV Sensor_22->UAV_3 bytes=1770 finishSec=583.719 durationSec=0.00722684 metDeadline=YES
+[ROLE] t=585.36 UAV[3] = SLAVE
+[ROLE] t=585.36 UAV[0] = MASTER
+[TASK-DONE] id=78 type=SLAVE_TO_MASTER UAV_3->UAV_0 bytes=1770 finishSec=585.366 durationSec=0.00616 metDeadline=YES
+[ROLE] t=586.129 UAV[2] = SLAVE
+[TASK-DONE] id=79 type=SENSOR_TO_UAV Sensor_17->UAV_2 bytes=400 finishSec=586.14 durationSec=0.0109225 metDeadline=YES
+[ROLE] t=586.422 UAV[2] = SLAVE
+[ROLE] t=586.422 UAV[0] = MASTER
+[TASK-DONE] id=80 type=SLAVE_TO_MASTER UAV_2->UAV_0 bytes=400 finishSec=586.433 durationSec=0.010942 metDeadline=YES
+[ROLE] t=586.473 UAV[2] = SLAVE
+[TASK-DONE] id=81 type=SENSOR_TO_UAV Sensor_421->UAV_2 bytes=1245 finishSec=586.486 durationSec=0.0133268 metDeadline=YES
+[ROLE] t=587.383 UAV[2] = SLAVE
+[ROLE] t=587.383 UAV[0] = MASTER
+[TASK-DONE] id=82 type=SLAVE_TO_MASTER UAV_2->UAV_0 bytes=1245 finishSec=587.388 durationSec=0.00546 metDeadline=YES
+[ROLE] t=587.54 UAV[2] = SLAVE
+[TASK-DONE] id=83 type=SENSOR_TO_UAV Sensor_321->UAV_2 bytes=1710 finishSec=587.547 durationSec=0.00716683 metDeadline=YES
+[ROLE] t=588.775 UAV[2] = SLAVE
+[ROLE] t=588.775 UAV[0] = MASTER
+[TASK-DONE] id=84 type=SLAVE_TO_MASTER UAV_2->UAV_0 bytes=1710 finishSec=588.781 durationSec=0.00608 metDeadline=YES
+[ROLE] t=647.927 UAV[1] = SLAVE
+[TASK-DONE] id=85 type=SENSOR_TO_UAV Sensor_188->UAV_1 bytes=368 finishSec=647.932 durationSec=0.0047785 metDeadline=YES
+[ROLE] t=648.208 UAV[1] = SLAVE
+[ROLE] t=648.208 UAV[0] = MASTER
+[TASK-DONE] id=86 type=SLAVE_TO_MASTER UAV_1->UAV_0 bytes=368 finishSec=648.208 durationSec=0.000656 metDeadline=YES
+[ROLE] t=648.254 UAV[1] = SLAVE
+[TASK-DONE] id=87 type=SENSOR_TO_UAV Sensor_322->UAV_1 bytes=1415 finishSec=648.264 durationSec=0.0101468 metDeadline=YES
+[ROLE] t=649.37 UAV[1] = SLAVE
+[ROLE] t=649.37 UAV[0] = MASTER
+[TASK-DONE] id=88 type=SLAVE_TO_MASTER UAV_1->UAV_0 bytes=1415 finishSec=649.376 durationSec=0.005688 metDeadline=YES
+[ROLE] t=649.548 UAV[1] = SLAVE
+[TASK-DONE] id=89 type=SENSOR_TO_UAV Sensor_471->UAV_1 bytes=1725 finishSec=649.557 durationSec=0.00944684 metDeadline=YES
+[ROLE] t=650.897 UAV[1] = SLAVE
+[ROLE] t=650.897 UAV[0] = MASTER
+[TASK-DONE] id=90 type=SLAVE_TO_MASTER UAV_1->UAV_0 bytes=1725 finishSec=650.903 durationSec=0.0061 metDeadline=YES
+[ROLE] t=657.125 UAV[0] = MASTER
+[TASK-DONE] id=91 type=SENSOR_TO_UAV Sensor_277->UAV_0 bytes=1570 finishSec=657.135 durationSec=0.0103668 metDeadline=YES
+[ROLE] t=658.286 UAV[0] = MASTER
+[TASK-DONE] id=92 type=SENSOR_TO_UAV Sensor_423->UAV_0 bytes=1645 finishSec=658.292 durationSec=0.00599617 metDeadline=YES
+[ROLE] t=659.882 UAV[1] = MASTER
+[TASK-DONE] id=93 type=SENSOR_TO_UAV Sensor_223->UAV_1 bytes=1545 finishSec=659.887 durationSec=0.00586017 metDeadline=YES
+[ROLE] t=660.962 UAV[1] = MASTER
+[TASK-DONE] id=94 type=SENSOR_TO_UAV Sensor_218->UAV_1 bytes=1710 finishSec=660.968 durationSec=0.00608017 metDeadline=YES
+[ROLE] t=663.041 UAV[2] = SLAVE
+[TASK-DONE] id=95 type=SENSOR_TO_UAV Sensor_27->UAV_2 bytes=1615 finishSec=663.051 durationSec=0.0101868 metDeadline=YES
+[ROLE] t=664.178 UAV[2] = SLAVE
+[ROLE] t=664.178 UAV[0] = MASTER
+[TASK-DONE] id=96 type=SLAVE_TO_MASTER UAV_2->UAV_0 bytes=1615 finishSec=664.184 durationSec=0.005956 metDeadline=YES
+[ROLE] t=664.381 UAV[2] = SLAVE
+[TASK-DONE] id=97 type=SENSOR_TO_UAV Sensor_332->UAV_2 bytes=1550 finishSec=664.387 durationSec=0.00586817 metDeadline=YES
+[ROLE] t=664.612 UAV[3] = SLAVE
+[TASK-DONE] id=98 type=SENSOR_TO_UAV Sensor_378->UAV_3 bytes=1250 finishSec=664.617 durationSec=0.00546817 metDeadline=YES
+[ROLE] t=665.5 UAV[3] = SLAVE
+[ROLE] t=665.5 UAV[0] = MASTER
+[TASK-DONE] id=99 type=SLAVE_TO_MASTER UAV_3->UAV_0 bytes=1250 finishSec=665.506 durationSec=0.005468 metDeadline=YES
+[ROLE] t=665.656 UAV[2] = SLAVE
+[ROLE] t=665.656 UAV[0] = MASTER
+[ROLE] t=665.658 UAV[3] = SLAVE
+[TASK-DONE] id=100 type=SLAVE_TO_MASTER UAV_2->UAV_0 bytes=1550 finishSec=665.662 durationSec=0.005868 metDeadline=YES
+[TASK-DONE] id=101 type=SENSOR_TO_UAV Sensor_338->UAV_3 bytes=1435 finishSec=665.67 durationSec=0.0125268 metDeadline=YES
+[ROLE] t=665.851 UAV[2] = SLAVE
+[TASK-DONE] id=102 type=SENSOR_TO_UAV Sensor_475->UAV_2 bytes=1645 finishSec=665.859 durationSec=0.00828683 metDeadline=YES
+[ROLE] t=666.678 UAV[3] = SLAVE
+[ROLE] t=666.678 UAV[0] = MASTER
+[TASK-DONE] id=103 type=SLAVE_TO_MASTER UAV_3->UAV_0 bytes=1435 finishSec=666.683 durationSec=0.005716 metDeadline=YES
+[ROLE] t=667.203 UAV[2] = SLAVE
+[ROLE] t=667.203 UAV[0] = MASTER
+[TASK-DONE] id=104 type=SLAVE_TO_MASTER UAV_2->UAV_0 bytes=1645 finishSec=667.209 durationSec=0.005996 metDeadline=YES
+[MOVE] t=803.075 UAV[0] -> (3769.99, 2192.14, 50)
+[MOVE] t=803.075 UAV[1] -> (3769.99, 2192.14, 50)
+[MOVE] t=803.075 UAV[2] -> (3769.99, 2192.14, 50)
+[MOVE] t=803.075 UAV[3] -> (3769.99, 2192.14, 50)
+[ROLE] t=937.779 UAV[0] = SLAVE
+[TASK-DONE] id=105 type=SENSOR_TO_UAV Sensor_304->UAV_0 bytes=362 finishSec=937.788 durationSec=0.0086505 metDeadline=YES
+[ROLE] t=938.062 UAV[1] = SLAVE
+[TASK-DONE] id=106 type=SENSOR_TO_UAV Sensor_422->UAV_1 bytes=435 finishSec=938.071 durationSec=0.0087505 metDeadline=YES
+[ROLE] t=938.104 UAV[0] = SLAVE
+[ROLE] t=938.104 UAV[2] = MASTER
+[TASK-DONE] id=107 type=SLAVE_TO_MASTER UAV_0->UAV_2 bytes=362 finishSec=938.109 durationSec=0.00565 metDeadline=YES
+[ROLE] t=938.149 UAV[0] = SLAVE
+[TASK-DONE] id=108 type=SENSOR_TO_UAV Sensor_177->UAV_0 bytes=1400 finishSec=938.163 durationSec=0.0135268 metDeadline=YES
+[ROLE] t=938.431 UAV[1] = SLAVE
+[ROLE] t=938.431 UAV[2] = MASTER
+[TASK-DONE] id=109 type=SLAVE_TO_MASTER UAV_1->UAV_2 bytes=435 finishSec=938.433 durationSec=0.00177 metDeadline=YES
+[ROLE] t=938.486 UAV[1] = SLAVE
+[TASK-DONE] id=110 type=SENSOR_TO_UAV Sensor_40->UAV_1 bytes=1130 finishSec=938.498 durationSec=0.0114268 metDeadline=YES
+[ROLE] t=939.251 UAV[0] = SLAVE
+[ROLE] t=939.251 UAV[2] = MASTER
+[TASK-DONE] id=111 type=SLAVE_TO_MASTER UAV_0->UAV_2 bytes=1400 finishSec=939.257 durationSec=0.005668 metDeadline=YES
+[ROLE] t=939.427 UAV[0] = SLAVE
+[TASK-DONE] id=112 type=SENSOR_TO_UAV Sensor_173->UAV_0 bytes=1340 finishSec=939.433 durationSec=0.00558817 metDeadline=YES
+[ROLE] t=939.448 UAV[1] = SLAVE
+[ROLE] t=939.448 UAV[2] = MASTER
+[TASK-DONE] id=113 type=SLAVE_TO_MASTER UAV_1->UAV_2 bytes=1130 finishSec=939.453 durationSec=0.005308 metDeadline=YES
+[ROLE] t=939.59 UAV[1] = SLAVE
+[TASK-DONE] id=114 type=SENSOR_TO_UAV Sensor_362->UAV_1 bytes=1520 finishSec=939.596 durationSec=0.00582817 metDeadline=YES
+[ROLE] t=939.838 UAV[2] = MASTER
+[TASK-DONE] id=115 type=SENSOR_TO_UAV Sensor_125->UAV_2 bytes=455 finishSec=939.844 durationSec=0.0068145 metDeadline=YES
+[ROLE] t=940.195 UAV[2] = MASTER
+[TASK-DONE] id=116 type=SENSOR_TO_UAV Sensor_438->UAV_2 bytes=1415 finishSec=940.207 durationSec=0.0123468 metDeadline=YES
+[ROLE] t=940.597 UAV[0] = SLAVE
+[ROLE] t=940.597 UAV[2] = MASTER
+[TASK-DONE] id=117 type=SLAVE_TO_MASTER UAV_0->UAV_2 bytes=1340 finishSec=940.602 durationSec=0.005588 metDeadline=YES
+[ROLE] t=940.7 UAV[1] = SLAVE
+[ROLE] t=940.7 UAV[2] = MASTER
+[TASK-DONE] id=118 type=SLAVE_TO_MASTER UAV_1->UAV_2 bytes=1520 finishSec=940.706 durationSec=0.005828 metDeadline=YES
+[ROLE] t=940.765 UAV[0] = SLAVE
+[TASK-DONE] id=119 type=SENSOR_TO_UAV Sensor_318->UAV_0 bytes=1535 finishSec=940.771 durationSec=0.00584817 metDeadline=YES
+[ROLE] t=941.355 UAV[2] = MASTER
+[TASK-DONE] id=120 type=SENSOR_TO_UAV Sensor_235->UAV_2 bytes=1710 finishSec=941.368 durationSec=0.0133668 metDeadline=YES
+[ROLE] t=942.314 UAV[0] = SLAVE
+[ROLE] t=942.314 UAV[2] = MASTER
+[TASK-DONE] id=121 type=SLAVE_TO_MASTER UAV_0->UAV_2 bytes=1535 finishSec=942.319 durationSec=0.005848 metDeadline=YES
+[ROLE] t=945.184 UAV[3] = SLAVE
+[TASK-DONE] id=122 type=SENSOR_TO_UAV Sensor_80->UAV_3 bytes=388 finishSec=945.191 durationSec=0.0067265 metDeadline=YES
+[ROLE] t=945.548 UAV[3] = SLAVE
+[ROLE] t=945.548 UAV[2] = MASTER
+[TASK-DONE] id=123 type=SLAVE_TO_MASTER UAV_3->UAV_2 bytes=388 finishSec=945.549 durationSec=0.001686 metDeadline=YES
+[ROLE] t=945.597 UAV[3] = SLAVE
+[TASK-DONE] id=124 type=SENSOR_TO_UAV Sensor_174->UAV_3 bytes=1495 finishSec=945.609 durationSec=0.0126068 metDeadline=YES
+[ROLE] t=945.619 UAV[2] = SLAVE
+[TASK-DONE] id=125 type=SENSOR_TO_UAV Sensor_495->UAV_2 bytes=1185 finishSec=945.624 durationSec=0.00545483 metDeadline=YES
+[ROLE] t=946.502 UAV[2] = SLAVE
+[ROLE] t=946.502 UAV[3] = MASTER
+[TASK-DONE] id=126 type=SLAVE_TO_MASTER UAV_2->UAV_3 bytes=1185 finishSec=946.513 durationSec=0.010246 metDeadline=YES
+[ROLE] t=946.637 UAV[1] = SLAVE
+[TASK-DONE] id=127 type=SENSOR_TO_UAV Sensor_7->UAV_1 bytes=1245 finishSec=946.644 durationSec=0.00742684 metDeadline=YES
+[ROLE] t=946.651 UAV[2] = SLAVE
+[ROLE] t=946.658 UAV[3] = SLAVE
+[ROLE] t=946.658 UAV[2] = MASTER
+[TASK-DONE] id=128 type=SENSOR_TO_UAV Sensor_132->UAV_2 bytes=1220 finishSec=946.662 durationSec=0.0102668 metDeadline=YES
+[TASK-DONE] id=129 type=SLAVE_TO_MASTER UAV_3->UAV_2 bytes=1495 finishSec=946.663 durationSec=0.005796 metDeadline=YES
+[ROLE] t=946.846 UAV[3] = SLAVE
+[TASK-DONE] id=130 type=SENSOR_TO_UAV Sensor_192->UAV_3 bytes=1415 finishSec=946.852 durationSec=0.00568817 metDeadline=YES
+[ROLE] t=947.507 UAV[1] = SLAVE
+[ROLE] t=947.507 UAV[3] = MASTER
+[TASK-DONE] id=131 type=SLAVE_TO_MASTER UAV_1->UAV_3 bytes=1245 finishSec=947.513 durationSec=0.00546 metDeadline=YES
+[ROLE] t=947.533 UAV[2] = SLAVE
+[ROLE] t=947.533 UAV[3] = MASTER
+[TASK-DONE] id=132 type=SLAVE_TO_MASTER UAV_2->UAV_3 bytes=1220 finishSec=947.538 durationSec=0.005428 metDeadline=YES
+[ROLE] t=947.686 UAV[2] = SLAVE
+[TASK-DONE] id=133 type=SENSOR_TO_UAV Sensor_491->UAV_2 bytes=1695 finishSec=947.692 durationSec=0.00606017 metDeadline=YES
+[ROLE] t=948.177 UAV[3] = SLAVE
+[ROLE] t=948.177 UAV[2] = MASTER
+[TASK-DONE] id=134 type=SLAVE_TO_MASTER UAV_3->UAV_2 bytes=1415 finishSec=948.183 durationSec=0.005688 metDeadline=YES
+[ROLE] t=948.922 UAV[2] = SLAVE
+[ROLE] t=948.922 UAV[3] = MASTER
+[TASK-DONE] id=135 type=SLAVE_TO_MASTER UAV_2->UAV_3 bytes=1695 finishSec=948.928 durationSec=0.00606 metDeadline=YES
+[ROLE] t=949.658 UAV[0] = SLAVE
+[TASK-DONE] id=136 type=SENSOR_TO_UAV Sensor_130->UAV_0 bytes=1069 finishSec=949.666 durationSec=0.00712683 metDeadline=YES
+[ROLE] t=950.406 UAV[0] = SLAVE
+[ROLE] t=950.406 UAV[3] = MASTER
+[TASK-DONE] id=137 type=SLAVE_TO_MASTER UAV_0->UAV_3 bytes=1069 finishSec=950.416 durationSec=0.010406 metDeadline=YES
+[ROLE] t=954.182 UAV[3] = MASTER
+[TASK-DONE] id=138 type=SENSOR_TO_UAV Sensor_201->UAV_3 bytes=1145 finishSec=954.192 durationSec=0.0104268 metDeadline=YES
+[ROLE] t=954.453 UAV[1] = MASTER
+[TASK-DONE] id=139 type=SENSOR_TO_UAV Sensor_371->UAV_1 bytes=1690 finishSec=954.462 durationSec=0.00932683 metDeadline=YES
+[ROLE] t=955.231 UAV[2] = SLAVE
+[ROLE] t=955.24 UAV[3] = MASTER
+[TASK-DONE] id=140 type=SENSOR_TO_UAV Sensor_272->UAV_2 bytes=1280 finishSec=955.245 durationSec=0.0136268 metDeadline=YES
+[TASK-DONE] id=141 type=SENSOR_TO_UAV Sensor_254->UAV_3 bytes=1600 finishSec=955.251 durationSec=0.0106268 metDeadline=YES
+[ROLE] t=955.731 UAV[1] = MASTER
+[TASK-DONE] id=142 type=SENSOR_TO_UAV Sensor_271->UAV_1 bytes=1695 finishSec=955.739 durationSec=0.00856683 metDeadline=YES
+[ROLE] t=956.126 UAV[2] = SLAVE
+[ROLE] t=956.126 UAV[1] = MASTER
+[TASK-DONE] id=143 type=SLAVE_TO_MASTER UAV_2->UAV_1 bytes=1280 finishSec=956.131 durationSec=0.005508 metDeadline=YES
+[ROLE] t=956.58 UAV[3] = MASTER
+[TASK-DONE] id=144 type=SENSOR_TO_UAV Sensor_319->UAV_3 bytes=1490 finishSec=956.589 durationSec=0.00934683 metDeadline=YES
+[ROLE] t=958.015 UAV[3] = MASTER
+[TASK-DONE] id=145 type=SENSOR_TO_UAV Sensor_171->UAV_3 bytes=1585 finishSec=958.023 durationSec=0.00836684 metDeadline=YES
+[ROLE] t=960.574 UAV[0] = SLAVE
+[TASK-DONE] id=146 type=SENSOR_TO_UAV Sensor_439->UAV_0 bytes=1510 finishSec=960.581 durationSec=0.00748683 metDeadline=YES
+[ROLE] t=961.629 UAV[0] = SLAVE
+[ROLE] t=961.629 UAV[1] = MASTER
+[TASK-DONE] id=147 type=SLAVE_TO_MASTER UAV_0->UAV_1 bytes=1510 finishSec=961.64 durationSec=0.010406 metDeadline=YES
+[MOVE] t=1045.23 UAV[0] -> (3278.96, 1041.34, 50)
+[MOVE] t=1045.23 UAV[1] -> (3278.96, 1041.34, 50)
+[MOVE] t=1045.23 UAV[2] -> (3278.96, 1041.34, 50)
+[MOVE] t=1045.23 UAV[3] -> (3278.96, 1041.34, 50)
+[ROLE] t=1122.29 UAV[0] = SLAVE
+[TASK-DONE] id=148 type=SENSOR_TO_UAV Sensor_93->UAV_0 bytes=372 finishSec=1122.3 durationSec=0.0089265 metDeadline=YES
+[ROLE] t=1122.57 UAV[0] = SLAVE
+[ROLE] t=1122.57 UAV[3] = MASTER
+[TASK-DONE] id=149 type=SLAVE_TO_MASTER UAV_0->UAV_3 bytes=372 finishSec=1122.58 durationSec=0.001846 metDeadline=YES
+[ROLE] t=1122.62 UAV[0] = SLAVE
+[TASK-DONE] id=150 type=SENSOR_TO_UAV Sensor_91->UAV_0 bytes=1051 finishSec=1122.63 durationSec=0.0104268 metDeadline=YES
+[ROLE] t=1123.41 UAV[0] = SLAVE
+[ROLE] t=1123.41 UAV[3] = MASTER
+[TASK-DONE] id=151 type=SLAVE_TO_MASTER UAV_0->UAV_3 bytes=1051 finishSec=1123.41 durationSec=0.005204 metDeadline=YES
+[ROLE] t=1123.54 UAV[0] = SLAVE
+[TASK-DONE] id=152 type=SENSOR_TO_UAV Sensor_344->UAV_0 bytes=1280 finishSec=1123.55 durationSec=0.00818684 metDeadline=YES
+[ROLE] t=1124.48 UAV[0] = SLAVE
+[ROLE] t=1124.48 UAV[3] = MASTER
+[TASK-DONE] id=153 type=SLAVE_TO_MASTER UAV_0->UAV_3 bytes=1280 finishSec=1124.49 durationSec=0.005508 metDeadline=YES
+[ROLE] t=1126.06 UAV[1] = SLAVE
+[TASK-DONE] id=154 type=SENSOR_TO_UAV Sensor_253->UAV_1 bytes=388 finishSec=1126.06 durationSec=0.0057265 metDeadline=YES
+[ROLE] t=1126.38 UAV[1] = SLAVE
+[ROLE] t=1126.38 UAV[3] = MASTER
+[TASK-DONE] id=155 type=SLAVE_TO_MASTER UAV_1->UAV_3 bytes=388 finishSec=1126.39 durationSec=0.006746 metDeadline=YES
+[ROLE] t=1126.43 UAV[1] = SLAVE
+[TASK-DONE] id=156 type=SENSOR_TO_UAV Sensor_309->UAV_1 bytes=374 finishSec=1126.43 durationSec=0.0048265 metDeadline=YES
+[ROLE] t=1126.77 UAV[1] = SLAVE
+[ROLE] t=1126.77 UAV[3] = MASTER
+[TASK-DONE] id=157 type=SLAVE_TO_MASTER UAV_1->UAV_3 bytes=374 finishSec=1126.77 durationSec=0.000664 metDeadline=YES
+[ROLE] t=1126.82 UAV[1] = SLAVE
+[TASK-DONE] id=158 type=SENSOR_TO_UAV Sensor_26->UAV_1 bytes=1235 finishSec=1126.82 durationSec=0.00544817 metDeadline=YES
+[ROLE] t=1126.92 UAV[0] = SLAVE
+[TASK-DONE] id=159 type=SENSOR_TO_UAV Sensor_200->UAV_0 bytes=1690 finishSec=1126.93 durationSec=0.00605617 metDeadline=YES
+[ROLE] t=1127.74 UAV[1] = SLAVE
+[ROLE] t=1127.74 UAV[3] = MASTER
+[TASK-DONE] id=160 type=SLAVE_TO_MASTER UAV_1->UAV_3 bytes=1235 finishSec=1127.74 durationSec=0.005448 metDeadline=YES
+[ROLE] t=1127.89 UAV[1] = SLAVE
+[TASK-DONE] id=161 type=SENSOR_TO_UAV Sensor_213->UAV_1 bytes=1320 finishSec=1127.91 durationSec=0.0124268 metDeadline=YES
+[ROLE] t=1128.12 UAV[0] = SLAVE
+[ROLE] t=1128.12 UAV[2] = MASTER
+[TASK-DONE] id=162 type=SLAVE_TO_MASTER UAV_0->UAV_2 bytes=1690 finishSec=1128.12 durationSec=0.006056 metDeadline=YES
+[ROLE] t=1128.33 UAV[0] = SLAVE
+[TASK-DONE] id=163 type=SENSOR_TO_UAV Sensor_143->UAV_0 bytes=1740 finishSec=1128.34 durationSec=0.00948683 metDeadline=YES
+[ROLE] t=1129.09 UAV[1] = SLAVE
+[ROLE] t=1129.09 UAV[3] = MASTER
+[TASK-DONE] id=164 type=SLAVE_TO_MASTER UAV_1->UAV_3 bytes=1320 finishSec=1129.09 durationSec=0.00556 metDeadline=YES
+[ROLE] t=1129.56 UAV[0] = SLAVE
+[ROLE] t=1129.56 UAV[2] = MASTER
+[TASK-DONE] id=165 type=SLAVE_TO_MASTER UAV_0->UAV_2 bytes=1740 finishSec=1129.57 durationSec=0.00612 metDeadline=YES
+[ROLE] t=1130.48 UAV[3] = MASTER
+[TASK-DONE] id=166 type=SENSOR_TO_UAV Sensor_310->UAV_3 bytes=1235 finishSec=1130.49 durationSec=0.0114468 metDeadline=YES
+[ROLE] t=1131.05 UAV[2] = SLAVE
+[TASK-DONE] id=167 type=SENSOR_TO_UAV Sensor_197->UAV_2 bytes=356 finishSec=1131.05 durationSec=0.0056825 metDeadline=YES
+[ROLE] t=1131.31 UAV[2] = SLAVE
+[ROLE] t=1131.31 UAV[3] = MASTER
+[TASK-DONE] id=168 type=SLAVE_TO_MASTER UAV_2->UAV_3 bytes=356 finishSec=1131.32 durationSec=0.002762 metDeadline=YES
+[ROLE] t=1131.36 UAV[2] = SLAVE
+[TASK-DONE] id=169 type=SENSOR_TO_UAV Sensor_419->UAV_2 bytes=1160 finishSec=1131.36 durationSec=0.00538284 metDeadline=YES
+[ROLE] t=1131.46 UAV[3] = MASTER
+[TASK-DONE] id=170 type=SENSOR_TO_UAV Sensor_92->UAV_3 bytes=1560 finishSec=1131.47 durationSec=0.0106668 metDeadline=YES
+[ROLE] t=1132.2 UAV[2] = SLAVE
+[ROLE] t=1132.2 UAV[3] = MASTER
+[TASK-DONE] id=171 type=SLAVE_TO_MASTER UAV_2->UAV_3 bytes=1160 finishSec=1132.21 durationSec=0.005348 metDeadline=YES
+[ROLE] t=1132.35 UAV[2] = SLAVE
+[TASK-DONE] id=172 type=SENSOR_TO_UAV Sensor_63->UAV_2 bytes=1420 finishSec=1132.35 durationSec=0.00569617 metDeadline=YES
+[ROLE] t=1133.43 UAV[2] = SLAVE
+[ROLE] t=1133.43 UAV[3] = MASTER
+[TASK-DONE] id=173 type=SLAVE_TO_MASTER UAV_2->UAV_3 bytes=1420 finishSec=1133.43 durationSec=0.005696 metDeadline=YES
+[ROLE] t=1133.7 UAV[3] = SLAVE
+[TASK-DONE] id=174 type=SENSOR_TO_UAV Sensor_286->UAV_3 bytes=1725 finishSec=1133.71 durationSec=0.00610017 metDeadline=YES
+[ROLE] t=1135.11 UAV[3] = SLAVE
+[ROLE] t=1135.11 UAV[2] = MASTER
+[TASK-DONE] id=175 type=SLAVE_TO_MASTER UAV_3->UAV_2 bytes=1725 finishSec=1135.11 durationSec=0.0061 metDeadline=YES
+[ROLE] t=1135.32 UAV[3] = SLAVE
+[TASK-DONE] id=176 type=SENSOR_TO_UAV Sensor_404->UAV_3 bytes=1750 finishSec=1135.33 durationSec=0.00613617 metDeadline=YES
+[ROLE] t=1135.66 UAV[2] = MASTER
+[TASK-DONE] id=177 type=SENSOR_TO_UAV Sensor_36->UAV_2 bytes=1340 finishSec=1135.67 durationSec=0.00558817 metDeadline=YES
+[ROLE] t=1136.75 UAV[3] = SLAVE
+[ROLE] t=1136.75 UAV[2] = MASTER
+[TASK-DONE] id=178 type=SLAVE_TO_MASTER UAV_3->UAV_2 bytes=1750 finishSec=1136.76 durationSec=0.006136 metDeadline=YES
+[ROLE] t=1136.81 UAV[2] = MASTER
+[TASK-DONE] id=179 type=SENSOR_TO_UAV Sensor_185->UAV_2 bytes=1360 finishSec=1136.82 durationSec=0.00746683 metDeadline=YES
+[ROLE] t=1138.01 UAV[2] = MASTER
+[TASK-DONE] id=180 type=SENSOR_TO_UAV Sensor_73->UAV_2 bytes=1675 finishSec=1138.02 durationSec=0.0113868 metDeadline=YES
+[ROLE] t=1139.27 UAV[2] = MASTER
+[TASK-DONE] id=181 type=SENSOR_TO_UAV Sensor_299->UAV_2 bytes=1570 finishSec=1139.28 durationSec=0.0122068 metDeadline=YES
+[ROLE] t=1200.34 UAV[1] = MASTER
+[TASK-DONE] id=182 type=SENSOR_TO_UAV Sensor_460->UAV_1 bytes=358 finishSec=1200.35 durationSec=0.0037465 metDeadline=YES
+[ROLE] t=1200.67 UAV[1] = MASTER
+[TASK-DONE] id=183 type=SENSOR_TO_UAV Sensor_289->UAV_1 bytes=1205 finishSec=1200.67 durationSec=0.00540817 metDeadline=YES
+[ROLE] t=1201.55 UAV[1] = MASTER
+[TASK-DONE] id=184 type=SENSOR_TO_UAV Sensor_50->UAV_1 bytes=1125 finishSec=1201.57 durationSec=0.0104668 metDeadline=YES
+[ROLE] t=1202.5 UAV[1] = MASTER
+[TASK-DONE] id=185 type=SENSOR_TO_UAV Sensor_466->UAV_1 bytes=1315 finishSec=1202.5 durationSec=0.00854683 metDeadline=YES
+[ROLE] t=1203.49 UAV[1] = MASTER
+[TASK-DONE] id=186 type=SENSOR_TO_UAV Sensor_496->UAV_1 bytes=1515 finishSec=1203.5 durationSec=0.0125068 metDeadline=YES
+[ROLE] t=1281.11 UAV[1] = SLAVE
+[TASK-DONE] id=187 type=SENSOR_TO_UAV Sensor_472->UAV_1 bytes=1430 finishSec=1281.12 durationSec=0.00570817 metDeadline=YES
+[ROLE] t=1282.25 UAV[1] = SLAVE
+[ROLE] t=1282.25 UAV[2] = MASTER
+[TASK-DONE] id=188 type=SLAVE_TO_MASTER UAV_1->UAV_2 bytes=1430 finishSec=1282.26 durationSec=0.007226 metDeadline=YES
+[ROLE] t=1282.43 UAV[1] = SLAVE
+[TASK-DONE] id=189 type=SENSOR_TO_UAV Sensor_395->UAV_1 bytes=1290 finishSec=1282.44 durationSec=0.00552017 metDeadline=YES
+[ROLE] t=1283.69 UAV[1] = SLAVE
+[ROLE] t=1283.69 UAV[2] = MASTER
+[TASK-DONE] id=190 type=SLAVE_TO_MASTER UAV_1->UAV_2 bytes=1290 finishSec=1283.7 durationSec=0.00552 metDeadline=YES
+[ROLE] t=1283.85 UAV[1] = SLAVE
+[TASK-DONE] id=191 type=SENSOR_TO_UAV Sensor_440->UAV_1 bytes=1460 finishSec=1283.86 durationSec=0.0105868 metDeadline=YES
+[ROLE] t=1285.27 UAV[1] = SLAVE
+[ROLE] t=1285.27 UAV[2] = MASTER
+[TASK-DONE] id=192 type=SLAVE_TO_MASTER UAV_1->UAV_2 bytes=1460 finishSec=1285.28 durationSec=0.005748 metDeadline=YES
+[MOVE] t=1313.47 UAV[0] -> (3107.3, 1424.9, 50)
+[MOVE] t=1313.47 UAV[1] -> (3107.3, 1424.9, 50)
+[MOVE] t=1313.47 UAV[2] -> (3107.3, 1424.9, 50)
+[MOVE] t=1313.47 UAV[3] -> (3107.3, 1424.9, 50)
+[ROLE] t=1321.73 UAV[0] = MASTER
+[TASK-DONE] id=193 type=SENSOR_TO_UAV Sensor_326->UAV_0 bytes=402 finishSec=1321.73 durationSec=0.0036865 metDeadline=YES
+[ROLE] t=1322.04 UAV[0] = MASTER
+[TASK-DONE] id=194 type=SENSOR_TO_UAV Sensor_463->UAV_0 bytes=1105 finishSec=1322.05 durationSec=0.00529083 metDeadline=YES
+[ROLE] t=1322.97 UAV[0] = MASTER
+[TASK-DONE] id=195 type=SENSOR_TO_UAV Sensor_118->UAV_0 bytes=1690 finishSec=1322.98 durationSec=0.0103868 metDeadline=YES
+[ROLE] t=1342.63 UAV[1] = MASTER
+[TASK-DONE] id=196 type=SENSOR_TO_UAV Sensor_263->UAV_1 bytes=809 finishSec=1342.64 durationSec=0.0054465 metDeadline=YES
+[ROLE] t=1343.34 UAV[1] = MASTER
+[TASK-DONE] id=197 type=SENSOR_TO_UAV Sensor_276->UAV_1 bytes=999 finishSec=1343.35 durationSec=0.0077025 metDeadline=YES
+[ROLE] t=1362.76 UAV[2] = MASTER
+[TASK-DONE] id=198 type=SENSOR_TO_UAV Sensor_437->UAV_2 bytes=662 finishSec=1362.77 durationSec=0.0061305 metDeadline=YES
+[ROLE] t=1369.2 UAV[3] = SLAVE
+[TASK-DONE] id=199 type=SENSOR_TO_UAV Sensor_224->UAV_3 bytes=1097 finishSec=1369.21 durationSec=0.0136468 metDeadline=YES
+[ROLE] t=1369.97 UAV[3] = SLAVE
+[ROLE] t=1369.97 UAV[2] = MASTER
+[TASK-DONE] id=200 type=SLAVE_TO_MASTER UAV_3->UAV_2 bytes=1097 finishSec=1369.98 durationSec=0.008406 metDeadline=YES
+[ROLE] t=1382.02 UAV[0] = SLAVE
+[TASK-DONE] id=201 type=SENSOR_TO_UAV Sensor_45->UAV_0 bytes=722 finishSec=1382.03 durationSec=0.0081705 metDeadline=YES
+[ROLE] t=1382.56 UAV[0] = SLAVE
+[ROLE] t=1382.56 UAV[2] = MASTER
+[TASK-DONE] id=202 type=SLAVE_TO_MASTER UAV_0->UAV_2 bytes=722 finishSec=1382.57 durationSec=0.00811 metDeadline=YES
+[ROLE] t=1382.65 UAV[0] = SLAVE
+[TASK-DONE] id=203 type=SENSOR_TO_UAV Sensor_72->UAV_0 bytes=967 finishSec=1382.66 durationSec=0.0085585 metDeadline=YES
+[ROLE] t=1383.38 UAV[0] = SLAVE
+[ROLE] t=1383.38 UAV[2] = MASTER
+[TASK-DONE] id=204 type=SLAVE_TO_MASTER UAV_0->UAV_2 bytes=967 finishSec=1383.38 durationSec=0.001456 metDeadline=YES
+[ROLE] t=1431.61 UAV[1] = SLAVE
+[TASK-DONE] id=205 type=SENSOR_TO_UAV Sensor_169->UAV_1 bytes=1279 finishSec=1431.62 durationSec=0.00550817 metDeadline=YES
+[ROLE] t=1432.5 UAV[1] = SLAVE
+[ROLE] t=1432.5 UAV[2] = MASTER
+[TASK-DONE] id=206 type=SLAVE_TO_MASTER UAV_1->UAV_2 bytes=1279 finishSec=1432.51 durationSec=0.005508 metDeadline=YES
+[ROLE] t=1441.2 UAV[3] = MASTER
+[TASK-DONE] id=207 type=SENSOR_TO_UAV Sensor_239->UAV_3 bytes=846 finishSec=1441.21 durationSec=0.0083785 metDeadline=YES
+[ROLE] t=1453.36 UAV[2] = MASTER
+[TASK-DONE] id=208 type=SENSOR_TO_UAV Sensor_446->UAV_2 bytes=981 finishSec=1453.37 durationSec=0.0106385 metDeadline=YES
+[ROLE] t=1454.26 UAV[2] = MASTER
+[TASK-DONE] id=209 type=SENSOR_TO_UAV Sensor_380->UAV_2 bytes=1538 finishSec=1454.28 durationSec=0.0124268 metDeadline=YES
+[ROLE] t=1459.44 UAV[0] = MASTER
+[TASK-DONE] id=210 type=SENSOR_TO_UAV Sensor_266->UAV_0 bytes=877 finishSec=1459.45 durationSec=0.0114385 metDeadline=YES
+[ROLE] t=1476.51 UAV[1] = MASTER
+[TASK-DONE] id=211 type=SENSOR_TO_UAV Sensor_402->UAV_1 bytes=1300 finishSec=1476.52 durationSec=0.00557083 metDeadline=YES
+[ROLE] t=1478.51 UAV[3] = SLAVE
+[TASK-DONE] id=212 type=SENSOR_TO_UAV Sensor_441->UAV_3 bytes=933 finishSec=1478.51 durationSec=0.0023945 metDeadline=YES
+[ROLE] t=1479.16 UAV[3] = SLAVE
+[ROLE] t=1479.16 UAV[1] = MASTER
+[TASK-DONE] id=213 type=SLAVE_TO_MASTER UAV_3->UAV_1 bytes=933 finishSec=1479.17 durationSec=0.009594 metDeadline=YES
+[ROLE] t=1479.19 UAV[2] = MASTER
+[TASK-DONE] id=214 type=SENSOR_TO_UAV Sensor_368->UAV_2 bytes=1074 finishSec=1479.19 durationSec=0.00523217 metDeadline=YES
+[ROLE] t=1479.86 UAV[0] = MASTER
+[TASK-DONE] id=215 type=SENSOR_TO_UAV Sensor_474->UAV_0 bytes=1088 finishSec=1479.87 durationSec=0.0104068 metDeadline=YES
+[ROLE] t=1499.11 UAV[1] = MASTER
+[TASK-DONE] id=216 type=SENSOR_TO_UAV Sensor_158->UAV_1 bytes=942 finishSec=1499.12 durationSec=0.0115065 metDeadline=YES
+[ROLE] t=1523.81 UAV[0] = MASTER
+[TASK-DONE] id=217 type=SENSOR_TO_UAV Sensor_9->UAV_0 bytes=1519 finishSec=1523.82 durationSec=0.00582817 metDeadline=YES
+[ROLE] t=1539.69 UAV[3] = MASTER
+[TASK-DONE] id=218 type=SENSOR_TO_UAV Sensor_316->UAV_3 bytes=1254 finishSec=1539.71 durationSec=0.0104068 metDeadline=YES
+[ROLE] t=1546.05 UAV[2] = MASTER
+[TASK-DONE] id=219 type=SENSOR_TO_UAV Sensor_328->UAV_2 bytes=1259 finishSec=1546.06 durationSec=0.00548017 metDeadline=YES
+[ROLE] t=1623.93 UAV[1] = MASTER
+[TASK-DONE] id=220 type=SENSOR_TO_UAV Sensor_77->UAV_1 bytes=5178 finishSec=1623.96 durationSec=0.0252442 metDeadline=YES
+[MOVE] t=1734.22 UAV[0] -> (3152.15, 3024.25, 50)
+[MOVE] t=1734.22 UAV[1] -> (3152.15, 3024.25, 50)
+[MOVE] t=1734.22 UAV[2] -> (3152.15, 3024.25, 50)
+[MOVE] t=1734.22 UAV[3] -> (3152.15, 3024.25, 50)
+[ROLE] t=1827.99 UAV[0] = MASTER
+[TASK-DONE] id=221 type=SENSOR_TO_UAV Sensor_373->UAV_0 bytes=771 finishSec=1828 durationSec=0.0043985 metDeadline=YES
+[ROLE] t=1828.32 UAV[1] = SLAVE
+[TASK-DONE] id=222 type=SENSOR_TO_UAV Sensor_96->UAV_1 bytes=707 finishSec=1828.33 durationSec=0.0051305 metDeadline=YES
+[ROLE] t=1828.61 UAV[0] = MASTER
+[TASK-DONE] id=223 type=SENSOR_TO_UAV Sensor_129->UAV_0 bytes=4421 finishSec=1828.63 durationSec=0.0206002 metDeadline=YES
+[ROLE] t=1828.86 UAV[1] = SLAVE
+[ROLE] t=1828.86 UAV[0] = MASTER
+[TASK-DONE] id=224 type=SLAVE_TO_MASTER UAV_1->UAV_0 bytes=707 finishSec=1828.86 durationSec=0.00311 metDeadline=YES
+[ROLE] t=1828.95 UAV[1] = SLAVE
+[TASK-DONE] id=225 type=SENSOR_TO_UAV Sensor_297->UAV_1 bytes=4414 finishSec=1828.97 durationSec=0.0205922 metDeadline=YES
+[ROLE] t=1832.29 UAV[1] = SLAVE
+[ROLE] t=1832.29 UAV[0] = MASTER
+[TASK-DONE] id=226 type=SLAVE_TO_MASTER UAV_1->UAV_0 bytes=4414 finishSec=1832.31 durationSec=0.020592 metDeadline=YES
+[ROLE] t=1855.81 UAV[2] = MASTER
+[TASK-DONE] id=227 type=SENSOR_TO_UAV Sensor_145->UAV_2 bytes=792 finishSec=1855.82 durationSec=0.0044465 metDeadline=YES
+[ROLE] t=1863.12 UAV[0] = MASTER
+[TASK-DONE] id=228 type=SENSOR_TO_UAV Sensor_484->UAV_0 bytes=915 finishSec=1863.13 durationSec=0.0086505 metDeadline=YES
+[ROLE] t=1864.47 UAV[3] = SLAVE
+[TASK-DONE] id=229 type=SENSOR_TO_UAV Sensor_144->UAV_3 bytes=1108 finishSec=1864.48 durationSec=0.0104868 metDeadline=YES
+[ROLE] t=1865.25 UAV[3] = SLAVE
+[ROLE] t=1865.25 UAV[2] = MASTER
+[TASK-DONE] id=230 type=SLAVE_TO_MASTER UAV_3->UAV_2 bytes=1108 finishSec=1865.25 durationSec=0.00528 metDeadline=YES
+[ROLE] t=1905.86 UAV[2] = MASTER
+[TASK-DONE] id=231 type=SENSOR_TO_UAV Sensor_97->UAV_2 bytes=1007 finishSec=1905.86 durationSec=0.0026305 metDeadline=YES
+[ROLE] t=1909.08 UAV[1] = MASTER
+[TASK-DONE] id=232 type=SENSOR_TO_UAV Sensor_84->UAV_1 bytes=962 finishSec=1909.09 durationSec=0.0104905 metDeadline=YES
+[ROLE] t=1913.19 UAV[3] = MASTER
+[TASK-DONE] id=233 type=SENSOR_TO_UAV Sensor_76->UAV_3 bytes=992 finishSec=1913.2 durationSec=0.0085105 metDeadline=YES
+[ROLE] t=1959.31 UAV[2] = MASTER
+[TASK-DONE] id=234 type=SENSOR_TO_UAV Sensor_228->UAV_2 bytes=903 finishSec=1959.31 durationSec=0.0045145 metDeadline=YES
+[ROLE] t=1959.96 UAV[2] = MASTER
+[TASK-DONE] id=235 type=SENSOR_TO_UAV Sensor_401->UAV_2 bytes=4553 finishSec=1959.98 durationSec=0.0207762 metDeadline=YES
+[ROLE] t=1975.9 UAV[1] = MASTER
+[TASK-DONE] id=236 type=SENSOR_TO_UAV Sensor_18->UAV_1 bytes=1072 finishSec=1975.9 durationSec=0.00728683 metDeadline=YES
+[ROLE] t=1976.81 UAV[1] = MASTER
+[TASK-DONE] id=237 type=SENSOR_TO_UAV Sensor_104->UAV_1 bytes=4694 finishSec=1976.83 durationSec=0.0209642 metDeadline=YES
+[ROLE] t=1994.35 UAV[0] = MASTER
+[TASK-DONE] id=238 type=SENSOR_TO_UAV Sensor_247->UAV_0 bytes=841 finishSec=1994.35 durationSec=0.0035305 metDeadline=YES
+[ROLE] t=2000.62 UAV[2] = MASTER
+[TASK-DONE] id=239 type=SENSOR_TO_UAV Sensor_308->UAV_2 bytes=1438 finishSec=2000.63 durationSec=0.00864683 metDeadline=YES
+[ROLE] t=2007.03 UAV[3] = MASTER
+[TASK-DONE] id=240 type=SENSOR_TO_UAV Sensor_114->UAV_3 bytes=1009 finishSec=2007.04 durationSec=0.0035945 metDeadline=YES
+[ROLE] t=2012.99 UAV[1] = MASTER
+[TASK-DONE] id=241 type=SENSOR_TO_UAV Sensor_352->UAV_1 bytes=4304 finishSec=2013.01 durationSec=0.0204442 metDeadline=YES
+[MOVE] t=2020.31 UAV[0] -> (3108.72, 2976.29, 50)
+[MOVE] t=2020.31 UAV[1] -> (3108.72, 2976.29, 50)
+[MOVE] t=2020.31 UAV[2] -> (3108.72, 2976.29, 50)
+[MOVE] t=2020.31 UAV[3] -> (3108.72, 2976.29, 50)
+[ROLE] t=2025.11 UAV[0] = MASTER
+[TASK-DONE] id=242 type=SENSOR_TO_UAV Sensor_374->UAV_0 bytes=4346 finishSec=2025.13 durationSec=0.0205002 metDeadline=YES
+[ROLE] t=2028.74 UAV[1] = SLAVE
+[TASK-DONE] id=243 type=SENSOR_TO_UAV Sensor_376->UAV_1 bytes=3862 finishSec=2028.76 durationSec=0.0162202 metDeadline=YES
+[ROLE] t=2031.44 UAV[1] = SLAVE
+[ROLE] t=2031.44 UAV[0] = MASTER
+[TASK-DONE] id=244 type=SLAVE_TO_MASTER UAV_1->UAV_0 bytes=3862 finishSec=2031.46 durationSec=0.01622 metDeadline=YES
+[ROLE] t=2032.25 UAV[2] = SLAVE
+[TASK-DONE] id=245 type=SENSOR_TO_UAV Sensor_405->UAV_2 bytes=4384 finishSec=2032.28 durationSec=0.0205522 metDeadline=YES
+[ROLE] t=2032.9 UAV[3] = SLAVE
+[TASK-DONE] id=246 type=SENSOR_TO_UAV Sensor_68->UAV_3 bytes=4789 finishSec=2032.92 durationSec=0.0210922 metDeadline=YES
+[ROLE] t=2035.32 UAV[2] = SLAVE
+[ROLE] t=2035.32 UAV[0] = MASTER
+[TASK-DONE] id=247 type=SLAVE_TO_MASTER UAV_2->UAV_0 bytes=4384 finishSec=2035.34 durationSec=0.020552 metDeadline=YES
+[ROLE] t=2035.89 UAV[0] = MASTER
+[TASK-DONE] id=248 type=SENSOR_TO_UAV Sensor_343->UAV_0 bytes=4811 finishSec=2035.91 durationSec=0.0211202 metDeadline=YES
+[ROLE] t=2036.24 UAV[3] = SLAVE
+[ROLE] t=2036.24 UAV[0] = MASTER
+[TASK-DONE] id=249 type=SLAVE_TO_MASTER UAV_3->UAV_0 bytes=4789 finishSec=2036.26 durationSec=0.021092 metDeadline=YES
+[ROLE] t=2036.86 UAV[1] = SLAVE
+[TASK-DONE] id=250 type=SENSOR_TO_UAV Sensor_202->UAV_1 bytes=4953 finishSec=2036.88 durationSec=0.0213082 metDeadline=YES
+[ROLE] t=2039.82 UAV[3] = MASTER
+[TASK-DONE] id=251 type=SENSOR_TO_UAV Sensor_292->UAV_3 bytes=5117 finishSec=2039.84 durationSec=0.0215282 metDeadline=YES
+[ROLE] t=2040.32 UAV[1] = SLAVE
+[ROLE] t=2040.32 UAV[0] = MASTER
+[TASK-DONE] id=252 type=SLAVE_TO_MASTER UAV_1->UAV_0 bytes=4953 finishSec=2040.34 durationSec=0.021308 metDeadline=YES
+[MOVE] t=2048.82 UAV[0] -> (3035.48, 3011.59, 50)
+[MOVE] t=2048.82 UAV[1] -> (3035.48, 3011.59, 50)
+[MOVE] t=2048.82 UAV[2] -> (3035.48, 3011.59, 50)
+[MOVE] t=2048.82 UAV[3] -> (3035.48, 3011.59, 50)
+[ROLE] t=2049.85 UAV[0] = MASTER
+[TASK-DONE] id=253 type=SENSOR_TO_UAV Sensor_117->UAV_0 bytes=4617 finishSec=2049.87 durationSec=0.0208602 metDeadline=YES
+[ROLE] t=2055.42 UAV[1] = SLAVE
+[TASK-DONE] id=254 type=SENSOR_TO_UAV Sensor_447->UAV_1 bytes=4308 finishSec=2055.44 durationSec=0.0204482 metDeadline=YES
+[ROLE] t=2058.43 UAV[1] = SLAVE
+[ROLE] t=2058.43 UAV[0] = MASTER
+[TASK-DONE] id=255 type=SLAVE_TO_MASTER UAV_1->UAV_0 bytes=4308 finishSec=2058.45 durationSec=0.020448 metDeadline=YES
+[ROLE] t=2061.19 UAV[2] = SLAVE
+[TASK-DONE] id=256 type=SENSOR_TO_UAV Sensor_215->UAV_2 bytes=4605 finishSec=2061.21 durationSec=0.0208442 metDeadline=YES
+[ROLE] t=2064.31 UAV[3] = SLAVE
+[TASK-DONE] id=257 type=SENSOR_TO_UAV Sensor_334->UAV_3 bytes=4726 finishSec=2064.34 durationSec=0.0210082 metDeadline=YES
+[ROLE] t=2064.4 UAV[2] = SLAVE
+[ROLE] t=2064.4 UAV[0] = MASTER
+[TASK-DONE] id=258 type=SLAVE_TO_MASTER UAV_2->UAV_0 bytes=4605 finishSec=2064.43 durationSec=0.020844 metDeadline=YES
+[ROLE] t=2064.62 UAV[0] = MASTER
+[TASK-DONE] id=259 type=SENSOR_TO_UAV Sensor_290->UAV_0 bytes=4741 finishSec=2064.64 durationSec=0.0210282 metDeadline=YES
+[ROLE] t=2067.62 UAV[3] = SLAVE
+[ROLE] t=2067.62 UAV[0] = MASTER
+[TASK-DONE] id=260 type=SLAVE_TO_MASTER UAV_3->UAV_0 bytes=4726 finishSec=2067.64 durationSec=0.021008 metDeadline=YES
+[ROLE] t=2072.6 UAV[2] = SLAVE
+[TASK-DONE] id=261 type=SENSOR_TO_UAV Sensor_55->UAV_2 bytes=5320 finishSec=2072.63 durationSec=0.0254322 metDeadline=YES
+[ROLE] t=2074.5 UAV[1] = MASTER
+[TASK-DONE] id=262 type=SENSOR_TO_UAV Sensor_393->UAV_1 bytes=4801 finishSec=2074.52 durationSec=0.0211082 metDeadline=YES
+[ROLE] t=2076.32 UAV[2] = SLAVE
+[ROLE] t=2076.32 UAV[1] = MASTER
+[TASK-DONE] id=263 type=SLAVE_TO_MASTER UAV_2->UAV_1 bytes=5320 finishSec=2076.34 durationSec=0.025432 metDeadline=YES
+[MOVE] t=2081.63 UAV[0] -> (3018.11, 2957.62, 50)
+[MOVE] t=2081.63 UAV[1] -> (3018.11, 2957.62, 50)
+[MOVE] t=2081.63 UAV[2] -> (3018.11, 2957.62, 50)
+[MOVE] t=2081.63 UAV[3] -> (3018.11, 2957.62, 50)
+[ROLE] t=2086.34 UAV[2] = MASTER
+[TASK-DONE] id=264 type=SENSOR_TO_UAV Sensor_110->UAV_2 bytes=4450 finishSec=2086.36 durationSec=0.0206402 metDeadline=YES
+[ROLE] t=2089.22 UAV[0] = SLAVE
+[TASK-DONE] id=265 type=SENSOR_TO_UAV Sensor_350->UAV_0 bytes=3989 finishSec=2089.23 durationSec=0.0163882 metDeadline=YES
+[ROLE] t=2092.01 UAV[0] = SLAVE
+[ROLE] t=2092.01 UAV[2] = MASTER
+[TASK-DONE] id=266 type=SLAVE_TO_MASTER UAV_0->UAV_2 bytes=3989 finishSec=2092.02 durationSec=0.016388 metDeadline=YES
+[ROLE] t=2092.26 UAV[3] = SLAVE
+[TASK-DONE] id=267 type=SENSOR_TO_UAV Sensor_300->UAV_3 bytes=4790 finishSec=2092.28 durationSec=0.0210922 metDeadline=YES
+[ROLE] t=2092.89 UAV[1] = SLAVE
+[TASK-DONE] id=268 type=SENSOR_TO_UAV Sensor_234->UAV_1 bytes=4867 finishSec=2092.91 durationSec=0.0211962 metDeadline=YES
+[ROLE] t=2095.61 UAV[3] = SLAVE
+[ROLE] t=2095.61 UAV[2] = MASTER
+[TASK-DONE] id=269 type=SLAVE_TO_MASTER UAV_3->UAV_2 bytes=4790 finishSec=2095.63 durationSec=0.021092 metDeadline=YES
+[ROLE] t=2096.29 UAV[1] = SLAVE
+[ROLE] t=2096.29 UAV[2] = MASTER
+[TASK-DONE] id=270 type=SLAVE_TO_MASTER UAV_1->UAV_2 bytes=4867 finishSec=2096.31 durationSec=0.021196 metDeadline=YES
+[ROLE] t=2098.95 UAV[0] = MASTER
+[TASK-DONE] id=271 type=SENSOR_TO_UAV Sensor_432->UAV_0 bytes=5016 finishSec=2098.97 durationSec=0.0213922 metDeadline=YES
+[ROLE] t=2104.43 UAV[2] = SLAVE
+[TASK-DONE] id=272 type=SENSOR_TO_UAV Sensor_416->UAV_2 bytes=5219 finishSec=2104.46 durationSec=0.0253002 metDeadline=YES
+[ROLE] t=2106.92 UAV[3] = MASTER
+[TASK-DONE] id=273 type=SENSOR_TO_UAV Sensor_468->UAV_3 bytes=4961 finishSec=2106.94 durationSec=0.0213202 metDeadline=YES
+[ROLE] t=2108.08 UAV[2] = SLAVE
+[ROLE] t=2108.08 UAV[0] = MASTER
+[TASK-DONE] id=274 type=SLAVE_TO_MASTER UAV_2->UAV_0 bytes=5219 finishSec=2108.11 durationSec=0.0253 metDeadline=YES
+[MOVE] t=2112.6 UAV[0] -> (2985.96, 2949.34, 50)
+[MOVE] t=2112.6 UAV[1] -> (2985.96, 2949.34, 50)
+[MOVE] t=2112.6 UAV[2] -> (2985.96, 2949.34, 50)
+[MOVE] t=2112.6 UAV[3] -> (2985.96, 2949.34, 50)
+[ROLE] t=2117.67 UAV[3] = SLAVE
+[TASK-DONE] id=275 type=SENSOR_TO_UAV Sensor_189->UAV_3 bytes=4656 finishSec=2117.69 durationSec=0.0209122 metDeadline=YES
+[ROLE] t=2117.79 UAV[0] = SLAVE
+[TASK-DONE] id=276 type=SENSOR_TO_UAV Sensor_181->UAV_0 bytes=3908 finishSec=2117.81 durationSec=0.0162802 metDeadline=YES
+[ROLE] t=2119.25 UAV[2] = MASTER
+[TASK-DONE] id=277 type=SENSOR_TO_UAV Sensor_194->UAV_2 bytes=4571 finishSec=2119.27 durationSec=0.0208002 metDeadline=YES
+[ROLE] t=2120.52 UAV[0] = SLAVE
+[ROLE] t=2120.52 UAV[2] = MASTER
+[TASK-DONE] id=278 type=SLAVE_TO_MASTER UAV_0->UAV_2 bytes=3908 finishSec=2120.54 durationSec=0.01628 metDeadline=YES
+[ROLE] t=2120.93 UAV[3] = SLAVE
+[ROLE] t=2120.93 UAV[2] = MASTER
+[TASK-DONE] id=279 type=SLAVE_TO_MASTER UAV_3->UAV_2 bytes=4656 finishSec=2120.95 durationSec=0.020912 metDeadline=YES
+[ROLE] t=2125.1 UAV[1] = SLAVE
+[TASK-DONE] id=280 type=SENSOR_TO_UAV Sensor_331->UAV_1 bytes=3336 finishSec=2125.11 durationSec=0.0167515 metDeadline=YES
+[ROLE] t=2127.43 UAV[1] = SLAVE
+[ROLE] t=2127.43 UAV[2] = MASTER
+[TASK-DONE] id=281 type=SLAVE_TO_MASTER UAV_1->UAV_2 bytes=3336 finishSec=2127.44 durationSec=0.01552 metDeadline=YES
+[ROLE] t=2131.16 UAV[0] = SLAVE
+[TASK-DONE] id=282 type=SENSOR_TO_UAV Sensor_30->UAV_0 bytes=4892 finishSec=2131.18 durationSec=0.0212282 metDeadline=YES
+[ROLE] t=2131.47 UAV[2] = MASTER
+[TASK-DONE] id=283 type=SENSOR_TO_UAV Sensor_20->UAV_2 bytes=4763 finishSec=2131.49 durationSec=0.0210562 metDeadline=YES
+[ROLE] t=2134.58 UAV[0] = SLAVE
+[ROLE] t=2134.58 UAV[2] = MASTER
+[TASK-DONE] id=284 type=SLAVE_TO_MASTER UAV_0->UAV_2 bytes=4892 finishSec=2134.6 durationSec=0.021228 metDeadline=YES
+[ROLE] t=2138.8 UAV[3] = SLAVE
+[TASK-DONE] id=285 type=SENSOR_TO_UAV Sensor_238->UAV_3 bytes=4533 finishSec=2138.83 durationSec=0.0207482 metDeadline=YES
+[ROLE] t=2141.73 UAV[1] = MASTER
+[TASK-DONE] id=286 type=SENSOR_TO_UAV Sensor_390->UAV_1 bytes=4907 finishSec=2141.75 durationSec=0.0212482 metDeadline=YES
+[ROLE] t=2141.97 UAV[3] = SLAVE
+[ROLE] t=2141.97 UAV[2] = MASTER
+[TASK-DONE] id=287 type=SLAVE_TO_MASTER UAV_3->UAV_2 bytes=4533 finishSec=2141.99 durationSec=0.020748 metDeadline=YES
+[MOVE] t=2154 UAV[0] -> (2884.78, 3035.14, 50)
+[MOVE] t=2154 UAV[1] -> (2884.78, 3035.14, 50)
+[MOVE] t=2154 UAV[2] -> (2884.78, 3035.14, 50)
+[MOVE] t=2154 UAV[3] -> (2884.78, 3035.14, 50)
+[ROLE] t=2161.11 UAV[0] = SLAVE
+[TASK-DONE] id=288 type=SENSOR_TO_UAV Sensor_281->UAV_0 bytes=4990 finishSec=2161.13 durationSec=0.0213602 metDeadline=YES
+[ROLE] t=2163.67 UAV[1] = SLAVE
+[TASK-DONE] id=289 type=SENSOR_TO_UAV Sensor_19->UAV_1 bytes=4115 finishSec=2163.69 durationSec=0.0201922 metDeadline=YES
+[ROLE] t=2164.6 UAV[0] = SLAVE
+[ROLE] t=2164.6 UAV[2] = MASTER
+[TASK-DONE] id=290 type=SLAVE_TO_MASTER UAV_0->UAV_2 bytes=4990 finishSec=2164.62 durationSec=0.02136 metDeadline=YES
+[ROLE] t=2164.96 UAV[2] = MASTER
+[TASK-DONE] id=291 type=SENSOR_TO_UAV Sensor_476->UAV_2 bytes=4299 finishSec=2164.98 durationSec=0.0204362 metDeadline=YES
+[ROLE] t=2165.57 UAV[3] = SLAVE
+[TASK-DONE] id=292 type=SENSOR_TO_UAV Sensor_335->UAV_3 bytes=3912 finishSec=2165.59 durationSec=0.0169315 metDeadline=YES
+[ROLE] t=2166.54 UAV[1] = SLAVE
+[ROLE] t=2166.54 UAV[2] = MASTER
+[TASK-DONE] id=293 type=SLAVE_TO_MASTER UAV_1->UAV_2 bytes=4115 finishSec=2166.56 durationSec=0.020192 metDeadline=YES
+[ROLE] t=2168.31 UAV[3] = SLAVE
+[ROLE] t=2168.31 UAV[2] = MASTER
+[TASK-DONE] id=294 type=SLAVE_TO_MASTER UAV_3->UAV_2 bytes=3912 finishSec=2168.32 durationSec=0.016288 metDeadline=YES
+[ROLE] t=2174.5 UAV[3] = MASTER
+[TASK-DONE] id=295 type=SENSOR_TO_UAV Sensor_293->UAV_3 bytes=4501 finishSec=2174.52 durationSec=0.0207082 metDeadline=YES
+[ROLE] t=2175.32 UAV[1] = SLAVE
+[TASK-DONE] id=296 type=SENSOR_TO_UAV Sensor_269->UAV_1 bytes=5262 finishSec=2175.34 durationSec=0.0253562 metDeadline=YES
+[ROLE] t=2178.15 UAV[0] = SLAVE
+[TASK-DONE] id=297 type=SENSOR_TO_UAV Sensor_458->UAV_0 bytes=4483 finishSec=2178.17 durationSec=0.0206842 metDeadline=YES
+[ROLE] t=2178.54 UAV[2] = SLAVE
+[TASK-DONE] id=298 type=SENSOR_TO_UAV Sensor_403->UAV_2 bytes=4353 finishSec=2178.56 durationSec=0.0205082 metDeadline=YES
+[ROLE] t=2178.99 UAV[1] = SLAVE
+[ROLE] t=2178.99 UAV[3] = MASTER
+[TASK-DONE] id=299 type=SLAVE_TO_MASTER UAV_1->UAV_3 bytes=5262 finishSec=2179.02 durationSec=0.025356 metDeadline=YES
+[ROLE] t=2181.28 UAV[0] = SLAVE
+[ROLE] t=2181.28 UAV[3] = MASTER
+[TASK-DONE] id=300 type=SLAVE_TO_MASTER UAV_0->UAV_3 bytes=4483 finishSec=2181.31 durationSec=0.020684 metDeadline=YES
+[ROLE] t=2181.58 UAV[2] = SLAVE
+[ROLE] t=2181.58 UAV[3] = MASTER
+[TASK-DONE] id=301 type=SLAVE_TO_MASTER UAV_2->UAV_3 bytes=4353 finishSec=2181.6 durationSec=0.020508 metDeadline=YES
+[MOVE] t=2183.93 UAV[0] -> (2899.49, 3012.44, 50)
+[MOVE] t=2183.93 UAV[1] -> (2899.49, 3012.44, 50)
+[MOVE] t=2183.93 UAV[2] -> (2899.49, 3012.44, 50)
+[MOVE] t=2183.93 UAV[3] -> (2899.49, 3012.44, 50)
+[ROLE] t=2190.27 UAV[0] = MASTER
+[TASK-DONE] id=302 type=SENSOR_TO_UAV Sensor_154->UAV_0 bytes=4535 finishSec=2190.3 durationSec=0.0207522 metDeadline=YES
+[ROLE] t=2190.93 UAV[1] = SLAVE
+[TASK-DONE] id=303 type=SENSOR_TO_UAV Sensor_220->UAV_1 bytes=4297 finishSec=2190.95 durationSec=0.0204362 metDeadline=YES
+[ROLE] t=2191.58 UAV[2] = SLAVE
+[TASK-DONE] id=304 type=SENSOR_TO_UAV Sensor_31->UAV_2 bytes=3995 finishSec=2191.6 durationSec=0.0163962 metDeadline=YES
+[ROLE] t=2191.87 UAV[3] = SLAVE
+[TASK-DONE] id=305 type=SENSOR_TO_UAV Sensor_407->UAV_3 bytes=4066 finishSec=2191.89 durationSec=0.0164922 metDeadline=YES
+[ROLE] t=2193.93 UAV[1] = SLAVE
+[ROLE] t=2193.93 UAV[0] = MASTER
+[TASK-DONE] id=306 type=SLAVE_TO_MASTER UAV_1->UAV_0 bytes=4297 finishSec=2193.95 durationSec=0.020436 metDeadline=YES
+[ROLE] t=2194.38 UAV[2] = SLAVE
+[ROLE] t=2194.38 UAV[0] = MASTER
+[TASK-DONE] id=307 type=SLAVE_TO_MASTER UAV_2->UAV_0 bytes=3995 finishSec=2194.39 durationSec=0.016396 metDeadline=YES
+[ROLE] t=2194.71 UAV[3] = SLAVE
+[ROLE] t=2194.71 UAV[0] = MASTER
+[TASK-DONE] id=308 type=SLAVE_TO_MASTER UAV_3->UAV_0 bytes=4066 finishSec=2194.73 durationSec=0.016492 metDeadline=YES
+[ROLE] t=2199.06 UAV[0] = MASTER
+[TASK-DONE] id=309 type=SENSOR_TO_UAV Sensor_245->UAV_0 bytes=4377 finishSec=2199.08 durationSec=0.0205402 metDeadline=YES
+[ROLE] t=2206.4 UAV[2] = SLAVE
+[TASK-DONE] id=310 type=SENSOR_TO_UAV Sensor_457->UAV_2 bytes=4407 finishSec=2206.43 durationSec=0.0205802 metDeadline=YES
+[ROLE] t=2209.49 UAV[2] = SLAVE
+[ROLE] t=2209.49 UAV[0] = MASTER
+[TASK-DONE] id=311 type=SLAVE_TO_MASTER UAV_2->UAV_0 bytes=4407 finishSec=2209.51 durationSec=0.02058 metDeadline=YES
+[ROLE] t=2210.36 UAV[1] = MASTER
+[TASK-DONE] id=312 type=SENSOR_TO_UAV Sensor_61->UAV_1 bytes=4955 finishSec=2210.38 durationSec=0.0213122 metDeadline=YES
+[ROLE] t=2218.18 UAV[3] = SLAVE
+[TASK-DONE] id=313 type=SENSOR_TO_UAV Sensor_452->UAV_3 bytes=4982 finishSec=2218.2 durationSec=0.0213482 metDeadline=YES
+[ROLE] t=2221.66 UAV[3] = SLAVE
+[ROLE] t=2221.66 UAV[1] = MASTER
+[TASK-DONE] id=314 type=SLAVE_TO_MASTER UAV_3->UAV_1 bytes=4982 finishSec=2221.68 durationSec=0.021348 metDeadline=YES
+[MOVE] t=2226.9 UAV[0] -> (2968.07, 3021.79, 50)
+[MOVE] t=2226.9 UAV[1] -> (2968.07, 3021.79, 50)
+[MOVE] t=2226.9 UAV[2] -> (2968.07, 3021.79, 50)
+[MOVE] t=2226.9 UAV[3] -> (2968.07, 3021.79, 50)
+[ROLE] t=2231.03 UAV[1] = SLAVE
+[TASK-DONE] id=315 type=SENSOR_TO_UAV Sensor_244->UAV_1 bytes=4302 finishSec=2231.05 durationSec=0.0204402 metDeadline=YES
+[ROLE] t=2233.6 UAV[0] = MASTER
+[TASK-DONE] id=316 type=SENSOR_TO_UAV Sensor_317->UAV_0 bytes=4499 finishSec=2233.62 durationSec=0.0207042 metDeadline=YES
+[ROLE] t=2234.04 UAV[1] = SLAVE
+[ROLE] t=2234.04 UAV[0] = MASTER
+[TASK-DONE] id=317 type=SLAVE_TO_MASTER UAV_1->UAV_0 bytes=4302 finishSec=2234.06 durationSec=0.02044 metDeadline=YES
+[ROLE] t=2240.51 UAV[2] = SLAVE
+[TASK-DONE] id=318 type=SENSOR_TO_UAV Sensor_148->UAV_2 bytes=4904 finishSec=2240.53 durationSec=0.0212442 metDeadline=YES
+[ROLE] t=2240.95 UAV[3] = SLAVE
+[TASK-DONE] id=319 type=SENSOR_TO_UAV Sensor_454->UAV_3 bytes=5066 finishSec=2240.97 durationSec=0.0214602 metDeadline=YES
+[ROLE] t=2243.94 UAV[2] = SLAVE
+[ROLE] t=2243.94 UAV[0] = MASTER
+[TASK-DONE] id=320 type=SLAVE_TO_MASTER UAV_2->UAV_0 bytes=4904 finishSec=2243.96 durationSec=0.021244 metDeadline=YES
+[ROLE] t=2244.49 UAV[3] = SLAVE
+[ROLE] t=2244.49 UAV[0] = MASTER
+[TASK-DONE] id=321 type=SLAVE_TO_MASTER UAV_3->UAV_0 bytes=5066 finishSec=2244.51 durationSec=0.02146 metDeadline=YES
+[ROLE] t=2249.18 UAV[3] = MASTER
+[TASK-DONE] id=322 type=SENSOR_TO_UAV Sensor_241->UAV_3 bytes=4485 finishSec=2249.2 durationSec=0.0206842 metDeadline=YES
+[ROLE] t=2252.94 UAV[0] = MASTER
+[TASK-DONE] id=323 type=SENSOR_TO_UAV Sensor_115->UAV_0 bytes=3347 finishSec=2252.96 durationSec=0.0155322 metDeadline=YES
+[ROLE] t=2257.22 UAV[1] = MASTER
+[ROLE] t=2257.24 UAV[2] = SLAVE
+[TASK-DONE] id=324 type=SENSOR_TO_UAV Sensor_231->UAV_1 bytes=4124 finishSec=2257.24 durationSec=0.0202042 metDeadline=YES
+[TASK-DONE] id=325 type=SENSOR_TO_UAV Sensor_314->UAV_2 bytes=4511 finishSec=2257.26 durationSec=0.0207202 metDeadline=YES
+[ROLE] t=2260.39 UAV[2] = SLAVE
+[ROLE] t=2260.39 UAV[3] = MASTER
+[TASK-DONE] id=326 type=SLAVE_TO_MASTER UAV_2->UAV_3 bytes=4511 finishSec=2260.41 durationSec=0.02072 metDeadline=YES
+[MOVE] t=2265.72 UAV[0] -> (3032.4, 3052.87, 50)
+[MOVE] t=2265.72 UAV[1] -> (3032.4, 3052.87, 50)
+[MOVE] t=2265.72 UAV[2] -> (3032.4, 3052.87, 50)
+[MOVE] t=2265.72 UAV[3] -> (3032.4, 3052.87, 50)
+[ROLE] t=2272.02 UAV[3] = MASTER
+[TASK-DONE] id=327 type=SENSOR_TO_UAV Sensor_243->UAV_3 bytes=4608 finishSec=2272.04 durationSec=0.0208482 metDeadline=YES
+[ROLE] t=2272.58 UAV[0] = SLAVE
+[TASK-DONE] id=328 type=SENSOR_TO_UAV Sensor_35->UAV_0 bytes=4502 finishSec=2272.6 durationSec=0.0207082 metDeadline=YES
+[ROLE] t=2274.41 UAV[1] = SLAVE
+[TASK-DONE] id=329 type=SENSOR_TO_UAV Sensor_221->UAV_1 bytes=4306 finishSec=2274.43 durationSec=0.0204482 metDeadline=YES
+[ROLE] t=2275.73 UAV[0] = SLAVE
+[ROLE] t=2275.73 UAV[3] = MASTER
+[TASK-DONE] id=330 type=SLAVE_TO_MASTER UAV_0->UAV_3 bytes=4502 finishSec=2275.75 durationSec=0.020708 metDeadline=YES
+[ROLE] t=2276.8 UAV[2] = SLAVE
+[TASK-DONE] id=331 type=SENSOR_TO_UAV Sensor_408->UAV_2 bytes=4790 finishSec=2276.82 durationSec=0.0210922 metDeadline=YES
+[ROLE] t=2277.42 UAV[1] = SLAVE
+[ROLE] t=2277.42 UAV[3] = MASTER
+[TASK-DONE] id=332 type=SLAVE_TO_MASTER UAV_1->UAV_3 bytes=4306 finishSec=2277.44 durationSec=0.020448 metDeadline=YES
+[ROLE] t=2280.14 UAV[2] = SLAVE
+[ROLE] t=2280.14 UAV[3] = MASTER
+[TASK-DONE] id=333 type=SLAVE_TO_MASTER UAV_2->UAV_3 bytes=4790 finishSec=2280.17 durationSec=0.021092 metDeadline=YES
+[ROLE] t=2286.4 UAV[1] = MASTER
+[TASK-DONE] id=334 type=SENSOR_TO_UAV Sensor_138->UAV_1 bytes=3999 finishSec=2286.42 durationSec=0.0164042 metDeadline=YES
+[ROLE] t=2287.05 UAV[2] = MASTER
+[TASK-DONE] id=335 type=SENSOR_TO_UAV Sensor_75->UAV_2 bytes=4262 finishSec=2287.07 durationSec=0.0203882 metDeadline=YES
+[ROLE] t=2290.13 UAV[3] = MASTER
+[TASK-DONE] id=336 type=SENSOR_TO_UAV Sensor_121->UAV_3 bytes=4497 finishSec=2290.16 durationSec=0.0207002 metDeadline=YES
+[ROLE] t=2293.74 UAV[0] = SLAVE
+[TASK-DONE] id=337 type=SENSOR_TO_UAV Sensor_470->UAV_0 bytes=4775 finishSec=2293.76 durationSec=0.0210722 metDeadline=YES
+[ROLE] t=2297.07 UAV[0] = SLAVE
+[ROLE] t=2297.07 UAV[1] = MASTER
+[TASK-DONE] id=338 type=SLAVE_TO_MASTER UAV_0->UAV_1 bytes=4775 finishSec=2297.09 durationSec=0.021072 metDeadline=YES
+[MOVE] t=2298.94 UAV[0] -> (3021.1, 3037.51, 50)
+[MOVE] t=2298.94 UAV[1] -> (3021.1, 3037.51, 50)
+[MOVE] t=2298.94 UAV[2] -> (3021.1, 3037.51, 50)
+[MOVE] t=2298.94 UAV[3] -> (3021.1, 3037.51, 50)
+[ROLE] t=2300.2 UAV[0] = MASTER
+[TASK-DONE] id=339 type=SENSOR_TO_UAV Sensor_268->UAV_0 bytes=4818 finishSec=2300.22 durationSec=0.0211282 metDeadline=YES
+[ROLE] t=2302.46 UAV[1] = SLAVE
+[TASK-DONE] id=340 type=SENSOR_TO_UAV Sensor_119->UAV_1 bytes=5426 finishSec=2302.49 durationSec=0.0255762 metDeadline=YES
+[ROLE] t=2303.08 UAV[2] = SLAVE
+[TASK-DONE] id=341 type=SENSOR_TO_UAV Sensor_11->UAV_2 bytes=5442 finishSec=2303.1 durationSec=0.0255962 metDeadline=YES
+[ROLE] t=2304.84 UAV[3] = SLAVE
+[TASK-DONE] id=342 type=SENSOR_TO_UAV Sensor_354->UAV_3 bytes=4329 finishSec=2304.86 durationSec=0.0204762 metDeadline=YES
+[ROLE] t=2306.26 UAV[1] = SLAVE
+[ROLE] t=2306.26 UAV[0] = MASTER
+[TASK-DONE] id=343 type=SLAVE_TO_MASTER UAV_1->UAV_0 bytes=5426 finishSec=2306.28 durationSec=0.025576 metDeadline=YES
+[ROLE] t=2306.88 UAV[2] = SLAVE
+[ROLE] t=2306.88 UAV[0] = MASTER
+[TASK-DONE] id=344 type=SLAVE_TO_MASTER UAV_2->UAV_0 bytes=5442 finishSec=2306.91 durationSec=0.025596 metDeadline=YES
+[ROLE] t=2307.87 UAV[3] = SLAVE
+[ROLE] t=2307.87 UAV[0] = MASTER
+[TASK-DONE] id=345 type=SLAVE_TO_MASTER UAV_3->UAV_0 bytes=4329 finishSec=2307.89 durationSec=0.020476 metDeadline=YES
+[ROLE] t=2313.41 UAV[0] = SLAVE
+[TASK-DONE] id=346 type=SENSOR_TO_UAV Sensor_409->UAV_0 bytes=4829 finishSec=2313.43 durationSec=0.0211442 metDeadline=YES
+[ROLE] t=2313.58 UAV[1] = MASTER
+[TASK-DONE] id=347 type=SENSOR_TO_UAV Sensor_107->UAV_1 bytes=5404 finishSec=2313.61 durationSec=0.0255442 metDeadline=YES
+[ROLE] t=2316.79 UAV[0] = SLAVE
+[ROLE] t=2316.79 UAV[1] = MASTER
+[TASK-DONE] id=348 type=SLAVE_TO_MASTER UAV_0->UAV_1 bytes=4829 finishSec=2316.81 durationSec=0.021144 metDeadline=YES
+[ROLE] t=2326.78 UAV[2] = MASTER
+[TASK-DONE] id=349 type=SENSOR_TO_UAV Sensor_212->UAV_2 bytes=3470 finishSec=2326.8 durationSec=0.0156962 metDeadline=YES
+[MOVE] t=2330.58 UAV[0] -> (3028.03, 3056.91, 50)
+[MOVE] t=2330.58 UAV[1] -> (3028.03, 3056.91, 50)
+[MOVE] t=2330.58 UAV[2] -> (3028.03, 3056.91, 50)
+[MOVE] t=2330.58 UAV[3] -> (3028.03, 3056.91, 50)
+[ROLE] t=2335.25 UAV[0] = MASTER
+[TASK-DONE] id=350 type=SENSOR_TO_UAV Sensor_136->UAV_0 bytes=3273 finishSec=2335.27 durationSec=0.0154362 metDeadline=YES
+[ROLE] t=2337.19 UAV[1] = SLAVE
+[TASK-DONE] id=351 type=SENSOR_TO_UAV Sensor_303->UAV_1 bytes=4733 finishSec=2337.21 durationSec=0.0210162 metDeadline=YES
+[ROLE] t=2338.82 UAV[2] = SLAVE
+[TASK-DONE] id=352 type=SENSOR_TO_UAV Sensor_394->UAV_2 bytes=4272 finishSec=2338.84 durationSec=0.0204002 metDeadline=YES
+[ROLE] t=2339.16 UAV[3] = SLAVE
+[TASK-DONE] id=353 type=SENSOR_TO_UAV Sensor_82->UAV_3 bytes=4119 finishSec=2339.18 durationSec=0.0201962 metDeadline=YES
+[ROLE] t=2340.49 UAV[1] = SLAVE
+[ROLE] t=2340.49 UAV[0] = MASTER
+[TASK-DONE] id=354 type=SLAVE_TO_MASTER UAV_1->UAV_0 bytes=4733 finishSec=2340.52 durationSec=0.021016 metDeadline=YES
+[ROLE] t=2341.8 UAV[2] = SLAVE
+[ROLE] t=2341.8 UAV[0] = MASTER
+[TASK-DONE] id=355 type=SLAVE_TO_MASTER UAV_2->UAV_0 bytes=4272 finishSec=2341.83 durationSec=0.0204 metDeadline=YES
+[ROLE] t=2342.03 UAV[3] = SLAVE
+[ROLE] t=2342.03 UAV[0] = MASTER
+[TASK-DONE] id=356 type=SLAVE_TO_MASTER UAV_3->UAV_0 bytes=4119 finishSec=2342.05 durationSec=0.020196 metDeadline=YES
+[ROLE] t=2346 UAV[3] = MASTER
+[TASK-DONE] id=357 type=SENSOR_TO_UAV Sensor_34->UAV_3 bytes=5202 finishSec=2346.03 durationSec=0.0252762 metDeadline=YES
+[ROLE] t=2349.79 UAV[0] = SLAVE
+[TASK-DONE] id=358 type=SENSOR_TO_UAV Sensor_242->UAV_0 bytes=3764 finishSec=2349.8 durationSec=0.0160882 metDeadline=YES
+[ROLE] t=2352.42 UAV[0] = SLAVE
+[ROLE] t=2352.42 UAV[3] = MASTER
+[TASK-DONE] id=359 type=SLAVE_TO_MASTER UAV_0->UAV_3 bytes=3764 finishSec=2352.43 durationSec=0.016088 metDeadline=YES
+[ROLE] t=2359.12 UAV[1] = MASTER
+[TASK-DONE] id=360 type=SENSOR_TO_UAV Sensor_190->UAV_1 bytes=5056 finishSec=2359.14 durationSec=0.0214482 metDeadline=YES
+[ROLE] t=2364.88 UAV[2] = SLAVE
+[TASK-DONE] id=361 type=SENSOR_TO_UAV Sensor_315->UAV_2 bytes=4686 finishSec=2364.9 durationSec=0.0209522 metDeadline=YES
+[ROLE] t=2368.16 UAV[2] = SLAVE
+[ROLE] t=2368.16 UAV[1] = MASTER
+[TASK-DONE] id=362 type=SLAVE_TO_MASTER UAV_2->UAV_1 bytes=4686 finishSec=2368.18 durationSec=0.020952 metDeadline=YES
+[MOVE] t=2376.6 UAV[0] -> (3117.19, 3133.9, 50)
+[MOVE] t=2376.6 UAV[1] -> (3117.19, 3133.9, 50)
+[MOVE] t=2376.6 UAV[2] -> (3117.19, 3133.9, 50)
+[MOVE] t=2376.6 UAV[3] -> (3117.19, 3133.9, 50)
+[ROLE] t=2380.63 UAV[1] = SLAVE
+[TASK-DONE] id=363 type=SENSOR_TO_UAV Sensor_140->UAV_1 bytes=5457 finishSec=2380.66 durationSec=0.0256162 metDeadline=YES
+[ROLE] t=2381.43 UAV[0] = MASTER
+[TASK-DONE] id=364 type=SENSOR_TO_UAV Sensor_42->UAV_0 bytes=4330 finishSec=2381.45 durationSec=0.0204802 metDeadline=YES
+[ROLE] t=2384.44 UAV[1] = SLAVE
+[ROLE] t=2384.44 UAV[0] = MASTER
+[TASK-DONE] id=365 type=SLAVE_TO_MASTER UAV_1->UAV_0 bytes=5457 finishSec=2384.47 durationSec=0.025616 metDeadline=YES
+[ROLE] t=2384.97 UAV[2] = SLAVE
+[TASK-DONE] id=366 type=SENSOR_TO_UAV Sensor_156->UAV_2 bytes=4457 finishSec=2384.99 durationSec=0.0206482 metDeadline=YES
+[ROLE] t=2386.06 UAV[3] = SLAVE
+[TASK-DONE] id=367 type=SENSOR_TO_UAV Sensor_46->UAV_3 bytes=3609 finishSec=2386.08 durationSec=0.0158842 metDeadline=YES
+[ROLE] t=2388.09 UAV[2] = SLAVE
+[ROLE] t=2388.09 UAV[0] = MASTER
+[TASK-DONE] id=368 type=SLAVE_TO_MASTER UAV_2->UAV_0 bytes=4457 finishSec=2388.11 durationSec=0.020648 metDeadline=YES
+[ROLE] t=2388.59 UAV[3] = SLAVE
+[ROLE] t=2388.59 UAV[0] = MASTER
+[TASK-DONE] id=369 type=SLAVE_TO_MASTER UAV_3->UAV_0 bytes=3609 finishSec=2388.6 durationSec=0.015884 metDeadline=YES
+[ROLE] t=2394.74 UAV[0] = SLAVE
+[TASK-DONE] id=370 type=SENSOR_TO_UAV Sensor_109->UAV_0 bytes=4881 finishSec=2394.76 durationSec=0.0212122 metDeadline=YES
+[ROLE] t=2398.15 UAV[0] = SLAVE
+[ROLE] t=2398.15 UAV[1] = MASTER
+[TASK-DONE] id=371 type=SLAVE_TO_MASTER UAV_0->UAV_1 bytes=4881 finishSec=2398.17 durationSec=0.021212 metDeadline=YES
+[ROLE] t=2398.88 UAV[2] = SLAVE
+[TASK-DONE] id=372 type=SENSOR_TO_UAV Sensor_39->UAV_2 bytes=4789 finishSec=2398.9 durationSec=0.0210922 metDeadline=YES
+[ROLE] t=2399.48 UAV[1] = MASTER
+[TASK-DONE] id=373 type=SENSOR_TO_UAV Sensor_357->UAV_1 bytes=4401 finishSec=2399.5 durationSec=0.0205722 metDeadline=YES
+[ROLE] t=2402.22 UAV[2] = SLAVE
+[ROLE] t=2402.22 UAV[1] = MASTER
+[TASK-DONE] id=374 type=SLAVE_TO_MASTER UAV_2->UAV_1 bytes=4789 finishSec=2402.24 durationSec=0.021092 metDeadline=YES
+[MOVE] t=2406.21 UAV[0] -> (3086.91, 3093.09, 50)
+[MOVE] t=2406.21 UAV[1] -> (3086.91, 3093.09, 50)
+[MOVE] t=2406.21 UAV[2] -> (3086.91, 3093.09, 50)
+[MOVE] t=2406.21 UAV[3] -> (3086.91, 3093.09, 50)
+[ROLE] t=2412.18 UAV[1] = MASTER
+[TASK-DONE] id=375 type=SENSOR_TO_UAV Sensor_37->UAV_1 bytes=4449 finishSec=2412.21 durationSec=0.0206362 metDeadline=YES
+[ROLE] t=2412.7 UAV[0] = SLAVE
+[TASK-DONE] id=376 type=SENSOR_TO_UAV Sensor_349->UAV_0 bytes=3919 finishSec=2412.72 durationSec=0.0162962 metDeadline=YES
+[ROLE] t=2414.11 UAV[2] = SLAVE
+[TASK-DONE] id=377 type=SENSOR_TO_UAV Sensor_252->UAV_2 bytes=3929 finishSec=2414.13 durationSec=0.0163082 metDeadline=YES
+[ROLE] t=2415.44 UAV[0] = SLAVE
+[ROLE] t=2415.44 UAV[1] = MASTER
+[TASK-DONE] id=378 type=SLAVE_TO_MASTER UAV_0->UAV_1 bytes=3919 finishSec=2415.45 durationSec=0.016296 metDeadline=YES
+[ROLE] t=2415.89 UAV[3] = SLAVE
+[TASK-DONE] id=379 type=SENSOR_TO_UAV Sensor_497->UAV_3 bytes=4972 finishSec=2415.92 durationSec=0.0213362 metDeadline=YES
+[ROLE] t=2416.86 UAV[2] = SLAVE
+[ROLE] t=2416.86 UAV[1] = MASTER
+[TASK-DONE] id=380 type=SLAVE_TO_MASTER UAV_2->UAV_1 bytes=3929 finishSec=2416.88 durationSec=0.016308 metDeadline=YES
+[ROLE] t=2419.37 UAV[3] = SLAVE
+[ROLE] t=2419.37 UAV[1] = MASTER
+[TASK-DONE] id=381 type=SLAVE_TO_MASTER UAV_3->UAV_1 bytes=4972 finishSec=2419.39 durationSec=0.021336 metDeadline=YES
+[ROLE] t=2422.49 UAV[3] = SLAVE
+[TASK-DONE] id=382 type=SENSOR_TO_UAV Sensor_65->UAV_3 bytes=5296 finishSec=2422.52 durationSec=0.0254002 metDeadline=YES
+[ROLE] t=2423.69 UAV[1] = MASTER
+[TASK-DONE] id=383 type=SENSOR_TO_UAV Sensor_250->UAV_1 bytes=5355 finishSec=2423.71 durationSec=0.0254802 metDeadline=YES
+[ROLE] t=2426.19 UAV[3] = SLAVE
+[ROLE] t=2426.19 UAV[1] = MASTER
+[TASK-DONE] id=384 type=SLAVE_TO_MASTER UAV_3->UAV_1 bytes=5296 finishSec=2426.22 durationSec=0.0254 metDeadline=YES
+[ROLE] t=2429.1 UAV[0] = MASTER
+[TASK-DONE] id=385 type=SENSOR_TO_UAV Sensor_5->UAV_0 bytes=4450 finishSec=2429.12 durationSec=0.0206402 metDeadline=YES
+[MOVE] t=2439.98 UAV[0] -> (3074.54, 2977.2, 50)
+[MOVE] t=2439.98 UAV[1] -> (3074.54, 2977.2, 50)
+[MOVE] t=2439.98 UAV[2] -> (3074.54, 2977.2, 50)
+[MOVE] t=2439.98 UAV[3] -> (3074.54, 2977.2, 50)
+[ROLE] t=2448.74 UAV[3] = SLAVE
+[TASK-DONE] id=386 type=SENSOR_TO_UAV Sensor_353->UAV_3 bytes=4276 finishSec=2448.76 durationSec=0.0204082 metDeadline=YES
+[ROLE] t=2451.73 UAV[3] = SLAVE
+[ROLE] t=2451.73 UAV[0] = MASTER
+[TASK-DONE] id=387 type=SLAVE_TO_MASTER UAV_3->UAV_0 bytes=4276 finishSec=2451.75 durationSec=0.020408 metDeadline=YES
+[ROLE] t=2452.71 UAV[0] = MASTER
+[TASK-DONE] id=388 type=SENSOR_TO_UAV Sensor_248->UAV_0 bytes=5144 finishSec=2452.74 durationSec=0.0252002 metDeadline=YES
+[ROLE] t=2453.3 UAV[3] = MASTER
+[TASK-DONE] id=389 type=SENSOR_TO_UAV Sensor_325->UAV_3 bytes=4369 finishSec=2453.32 durationSec=0.0205322 metDeadline=YES
+[ROLE] t=2453.78 UAV[2] = SLAVE
+[TASK-DONE] id=390 type=SENSOR_TO_UAV Sensor_60->UAV_2 bytes=3402 finishSec=2453.8 durationSec=0.0156082 metDeadline=YES
+[ROLE] t=2455.24 UAV[1] = SLAVE
+[TASK-DONE] id=391 type=SENSOR_TO_UAV Sensor_461->UAV_1 bytes=4652 finishSec=2455.26 durationSec=0.0209082 metDeadline=YES
+[ROLE] t=2456.16 UAV[2] = SLAVE
+[ROLE] t=2456.16 UAV[0] = MASTER
+[TASK-DONE] id=392 type=SLAVE_TO_MASTER UAV_2->UAV_0 bytes=3402 finishSec=2456.17 durationSec=0.015608 metDeadline=YES
+[ROLE] t=2458.49 UAV[1] = SLAVE
+[ROLE] t=2458.49 UAV[0] = MASTER
+[TASK-DONE] id=393 type=SLAVE_TO_MASTER UAV_1->UAV_0 bytes=4652 finishSec=2458.51 durationSec=0.020908 metDeadline=YES
+[ROLE] t=2465.64 UAV[0] = MASTER
+[TASK-DONE] id=394 type=SENSOR_TO_UAV Sensor_184->UAV_0 bytes=4407 finishSec=2465.66 durationSec=0.0205802 metDeadline=YES
+[ROLE] t=2471.18 UAV[1] = MASTER
+[TASK-DONE] id=395 type=SENSOR_TO_UAV Sensor_264->UAV_1 bytes=5271 finishSec=2471.2 durationSec=0.0253682 metDeadline=YES
+[MOVE] t=2477.73 UAV[0] -> (3094.71, 2939.19, 50)
+[MOVE] t=2477.73 UAV[1] -> (3094.71, 2939.19, 50)
+[MOVE] t=2477.73 UAV[2] -> (3094.71, 2939.19, 50)
+[MOVE] t=2477.73 UAV[3] -> (3094.71, 2939.19, 50)
+[ROLE] t=2484.3 UAV[1] = MASTER
+[TASK-DONE] id=396 type=SENSOR_TO_UAV Sensor_330->UAV_1 bytes=4956 finishSec=2484.32 durationSec=0.0213122 metDeadline=YES
+[ROLE] t=2487.84 UAV[0] = SLAVE
+[TASK-DONE] id=397 type=SENSOR_TO_UAV Sensor_443->UAV_0 bytes=3795 finishSec=2487.86 durationSec=0.0161322 metDeadline=YES
+[ROLE] t=2490.5 UAV[0] = SLAVE
+[ROLE] t=2490.5 UAV[1] = MASTER
+[TASK-DONE] id=398 type=SLAVE_TO_MASTER UAV_0->UAV_1 bytes=3795 finishSec=2490.51 durationSec=0.016132 metDeadline=YES
+[ROLE] t=2492.65 UAV[2] = SLAVE
+[TASK-DONE] id=399 type=SENSOR_TO_UAV Sensor_265->UAV_2 bytes=4662 finishSec=2492.67 durationSec=0.0209202 metDeadline=YES
+[ROLE] t=2493.97 UAV[3] = SLAVE
+[TASK-DONE] id=400 type=SENSOR_TO_UAV Sensor_51->UAV_3 bytes=4582 finishSec=2493.99 durationSec=0.0208162 metDeadline=YES
+[ROLE] t=2495.9 UAV[2] = SLAVE
+[ROLE] t=2495.9 UAV[1] = MASTER
+[TASK-DONE] id=401 type=SLAVE_TO_MASTER UAV_2->UAV_1 bytes=4662 finishSec=2495.93 durationSec=0.02092 metDeadline=YES
+[ROLE] t=2497.09 UAV[0] = MASTER
+[TASK-DONE] id=402 type=SENSOR_TO_UAV Sensor_385->UAV_0 bytes=5000 finishSec=2497.11 durationSec=0.0213722 metDeadline=YES
+[ROLE] t=2497.17 UAV[3] = SLAVE
+[ROLE] t=2497.17 UAV[1] = MASTER
+[TASK-DONE] id=403 type=SLAVE_TO_MASTER UAV_3->UAV_1 bytes=4582 finishSec=2497.19 durationSec=0.020816 metDeadline=YES
+[ROLE] t=2505.19 UAV[3] = MASTER
+[TASK-DONE] id=404 type=SENSOR_TO_UAV Sensor_249->UAV_3 bytes=4783 finishSec=2505.21 durationSec=0.0210842 metDeadline=YES
+[ROLE] t=2506.6 UAV[1] = MASTER
+[TASK-DONE] id=405 type=SENSOR_TO_UAV Sensor_479->UAV_1 bytes=4206 finishSec=2506.62 durationSec=0.0203122 metDeadline=YES
+[MOVE] t=2515.36 UAV[0] -> (3026.59, 2993.69, 50)
+[MOVE] t=2515.36 UAV[1] -> (3026.59, 2993.69, 50)
+[MOVE] t=2515.36 UAV[2] -> (3026.59, 2993.69, 50)
+[MOVE] t=2515.36 UAV[3] -> (3026.59, 2993.69, 50)
+[ROLE] t=2523.3 UAV[0] = MASTER
+[TASK-DONE] id=406 type=SENSOR_TO_UAV Sensor_361->UAV_0 bytes=4869 finishSec=2523.32 durationSec=0.0211962 metDeadline=YES
+[ROLE] t=2525.78 UAV[3] = SLAVE
+[TASK-DONE] id=407 type=SENSOR_TO_UAV Sensor_176->UAV_3 bytes=4375 finishSec=2525.8 durationSec=0.0205402 metDeadline=YES
+[ROLE] t=2528.43 UAV[2] = SLAVE
+[TASK-DONE] id=408 type=SENSOR_TO_UAV Sensor_151->UAV_2 bytes=4274 finishSec=2528.45 durationSec=0.0204042 metDeadline=YES
+[ROLE] t=2528.83 UAV[3] = SLAVE
+[ROLE] t=2528.83 UAV[0] = MASTER
+[TASK-DONE] id=409 type=SLAVE_TO_MASTER UAV_3->UAV_0 bytes=4375 finishSec=2528.85 durationSec=0.02054 metDeadline=YES
+[ROLE] t=2530.52 UAV[1] = SLAVE
+[TASK-DONE] id=410 type=SENSOR_TO_UAV Sensor_153->UAV_1 bytes=4513 finishSec=2530.54 durationSec=0.0207242 metDeadline=YES
+[ROLE] t=2531.42 UAV[2] = SLAVE
+[ROLE] t=2531.42 UAV[0] = MASTER
+[TASK-DONE] id=411 type=SLAVE_TO_MASTER UAV_2->UAV_0 bytes=4274 finishSec=2531.44 durationSec=0.020404 metDeadline=YES
+[ROLE] t=2531.61 UAV[0] = MASTER
+[TASK-DONE] id=412 type=SENSOR_TO_UAV Sensor_391->UAV_0 bytes=4540 finishSec=2531.63 durationSec=0.0207602 metDeadline=YES
+[ROLE] t=2533.67 UAV[1] = SLAVE
+[ROLE] t=2533.67 UAV[0] = MASTER
+[TASK-DONE] id=413 type=SLAVE_TO_MASTER UAV_1->UAV_0 bytes=4513 finishSec=2533.7 durationSec=0.020724 metDeadline=YES
+[ROLE] t=2540.21 UAV[3] = SLAVE
+[TASK-DONE] id=414 type=SENSOR_TO_UAV Sensor_120->UAV_3 bytes=3621 finishSec=2540.22 durationSec=0.0159002 metDeadline=YES
+[ROLE] t=2542.74 UAV[3] = SLAVE
+[ROLE] t=2542.74 UAV[0] = MASTER
+[TASK-DONE] id=415 type=SLAVE_TO_MASTER UAV_3->UAV_0 bytes=3621 finishSec=2542.75 durationSec=0.0159 metDeadline=YES
+[ROLE] t=2546.81 UAV[1] = SLAVE
+[TASK-DONE] id=416 type=SENSOR_TO_UAV Sensor_101->UAV_1 bytes=4986 finishSec=2546.83 durationSec=0.0213522 metDeadline=YES
+[ROLE] t=2550.29 UAV[1] = SLAVE
+[ROLE] t=2550.29 UAV[0] = MASTER
+[TASK-DONE] id=417 type=SLAVE_TO_MASTER UAV_1->UAV_0 bytes=4986 finishSec=2550.31 durationSec=0.021352 metDeadline=YES
+[ROLE] t=2552.55 UAV[2] = MASTER
+[TASK-DONE] id=418 type=SENSOR_TO_UAV Sensor_150->UAV_2 bytes=4369 finishSec=2552.57 durationSec=0.0205322 metDeadline=YES
+[MOVE] t=2562.35 UAV[0] -> (2926.11, 2982.22, 50)
+[MOVE] t=2562.35 UAV[1] -> (2926.11, 2982.22, 50)
+[MOVE] t=2562.35 UAV[2] -> (2926.11, 2982.22, 50)
+[MOVE] t=2562.35 UAV[3] -> (2926.11, 2982.22, 50)
+[ROLE] t=2564.77 UAV[1] = SLAVE
+[TASK-DONE] id=419 type=SENSOR_TO_UAV Sensor_4->UAV_1 bytes=4311 finishSec=2564.79 durationSec=0.0204522 metDeadline=YES
+[ROLE] t=2567.79 UAV[1] = SLAVE
+[ROLE] t=2567.79 UAV[0] = MASTER
+[TASK-DONE] id=420 type=SLAVE_TO_MASTER UAV_1->UAV_0 bytes=4311 finishSec=2567.81 durationSec=0.020452 metDeadline=YES
+[ROLE] t=2568.68 UAV[0] = MASTER
+[TASK-DONE] id=421 type=SENSOR_TO_UAV Sensor_257->UAV_0 bytes=3989 finishSec=2568.69 durationSec=0.0163882 metDeadline=YES
+[ROLE] t=2569.02 UAV[2] = SLAVE
+[TASK-DONE] id=422 type=SENSOR_TO_UAV Sensor_370->UAV_2 bytes=4027 finishSec=2569.04 durationSec=0.0164402 metDeadline=YES
+[ROLE] t=2571.84 UAV[2] = SLAVE
+[ROLE] t=2571.84 UAV[0] = MASTER
+[TASK-DONE] id=423 type=SLAVE_TO_MASTER UAV_2->UAV_0 bytes=4027 finishSec=2571.86 durationSec=0.01644 metDeadline=YES
+[ROLE] t=2572.67 UAV[1] = MASTER
+[TASK-DONE] id=424 type=SENSOR_TO_UAV Sensor_451->UAV_1 bytes=4850 finishSec=2572.69 durationSec=0.0211722 metDeadline=YES
+[ROLE] t=2575.04 UAV[3] = SLAVE
+[TASK-DONE] id=425 type=SENSOR_TO_UAV Sensor_311->UAV_3 bytes=4762 finishSec=2575.06 durationSec=0.0210562 metDeadline=YES
+[ROLE] t=2578.36 UAV[3] = SLAVE
+[ROLE] t=2578.36 UAV[0] = MASTER
+[TASK-DONE] id=426 type=SLAVE_TO_MASTER UAV_3->UAV_0 bytes=4762 finishSec=2578.38 durationSec=0.021056 metDeadline=YES
+[ROLE] t=2584.25 UAV[3] = MASTER
+[TASK-DONE] id=427 type=SENSOR_TO_UAV Sensor_312->UAV_3 bytes=4834 finishSec=2584.27 durationSec=0.0211522 metDeadline=YES
+[ROLE] t=2592.02 UAV[0] = MASTER
+[TASK-DONE] id=428 type=SENSOR_TO_UAV Sensor_1->UAV_0 bytes=5136 finishSec=2592.05 durationSec=0.0251882 metDeadline=YES
+[MOVE] t=2599.85 UAV[0] -> (2902.33, 3041.1, 50)
+[MOVE] t=2599.85 UAV[1] -> (2902.33, 3041.1, 50)
+[MOVE] t=2599.85 UAV[2] -> (2902.33, 3041.1, 50)
+[MOVE] t=2599.85 UAV[3] -> (2902.33, 3041.1, 50)
+[ROLE] t=2602.58 UAV[1] = SLAVE
+[TASK-DONE] id=429 type=SENSOR_TO_UAV Sensor_433->UAV_1 bytes=5310 finishSec=2602.61 durationSec=0.0254202 metDeadline=YES
+[ROLE] t=2602.75 UAV[0] = MASTER
+[TASK-DONE] id=430 type=SENSOR_TO_UAV Sensor_486->UAV_0 bytes=4850 finishSec=2602.77 durationSec=0.0211722 metDeadline=YES
+[ROLE] t=2606.29 UAV[1] = SLAVE
+[ROLE] t=2606.29 UAV[0] = MASTER
+[TASK-DONE] id=431 type=SLAVE_TO_MASTER UAV_1->UAV_0 bytes=5310 finishSec=2606.32 durationSec=0.02542 metDeadline=YES
+[ROLE] t=2606.58 UAV[2] = SLAVE
+[TASK-DONE] id=432 type=SENSOR_TO_UAV Sensor_122->UAV_2 bytes=4432 finishSec=2606.6 durationSec=0.0206162 metDeadline=YES
+[ROLE] t=2608.37 UAV[3] = SLAVE
+[TASK-DONE] id=433 type=SENSOR_TO_UAV Sensor_54->UAV_3 bytes=4599 finishSec=2608.39 durationSec=0.0208362 metDeadline=YES
+[ROLE] t=2609.68 UAV[2] = SLAVE
+[ROLE] t=2609.68 UAV[0] = MASTER
+[TASK-DONE] id=434 type=SLAVE_TO_MASTER UAV_2->UAV_0 bytes=4432 finishSec=2609.7 durationSec=0.020616 metDeadline=YES
+[ROLE] t=2611.59 UAV[3] = SLAVE
+[ROLE] t=2611.59 UAV[0] = MASTER
+[TASK-DONE] id=435 type=SLAVE_TO_MASTER UAV_3->UAV_0 bytes=4599 finishSec=2611.61 durationSec=0.020836 metDeadline=YES
+[ROLE] t=2617.14 UAV[3] = MASTER
+[TASK-DONE] id=436 type=SENSOR_TO_UAV Sensor_411->UAV_3 bytes=4052 finishSec=2617.16 durationSec=0.0164722 metDeadline=YES
+[ROLE] t=2628.66 UAV[1] = MASTER
+[TASK-DONE] id=437 type=SENSOR_TO_UAV Sensor_62->UAV_1 bytes=4594 finishSec=2628.68 durationSec=0.0208322 metDeadline=YES
+[ROLE] t=2632.48 UAV[2] = MASTER
+[TASK-DONE] id=438 type=SENSOR_TO_UAV Sensor_387->UAV_2 bytes=4676 finishSec=2632.5 durationSec=0.0209402 metDeadline=YES
+[MOVE] t=2646.6 UAV[0] -> (3063.19, 3065.73, 50)
+[MOVE] t=2646.6 UAV[1] -> (3063.19, 3065.73, 50)
+[MOVE] t=2646.6 UAV[2] -> (3063.19, 3065.73, 50)
+[MOVE] t=2646.6 UAV[3] -> (3063.19, 3065.73, 50)
+[ROLE] t=2652.05 UAV[0] = SLAVE
+[TASK-DONE] id=439 type=SENSOR_TO_UAV Sensor_90->UAV_0 bytes=3871 finishSec=2652.07 durationSec=0.0162322 metDeadline=YES
+[ROLE] t=2654.75 UAV[0] = SLAVE
+[ROLE] t=2654.75 UAV[1] = MASTER
+[TASK-DONE] id=440 type=SLAVE_TO_MASTER UAV_0->UAV_1 bytes=3871 finishSec=2654.77 durationSec=0.016232 metDeadline=YES
+[ROLE] t=2657.43 UAV[2] = SLAVE
+[TASK-DONE] id=441 type=SENSOR_TO_UAV Sensor_462->UAV_2 bytes=3816 finishSec=2657.45 durationSec=0.0167715 metDeadline=YES
+[ROLE] t=2659.54 UAV[1] = MASTER
+[TASK-DONE] id=442 type=SENSOR_TO_UAV Sensor_199->UAV_1 bytes=5218 finishSec=2659.57 durationSec=0.0252962 metDeadline=YES
+[ROLE] t=2660.1 UAV[2] = SLAVE
+[ROLE] t=2660.1 UAV[1] = MASTER
+[TASK-DONE] id=443 type=SLAVE_TO_MASTER UAV_2->UAV_1 bytes=3816 finishSec=2660.12 durationSec=0.01616 metDeadline=YES
+[ROLE] t=2661.64 UAV[3] = SLAVE
+[TASK-DONE] id=444 type=SENSOR_TO_UAV Sensor_386->UAV_3 bytes=4011 finishSec=2661.66 durationSec=0.0164202 metDeadline=YES
+[ROLE] t=2664.44 UAV[3] = SLAVE
+[ROLE] t=2664.44 UAV[1] = MASTER
+[TASK-DONE] id=445 type=SLAVE_TO_MASTER UAV_3->UAV_1 bytes=4011 finishSec=2664.46 durationSec=0.01642 metDeadline=YES
+[ROLE] t=2668.36 UAV[3] = MASTER
+[TASK-DONE] id=446 type=SENSOR_TO_UAV Sensor_183->UAV_3 bytes=4907 finishSec=2668.38 durationSec=0.0212482 metDeadline=YES
+[ROLE] t=2676.49 UAV[1] = SLAVE
+[TASK-DONE] id=447 type=SENSOR_TO_UAV Sensor_342->UAV_1 bytes=4265 finishSec=2676.51 durationSec=0.0203922 metDeadline=YES
+[ROLE] t=2676.68 UAV[0] = SLAVE
+[TASK-DONE] id=448 type=SENSOR_TO_UAV Sensor_436->UAV_0 bytes=4356 finishSec=2676.7 durationSec=0.0205122 metDeadline=YES
+[ROLE] t=2679.47 UAV[1] = SLAVE
+[ROLE] t=2679.47 UAV[3] = MASTER
+[TASK-DONE] id=449 type=SLAVE_TO_MASTER UAV_1->UAV_3 bytes=4265 finishSec=2679.49 durationSec=0.020392 metDeadline=YES
+[ROLE] t=2679.73 UAV[0] = SLAVE
+[ROLE] t=2679.73 UAV[3] = MASTER
+[TASK-DONE] id=450 type=SLAVE_TO_MASTER UAV_0->UAV_3 bytes=4356 finishSec=2679.75 durationSec=0.020512 metDeadline=YES
+[ROLE] t=2681.01 UAV[2] = MASTER
+[TASK-DONE] id=451 type=SENSOR_TO_UAV Sensor_124->UAV_2 bytes=4184 finishSec=2681.03 durationSec=0.0202842 metDeadline=YES
+[MOVE] t=2690.18 UAV[0] -> (3018.98, 2983.18, 50)
+[MOVE] t=2690.18 UAV[1] -> (3018.98, 2983.18, 50)
+[MOVE] t=2690.18 UAV[2] -> (3018.98, 2983.18, 50)
+[MOVE] t=2690.18 UAV[3] -> (3018.98, 2983.18, 50)
+[ROLE] t=2695.62 UAV[0] = MASTER
+[TASK-DONE] id=452 type=SENSOR_TO_UAV Sensor_246->UAV_0 bytes=4128 finishSec=2695.65 durationSec=0.0202082 metDeadline=YES
+[ROLE] t=2701.76 UAV[1] = SLAVE
+[TASK-DONE] id=453 type=SENSOR_TO_UAV Sensor_294->UAV_1 bytes=4592 finishSec=2701.78 durationSec=0.0208282 metDeadline=YES
+[ROLE] t=2702.03 UAV[2] = SLAVE
+[TASK-DONE] id=454 type=SENSOR_TO_UAV Sensor_166->UAV_2 bytes=5458 finishSec=2702.06 durationSec=0.0256162 metDeadline=YES
+[ROLE] t=2704.9 UAV[3] = SLAVE
+[TASK-DONE] id=455 type=SENSOR_TO_UAV Sensor_323->UAV_3 bytes=3949 finishSec=2704.91 durationSec=0.0168115 metDeadline=YES
+[ROLE] t=2704.97 UAV[1] = SLAVE
+[ROLE] t=2704.97 UAV[0] = MASTER
+[TASK-DONE] id=456 type=SLAVE_TO_MASTER UAV_1->UAV_0 bytes=4592 finishSec=2704.99 durationSec=0.020828 metDeadline=YES
+[ROLE] t=2705.85 UAV[2] = SLAVE
+[ROLE] t=2705.85 UAV[0] = MASTER
+[TASK-DONE] id=457 type=SLAVE_TO_MASTER UAV_2->UAV_0 bytes=5458 finishSec=2705.87 durationSec=0.025616 metDeadline=YES
+[ROLE] t=2707.66 UAV[3] = SLAVE
+[ROLE] t=2707.66 UAV[0] = MASTER
+[TASK-DONE] id=458 type=SLAVE_TO_MASTER UAV_3->UAV_0 bytes=3949 finishSec=2707.67 durationSec=0.016336 metDeadline=YES
+[ROLE] t=2709.23 UAV[2] = SLAVE
+[TASK-DONE] id=459 type=SENSOR_TO_UAV Sensor_163->UAV_2 bytes=4197 finishSec=2709.25 durationSec=0.0203002 metDeadline=YES
+[ROLE] t=2712.16 UAV[2] = SLAVE
+[ROLE] t=2712.16 UAV[0] = MASTER
+[TASK-DONE] id=460 type=SLAVE_TO_MASTER UAV_2->UAV_0 bytes=4197 finishSec=2712.18 durationSec=0.0203 metDeadline=YES
+[ROLE] t=2714.77 UAV[0] = MASTER
+[TASK-DONE] id=461 type=SENSOR_TO_UAV Sensor_267->UAV_0 bytes=4465 finishSec=2714.79 durationSec=0.0206602 metDeadline=YES
+[ROLE] t=2723.62 UAV[3] = MASTER
+[TASK-DONE] id=462 type=SENSOR_TO_UAV Sensor_49->UAV_3 bytes=4502 finishSec=2723.64 durationSec=0.0207082 metDeadline=YES
+[ROLE] t=2730.08 UAV[2] = MASTER
+[TASK-DONE] id=463 type=SENSOR_TO_UAV Sensor_413->UAV_2 bytes=4570 finishSec=2730.1 durationSec=0.0208002 metDeadline=YES
+[MOVE] t=2739.42 UAV[0] -> (3023.34, 2891.06, 50)
+[MOVE] t=2739.42 UAV[1] -> (3023.34, 2891.06, 50)
+[MOVE] t=2739.42 UAV[2] -> (3023.34, 2891.06, 50)
+[MOVE] t=2739.42 UAV[3] -> (3023.34, 2891.06, 50)
+[ROLE] t=2746.49 UAV[1] = SLAVE
+[ROLE] t=2746.51 UAV[0] = MASTER
+[TASK-DONE] id=464 type=SENSOR_TO_UAV Sensor_6->UAV_1 bytes=4636 finishSec=2746.51 durationSec=0.0208882 metDeadline=YES
+[TASK-DONE] id=465 type=SENSOR_TO_UAV Sensor_137->UAV_0 bytes=5266 finishSec=2746.53 durationSec=0.0253602 metDeadline=YES
+[ROLE] t=2747.34 UAV[2] = SLAVE
+[TASK-DONE] id=466 type=SENSOR_TO_UAV Sensor_44->UAV_2 bytes=5018 finishSec=2747.36 durationSec=0.0213962 metDeadline=YES
+[ROLE] t=2748.03 UAV[3] = SLAVE
+[TASK-DONE] id=467 type=SENSOR_TO_UAV Sensor_410->UAV_3 bytes=3841 finishSec=2748.04 durationSec=0.0161922 metDeadline=YES
+[ROLE] t=2749.73 UAV[1] = SLAVE
+[ROLE] t=2749.73 UAV[0] = MASTER
+[TASK-DONE] id=468 type=SLAVE_TO_MASTER UAV_1->UAV_0 bytes=4636 finishSec=2749.75 durationSec=0.020888 metDeadline=YES
+[ROLE] t=2750.71 UAV[3] = SLAVE
+[ROLE] t=2750.71 UAV[0] = MASTER
+[TASK-DONE] id=469 type=SLAVE_TO_MASTER UAV_3->UAV_0 bytes=3841 finishSec=2750.73 durationSec=0.016192 metDeadline=YES
+[ROLE] t=2750.84 UAV[2] = SLAVE
+[ROLE] t=2750.84 UAV[0] = MASTER
+[TASK-DONE] id=470 type=SLAVE_TO_MASTER UAV_2->UAV_0 bytes=5018 finishSec=2750.87 durationSec=0.021396 metDeadline=YES
+[ROLE] t=2759.77 UAV[3] = MASTER
+[TASK-DONE] id=471 type=SENSOR_TO_UAV Sensor_425->UAV_3 bytes=3778 finishSec=2759.78 durationSec=0.0161082 metDeadline=YES
+[ROLE] t=2763.59 UAV[1] = MASTER
+[TASK-DONE] id=472 type=SENSOR_TO_UAV Sensor_469->UAV_1 bytes=5165 finishSec=2763.62 durationSec=0.0252282 metDeadline=YES
+[ROLE] t=2769.2 UAV[0] = MASTER
+[TASK-DONE] id=473 type=SENSOR_TO_UAV Sensor_481->UAV_0 bytes=3757 finishSec=2769.22 durationSec=0.0160802 metDeadline=YES
+[MOVE] t=2777.28 UAV[0] -> (2959.25, 2840.2, 50)
+[MOVE] t=2777.28 UAV[1] -> (2959.25, 2840.2, 50)
+[MOVE] t=2777.28 UAV[2] -> (2959.25, 2840.2, 50)
+[MOVE] t=2777.28 UAV[3] -> (2959.25, 2840.2, 50)
+[ROLE] t=2777.69 UAV[2] = MASTER
+[TASK-DONE] id=474 type=SENSOR_TO_UAV Sensor_52->UAV_2 bytes=4926 finishSec=2777.72 durationSec=0.0212722 metDeadline=YES
+[ROLE] t=2780.14 UAV[1] = SLAVE
+[TASK-DONE] id=475 type=SENSOR_TO_UAV Sensor_275->UAV_1 bytes=4156 finishSec=2780.16 durationSec=0.0202482 metDeadline=YES
+[ROLE] t=2781.47 UAV[3] = SLAVE
+[TASK-DONE] id=476 type=SENSOR_TO_UAV Sensor_204->UAV_3 bytes=4470 finishSec=2781.49 durationSec=0.0206642 metDeadline=YES
+[ROLE] t=2783.04 UAV[1] = SLAVE
+[ROLE] t=2783.04 UAV[2] = MASTER
+[TASK-DONE] id=477 type=SLAVE_TO_MASTER UAV_1->UAV_2 bytes=4156 finishSec=2783.06 durationSec=0.020248 metDeadline=YES
+[ROLE] t=2784.03 UAV[0] = SLAVE
+[TASK-DONE] id=478 type=SENSOR_TO_UAV Sensor_205->UAV_0 bytes=3997 finishSec=2784.04 durationSec=0.0164002 metDeadline=YES
+[ROLE] t=2784.59 UAV[3] = SLAVE
+[ROLE] t=2784.59 UAV[2] = MASTER
+[TASK-DONE] id=479 type=SLAVE_TO_MASTER UAV_3->UAV_2 bytes=4470 finishSec=2784.61 durationSec=0.020664 metDeadline=YES
+[ROLE] t=2786.82 UAV[0] = SLAVE
+[ROLE] t=2786.82 UAV[2] = MASTER
+[TASK-DONE] id=480 type=SLAVE_TO_MASTER UAV_0->UAV_2 bytes=3997 finishSec=2786.84 durationSec=0.0164 metDeadline=YES
+[ROLE] t=2792.63 UAV[3] = MASTER
+[TASK-DONE] id=481 type=SENSOR_TO_UAV Sensor_426->UAV_3 bytes=3432 finishSec=2792.64 durationSec=0.0156482 metDeadline=YES
+[ROLE] t=2798 UAV[1] = SLAVE
+[TASK-DONE] id=482 type=SENSOR_TO_UAV Sensor_28->UAV_1 bytes=5404 finishSec=2798.03 durationSec=0.0255442 metDeadline=YES
+[ROLE] t=2801.06 UAV[0] = MASTER
+[TASK-DONE] id=483 type=SENSOR_TO_UAV Sensor_459->UAV_0 bytes=5131 finishSec=2801.08 durationSec=0.0251802 metDeadline=YES
+[ROLE] t=2801.78 UAV[1] = SLAVE
+[ROLE] t=2801.78 UAV[3] = MASTER
+[TASK-DONE] id=484 type=SLAVE_TO_MASTER UAV_1->UAV_3 bytes=5404 finishSec=2801.8 durationSec=0.025544 metDeadline=YES
+[ROLE] t=2803.54 UAV[2] = SLAVE
+[TASK-DONE] id=485 type=SENSOR_TO_UAV Sensor_397->UAV_2 bytes=4185 finishSec=2803.56 durationSec=0.0202842 metDeadline=YES
+[ROLE] t=2806.47 UAV[2] = SLAVE
+[ROLE] t=2806.47 UAV[3] = MASTER
+[TASK-DONE] id=486 type=SLAVE_TO_MASTER UAV_2->UAV_3 bytes=4185 finishSec=2806.49 durationSec=0.020284 metDeadline=YES
+[MOVE] t=2808.7 UAV[0] -> (2956.15, 2865.53, 50)
+[MOVE] t=2808.7 UAV[1] -> (2956.15, 2865.53, 50)
+[MOVE] t=2808.7 UAV[2] -> (2956.15, 2865.53, 50)
+[MOVE] t=2808.7 UAV[3] -> (2956.15, 2865.53, 50)
+[ROLE] t=2809.89 UAV[0] = MASTER
+[TASK-DONE] id=487 type=SENSOR_TO_UAV Sensor_467->UAV_0 bytes=4401 finishSec=2809.91 durationSec=0.0205722 metDeadline=YES
+[ROLE] t=2817.81 UAV[1] = SLAVE
+[TASK-DONE] id=488 type=SENSOR_TO_UAV Sensor_379->UAV_1 bytes=5197 finishSec=2817.83 durationSec=0.0252682 metDeadline=YES
+[ROLE] t=2819.31 UAV[2] = SLAVE
+[TASK-DONE] id=489 type=SENSOR_TO_UAV Sensor_94->UAV_2 bytes=4947 finishSec=2819.33 durationSec=0.0213002 metDeadline=YES
+[ROLE] t=2821.44 UAV[1] = SLAVE
+[ROLE] t=2821.44 UAV[0] = MASTER
+[TASK-DONE] id=490 type=SLAVE_TO_MASTER UAV_1->UAV_0 bytes=5197 finishSec=2821.46 durationSec=0.025268 metDeadline=YES
+[ROLE] t=2822.76 UAV[2] = SLAVE
+[ROLE] t=2822.76 UAV[0] = MASTER
+[TASK-DONE] id=491 type=SLAVE_TO_MASTER UAV_2->UAV_0 bytes=4947 finishSec=2822.78 durationSec=0.0213 metDeadline=YES
+[ROLE] t=2824.28 UAV[3] = SLAVE
+[TASK-DONE] id=492 type=SENSOR_TO_UAV Sensor_32->UAV_3 bytes=3759 finishSec=2824.3 durationSec=0.0160842 metDeadline=YES
+[ROLE] t=2826.91 UAV[3] = SLAVE
+[ROLE] t=2826.91 UAV[0] = MASTER
+[TASK-DONE] id=493 type=SLAVE_TO_MASTER UAV_3->UAV_0 bytes=3759 finishSec=2826.93 durationSec=0.016084 metDeadline=YES
+[ROLE] t=2831.09 UAV[2] = MASTER
+[TASK-DONE] id=494 type=SENSOR_TO_UAV Sensor_123->UAV_2 bytes=4913 finishSec=2831.11 durationSec=0.0212562 metDeadline=YES
+[ROLE] t=2832.42 UAV[0] = MASTER
+[TASK-DONE] id=495 type=SENSOR_TO_UAV Sensor_70->UAV_0 bytes=4939 finishSec=2832.44 durationSec=0.0212922 metDeadline=YES
+[ROLE] t=2833.91 UAV[3] = MASTER
+[TASK-DONE] id=496 type=SENSOR_TO_UAV Sensor_418->UAV_3 bytes=4681 finishSec=2833.93 durationSec=0.0209482 metDeadline=YES
+[MOVE] t=2837.93 UAV[0] -> (2961.48, 2855.66, 50)
+[MOVE] t=2837.93 UAV[1] -> (2961.48, 2855.66, 50)
+[MOVE] t=2837.93 UAV[2] -> (2961.48, 2855.66, 50)
+[MOVE] t=2837.93 UAV[3] -> (2961.48, 2855.66, 50)
+[ROLE] t=2840.29 UAV[1] = SLAVE
+[TASK-DONE] id=497 type=SENSOR_TO_UAV Sensor_217->UAV_1 bytes=4664 finishSec=2840.31 durationSec=0.0209242 metDeadline=YES
+[ROLE] t=2843.55 UAV[1] = SLAVE
+[ROLE] t=2843.55 UAV[2] = MASTER
+[TASK-DONE] id=498 type=SLAVE_TO_MASTER UAV_1->UAV_2 bytes=4664 finishSec=2843.57 durationSec=0.020924 metDeadline=YES
+[ROLE] t=2844.69 UAV[0] = SLAVE
+[TASK-DONE] id=499 type=SENSOR_TO_UAV Sensor_333->UAV_0 bytes=4106 finishSec=2844.71 durationSec=0.0201802 metDeadline=YES
+[ROLE] t=2846.05 UAV[2] = MASTER
+[TASK-DONE] id=500 type=SENSOR_TO_UAV Sensor_139->UAV_2 bytes=4809 finishSec=2846.07 durationSec=0.0211162 metDeadline=YES
+[ROLE] t=2847.56 UAV[0] = SLAVE
+[ROLE] t=2847.56 UAV[2] = MASTER
+[TASK-DONE] id=501 type=SLAVE_TO_MASTER UAV_0->UAV_2 bytes=4106 finishSec=2847.58 durationSec=0.02018 metDeadline=YES
+[ROLE] t=2848.38 UAV[3] = SLAVE
+[TASK-DONE] id=502 type=SENSOR_TO_UAV Sensor_284->UAV_3 bytes=4319 finishSec=2848.4 durationSec=0.0204642 metDeadline=YES
+[ROLE] t=2851.4 UAV[3] = SLAVE
+[ROLE] t=2851.4 UAV[2] = MASTER
+[TASK-DONE] id=503 type=SLAVE_TO_MASTER UAV_3->UAV_2 bytes=4319 finishSec=2851.42 durationSec=0.020464 metDeadline=YES
+[ROLE] t=2860.03 UAV[3] = MASTER
+[TASK-DONE] id=504 type=SENSOR_TO_UAV Sensor_85->UAV_3 bytes=4254 finishSec=2860.05 durationSec=0.0203762 metDeadline=YES
+[ROLE] t=2861.41 UAV[0] = MASTER
+[TASK-DONE] id=505 type=SENSOR_TO_UAV Sensor_210->UAV_0 bytes=3951 finishSec=2861.43 durationSec=0.0163402 metDeadline=YES
+[ROLE] t=2867.72 UAV[2] = MASTER
+[TASK-DONE] id=506 type=SENSOR_TO_UAV Sensor_375->UAV_2 bytes=3400 finishSec=2867.73 durationSec=0.0156042 metDeadline=YES
+[ROLE] t=2871.26 UAV[1] = SLAVE
+[TASK-DONE] id=507 type=SENSOR_TO_UAV Sensor_415->UAV_1 bytes=3988 finishSec=2871.28 durationSec=0.0163882 metDeadline=YES
+[ROLE] t=2874.05 UAV[1] = SLAVE
+[ROLE] t=2874.05 UAV[0] = MASTER
+[TASK-DONE] id=508 type=SLAVE_TO_MASTER UAV_1->UAV_0 bytes=3988 finishSec=2874.07 durationSec=0.016388 metDeadline=YES
+[MOVE] t=2880.38 UAV[0] -> (2915.14, 2929.73, 50)
+[MOVE] t=2880.38 UAV[1] -> (2915.14, 2929.73, 50)
+[MOVE] t=2880.38 UAV[2] -> (2915.14, 2929.73, 50)
+[MOVE] t=2880.38 UAV[3] -> (2915.14, 2929.73, 50)
+[ROLE] t=2892.57 UAV[2] = SLAVE
+[TASK-DONE] id=509 type=SENSOR_TO_UAV Sensor_348->UAV_2 bytes=4098 finishSec=2892.59 durationSec=0.0201682 metDeadline=YES
+[ROLE] t=2893.04 UAV[0] = MASTER
+[TASK-DONE] id=510 type=SENSOR_TO_UAV Sensor_167->UAV_0 bytes=3809 finishSec=2893.05 durationSec=0.0161482 metDeadline=YES
+[ROLE] t=2893.12 UAV[1] = SLAVE
+[TASK-DONE] id=511 type=SENSOR_TO_UAV Sensor_417->UAV_1 bytes=4653 finishSec=2893.14 durationSec=0.0209082 metDeadline=YES
+[ROLE] t=2895.1 UAV[3] = SLAVE
+[TASK-DONE] id=512 type=SENSOR_TO_UAV Sensor_477->UAV_3 bytes=4544 finishSec=2895.12 durationSec=0.0207642 metDeadline=YES
+[ROLE] t=2895.43 UAV[2] = SLAVE
+[ROLE] t=2895.43 UAV[0] = MASTER
+[TASK-DONE] id=513 type=SLAVE_TO_MASTER UAV_2->UAV_0 bytes=4098 finishSec=2895.45 durationSec=0.020168 metDeadline=YES
+[ROLE] t=2896.37 UAV[1] = SLAVE
+[ROLE] t=2896.37 UAV[0] = MASTER
+[TASK-DONE] id=514 type=SLAVE_TO_MASTER UAV_1->UAV_0 bytes=4653 finishSec=2896.39 durationSec=0.020908 metDeadline=YES
+[ROLE] t=2898.28 UAV[3] = SLAVE
+[ROLE] t=2898.28 UAV[0] = MASTER
+[TASK-DONE] id=515 type=SLAVE_TO_MASTER UAV_3->UAV_0 bytes=4544 finishSec=2898.3 durationSec=0.020764 metDeadline=YES
+[ROLE] t=2906.53 UAV[1] = MASTER
+[TASK-DONE] id=516 type=SENSOR_TO_UAV Sensor_67->UAV_1 bytes=4864 finishSec=2906.55 durationSec=0.0211922 metDeadline=YES
+[ROLE] t=2909.01 UAV[2] = SLAVE
+[TASK-DONE] id=517 type=SENSOR_TO_UAV Sensor_175->UAV_2 bytes=5316 finishSec=2909.04 durationSec=0.0254282 metDeadline=YES
+[ROLE] t=2912.73 UAV[2] = SLAVE
+[ROLE] t=2912.73 UAV[1] = MASTER
+[TASK-DONE] id=518 type=SLAVE_TO_MASTER UAV_2->UAV_1 bytes=5316 finishSec=2912.76 durationSec=0.025428 metDeadline=YES
+[ROLE] t=2923 UAV[3] = MASTER
+[TASK-DONE] id=519 type=SENSOR_TO_UAV Sensor_178->UAV_3 bytes=4118 finishSec=2923.02 durationSec=0.0201962 metDeadline=YES
+[ROLE] t=2929.8 UAV[0] = SLAVE
+[TASK-DONE] id=520 type=SENSOR_TO_UAV Sensor_367->UAV_0 bytes=3947 finishSec=2929.82 durationSec=0.0163322 metDeadline=YES
+[ROLE] t=2932.56 UAV[0] = SLAVE
+[ROLE] t=2932.56 UAV[3] = MASTER
+[TASK-DONE] id=521 type=SLAVE_TO_MASTER UAV_0->UAV_3 bytes=3947 finishSec=2932.58 durationSec=0.016332 metDeadline=YES
+[MOVE] t=2943.79 UAV[0] -> (2988.61, 3072.89, 50)
+[MOVE] t=2943.79 UAV[1] -> (2988.61, 3072.89, 50)
+[MOVE] t=2943.79 UAV[2] -> (2988.61, 3072.89, 50)
+[MOVE] t=2943.79 UAV[3] -> (2988.61, 3072.89, 50)
+[ROLE] t=2952.81 UAV[0] = MASTER
+[TASK-DONE] id=522 type=SENSOR_TO_UAV Sensor_456->UAV_0 bytes=4042 finishSec=2952.83 durationSec=0.0164602 metDeadline=YES
+[ROLE] t=2953.67 UAV[1] = SLAVE
+[TASK-DONE] id=523 type=SENSOR_TO_UAV Sensor_86->UAV_1 bytes=3709 finishSec=2953.68 durationSec=0.0160162 metDeadline=YES
+[ROLE] t=2954.75 UAV[3] = SLAVE
+[TASK-DONE] id=524 type=SENSOR_TO_UAV Sensor_38->UAV_3 bytes=4678 finishSec=2954.77 durationSec=0.0209442 metDeadline=YES
+[ROLE] t=2954.92 UAV[2] = SLAVE
+[TASK-DONE] id=525 type=SENSOR_TO_UAV Sensor_473->UAV_2 bytes=4441 finishSec=2954.94 durationSec=0.0206282 metDeadline=YES
+[ROLE] t=2956.26 UAV[1] = SLAVE
+[ROLE] t=2956.26 UAV[0] = MASTER
+[TASK-DONE] id=526 type=SLAVE_TO_MASTER UAV_1->UAV_0 bytes=3709 finishSec=2956.27 durationSec=0.016016 metDeadline=YES
+[ROLE] t=2958.02 UAV[2] = SLAVE
+[ROLE] t=2958.02 UAV[0] = MASTER
+[ROLE] t=2958.02 UAV[3] = SLAVE
+[ROLE] t=2958.02 UAV[0] = MASTER
+[TASK-DONE] id=527 type=SLAVE_TO_MASTER UAV_2->UAV_0 bytes=4441 finishSec=2958.04 durationSec=0.020628 metDeadline=YES
+[TASK-DONE] id=528 type=SLAVE_TO_MASTER UAV_3->UAV_0 bytes=4678 finishSec=2958.04 durationSec=0.020944 metDeadline=YES
+[ROLE] t=2962.62 UAV[0] = MASTER
+[TASK-DONE] id=529 type=SENSOR_TO_UAV Sensor_398->UAV_0 bytes=4741 finishSec=2962.64 durationSec=0.0210282 metDeadline=YES
+[ROLE] t=2966.98 UAV[3] = MASTER
+[TASK-DONE] id=530 type=SENSOR_TO_UAV Sensor_282->UAV_3 bytes=4275 finishSec=2967 durationSec=0.0204042 metDeadline=YES
+[ROLE] t=2968.66 UAV[1] = SLAVE
+[TASK-DONE] id=531 type=SENSOR_TO_UAV Sensor_406->UAV_1 bytes=4353 finishSec=2968.68 durationSec=0.0205082 metDeadline=YES
+[ROLE] t=2971.71 UAV[1] = SLAVE
+[ROLE] t=2971.71 UAV[0] = MASTER
+[TASK-DONE] id=532 type=SLAVE_TO_MASTER UAV_1->UAV_0 bytes=4353 finishSec=2971.73 durationSec=0.020508 metDeadline=YES
+[ROLE] t=2988.69 UAV[2] = MASTER
+[TASK-DONE] id=533 type=SENSOR_TO_UAV Sensor_480->UAV_2 bytes=4295 finishSec=2988.71 durationSec=0.0204322 metDeadline=YES
+[MOVE] t=2997.27 UAV[0] -> (3068.81, 3096.69, 50)
+[MOVE] t=2997.27 UAV[1] -> (3068.81, 3096.69, 50)
+[MOVE] t=2997.27 UAV[2] -> (3068.81, 3096.69, 50)
+[MOVE] t=2997.27 UAV[3] -> (3068.81, 3096.69, 50)
+[ROLE] t=3005.71 UAV[0] = SLAVE
+[TASK-DONE] id=534 type=SENSOR_TO_UAV Sensor_69->UAV_0 bytes=4384 finishSec=3005.73 durationSec=0.0205522 metDeadline=YES
+[ROLE] t=3007.54 UAV[1] = MASTER
+[TASK-DONE] id=535 type=SENSOR_TO_UAV Sensor_203->UAV_1 bytes=4640 finishSec=3007.56 durationSec=0.0208922 metDeadline=YES
+[ROLE] t=3008.78 UAV[0] = SLAVE
+[ROLE] t=3008.78 UAV[1] = MASTER
+[TASK-DONE] id=536 type=SLAVE_TO_MASTER UAV_0->UAV_1 bytes=4384 finishSec=3008.8 durationSec=0.020552 metDeadline=YES
+[ROLE] t=3010.55 UAV[3] = SLAVE
+[TASK-DONE] id=537 type=SENSOR_TO_UAV Sensor_358->UAV_3 bytes=4628 finishSec=3010.57 durationSec=0.0208762 metDeadline=YES
+[ROLE] t=3013.78 UAV[3] = SLAVE
+[ROLE] t=3013.78 UAV[1] = MASTER
+[TASK-DONE] id=538 type=SLAVE_TO_MASTER UAV_3->UAV_1 bytes=4628 finishSec=3013.8 durationSec=0.020876 metDeadline=YES
+[ROLE] t=3017.94 UAV[2] = SLAVE
+[TASK-DONE] id=539 type=SENSOR_TO_UAV Sensor_414->UAV_2 bytes=5063 finishSec=3017.96 durationSec=0.0214562 metDeadline=YES
+[ROLE] t=3021.48 UAV[2] = SLAVE
+[ROLE] t=3021.48 UAV[1] = MASTER
+[TASK-DONE] id=540 type=SLAVE_TO_MASTER UAV_2->UAV_1 bytes=5063 finishSec=3021.5 durationSec=0.021456 metDeadline=YES
+[ROLE] t=3027.43 UAV[0] = MASTER
+[TASK-DONE] id=541 type=SENSOR_TO_UAV Sensor_14->UAV_0 bytes=5226 finishSec=3027.45 durationSec=0.0253082 metDeadline=YES
+[ROLE] t=3036.82 UAV[3] = MASTER
+[TASK-DONE] id=542 type=SENSOR_TO_UAV Sensor_112->UAV_3 bytes=4282 finishSec=3036.84 durationSec=0.0204162 metDeadline=YES
+[ROLE] t=3039.31 UAV[1] = SLAVE
+[TASK-DONE] id=543 type=SENSOR_TO_UAV Sensor_105->UAV_1 bytes=4483 finishSec=3039.33 durationSec=0.0206842 metDeadline=YES
+[ROLE] t=3042.45 UAV[1] = SLAVE
+[ROLE] t=3042.45 UAV[0] = MASTER
+[TASK-DONE] id=544 type=SLAVE_TO_MASTER UAV_1->UAV_0 bytes=4483 finishSec=3042.47 durationSec=0.020684 metDeadline=YES
+[MOVE] t=3051.68 UAV[0] -> (3035.61, 2970.94, 50)
+[MOVE] t=3051.68 UAV[1] -> (3035.61, 2970.94, 50)
+[MOVE] t=3051.68 UAV[2] -> (3035.61, 2970.94, 50)
+[MOVE] t=3051.68 UAV[3] -> (3035.61, 2970.94, 50)
+[ROLE] t=3056.3 UAV[2] = SLAVE
+[TASK-DONE] id=545 type=SENSOR_TO_UAV Sensor_287->UAV_2 bytes=4439 finishSec=3056.32 durationSec=0.0206242 metDeadline=YES
+[ROLE] t=3058.98 UAV[0] = MASTER
+[TASK-DONE] id=546 type=SENSOR_TO_UAV Sensor_157->UAV_0 bytes=4161 finishSec=3059 durationSec=0.0202522 metDeadline=YES
+[ROLE] t=3059.02 UAV[1] = SLAVE
+[TASK-DONE] id=547 type=SENSOR_TO_UAV Sensor_449->UAV_1 bytes=4354 finishSec=3059.04 durationSec=0.0205122 metDeadline=YES
+[ROLE] t=3059.4 UAV[2] = SLAVE
+[ROLE] t=3059.4 UAV[0] = MASTER
+[TASK-DONE] id=548 type=SLAVE_TO_MASTER UAV_2->UAV_0 bytes=4439 finishSec=3059.42 durationSec=0.020624 metDeadline=YES
+[ROLE] t=3062.06 UAV[1] = SLAVE
+[ROLE] t=3062.06 UAV[0] = MASTER
+[TASK-DONE] id=549 type=SLAVE_TO_MASTER UAV_1->UAV_0 bytes=4354 finishSec=3062.08 durationSec=0.020512 metDeadline=YES
+[ROLE] t=3070.7 UAV[3] = MASTER
+[TASK-DONE] id=550 type=SENSOR_TO_UAV Sensor_237->UAV_3 bytes=4427 finishSec=3070.72 durationSec=0.0206082 metDeadline=YES
+[ROLE] t=3081.21 UAV[2] = SLAVE
+[TASK-DONE] id=551 type=SENSOR_TO_UAV Sensor_162->UAV_2 bytes=4116 finishSec=3081.23 durationSec=0.0201922 metDeadline=YES
+[ROLE] t=3082.27 UAV[1] = SLAVE
+[TASK-DONE] id=552 type=SENSOR_TO_UAV Sensor_47->UAV_1 bytes=4582 finishSec=3082.29 durationSec=0.0208162 metDeadline=YES
+[ROLE] t=3084.09 UAV[2] = SLAVE
+[ROLE] t=3084.09 UAV[3] = MASTER
+[TASK-DONE] id=553 type=SLAVE_TO_MASTER UAV_2->UAV_3 bytes=4116 finishSec=3084.11 durationSec=0.020192 metDeadline=YES
+[ROLE] t=3085.48 UAV[1] = SLAVE
+[ROLE] t=3085.48 UAV[3] = MASTER
+[TASK-DONE] id=554 type=SLAVE_TO_MASTER UAV_1->UAV_3 bytes=4582 finishSec=3085.5 durationSec=0.020816 metDeadline=YES
+[ROLE] t=3090.72 UAV[0] = SLAVE
+[TASK-DONE] id=555 type=SENSOR_TO_UAV Sensor_301->UAV_0 bytes=4076 finishSec=3090.74 durationSec=0.0165042 metDeadline=YES
+[ROLE] t=3093.57 UAV[0] = SLAVE
+[ROLE] t=3093.57 UAV[3] = MASTER
+[TASK-DONE] id=556 type=SLAVE_TO_MASTER UAV_0->UAV_3 bytes=4076 finishSec=3093.59 durationSec=0.016504 metDeadline=YES
+[ROLE] t=3106.63 UAV[3] = MASTER
+[TASK-DONE] id=557 type=SENSOR_TO_UAV Sensor_23->UAV_3 bytes=4548 finishSec=3106.65 durationSec=0.0207682 metDeadline=YES
+[MOVE] t=3117.5 UAV[0] -> (3072.71, 3080.26, 50)
+[MOVE] t=3117.5 UAV[1] -> (3072.71, 3080.26, 50)
+[MOVE] t=3117.5 UAV[2] -> (3072.71, 3080.26, 50)
+[MOVE] t=3117.5 UAV[3] -> (3072.71, 3080.26, 50)
+[ROLE] t=3130.71 UAV[1] = SLAVE
+[TASK-DONE] id=558 type=SENSOR_TO_UAV Sensor_87->UAV_1 bytes=4676 finishSec=3130.74 durationSec=0.0209402 metDeadline=YES
+[ROLE] t=3133.98 UAV[1] = SLAVE
+[ROLE] t=3133.98 UAV[0] = MASTER
+[TASK-DONE] id=559 type=SLAVE_TO_MASTER UAV_1->UAV_0 bytes=4676 finishSec=3134 durationSec=0.02094 metDeadline=YES
+[ROLE] t=3137.38 UAV[2] = MASTER
+[TASK-DONE] id=560 type=SENSOR_TO_UAV Sensor_127->UAV_2 bytes=4723 finishSec=3137.41 durationSec=0.0210042 metDeadline=YES
+[ROLE] t=3140.95 UAV[3] = SLAVE
+[TASK-DONE] id=561 type=SENSOR_TO_UAV Sensor_131->UAV_3 bytes=3989 finishSec=3140.97 durationSec=0.0163882 metDeadline=YES
+[ROLE] t=3141.66 UAV[0] = MASTER
+[TASK-DONE] id=562 type=SENSOR_TO_UAV Sensor_450->UAV_0 bytes=4784 finishSec=3141.68 durationSec=0.0210842 metDeadline=YES
+[ROLE] t=3143.74 UAV[3] = SLAVE
+[ROLE] t=3143.74 UAV[2] = MASTER
+[TASK-DONE] id=563 type=SLAVE_TO_MASTER UAV_3->UAV_2 bytes=3989 finishSec=3143.76 durationSec=0.016388 metDeadline=YES
+[ROLE] t=3151.96 UAV[2] = MASTER
+[TASK-DONE] id=564 type=SENSOR_TO_UAV Sensor_355->UAV_2 bytes=4828 finishSec=3151.98 durationSec=0.0211442 metDeadline=YES
+[ROLE] t=3159.44 UAV[1] = SLAVE
+[TASK-DONE] id=565 type=SENSOR_TO_UAV Sensor_313->UAV_1 bytes=4870 finishSec=3159.46 durationSec=0.0212002 metDeadline=YES
+[ROLE] t=3162.84 UAV[1] = SLAVE
+[ROLE] t=3162.84 UAV[2] = MASTER
+[TASK-DONE] id=566 type=SLAVE_TO_MASTER UAV_1->UAV_2 bytes=4870 finishSec=3162.86 durationSec=0.0212 metDeadline=YES
+[ROLE] t=3183.93 UAV[0] = SLAVE
+[TASK-DONE] id=567 type=SENSOR_TO_UAV Sensor_345->UAV_0 bytes=5937 finishSec=3183.96 durationSec=0.0262562 metDeadline=YES
+[ROLE] t=3188.08 UAV[0] = SLAVE
+[ROLE] t=3188.08 UAV[2] = MASTER
+[TASK-DONE] id=568 type=SLAVE_TO_MASTER UAV_0->UAV_2 bytes=5937 finishSec=3188.11 durationSec=0.026256 metDeadline=YES
+[MOVE] t=3204.86 UAV[0] -> (2832.42, 3088.26, 50)
+[MOVE] t=3204.86 UAV[1] -> (2832.42, 3088.26, 50)
+[MOVE] t=3204.86 UAV[2] -> (2832.42, 3088.26, 50)
+[MOVE] t=3204.86 UAV[3] -> (2832.42, 3088.26, 50)
+[ROLE] t=3205.18 UAV[0] = MASTER
+[TASK-DONE] id=569 type=SENSOR_TO_UAV Sensor_372->UAV_0 bytes=4209 finishSec=3205.2 durationSec=0.0203162 metDeadline=YES
+[ROLE] t=3208.64 UAV[2] = SLAVE
+[TASK-DONE] id=570 type=SENSOR_TO_UAV Sensor_279->UAV_2 bytes=4105 finishSec=3208.66 durationSec=0.0201802 metDeadline=YES
+[ROLE] t=3208.81 UAV[1] = SLAVE
+[TASK-DONE] id=571 type=SENSOR_TO_UAV Sensor_111->UAV_1 bytes=3883 finishSec=3208.83 durationSec=0.0162482 metDeadline=YES
+[ROLE] t=3209 UAV[3] = SLAVE
+[TASK-DONE] id=572 type=SENSOR_TO_UAV Sensor_291->UAV_3 bytes=4468 finishSec=3209.02 durationSec=0.0206642 metDeadline=YES
+[ROLE] t=3211.51 UAV[2] = SLAVE
+[ROLE] t=3211.51 UAV[0] = MASTER
+[ROLE] t=3211.52 UAV[1] = SLAVE
+[ROLE] t=3211.52 UAV[0] = MASTER
+[TASK-DONE] id=573 type=SLAVE_TO_MASTER UAV_2->UAV_0 bytes=4105 finishSec=3211.53 durationSec=0.02018 metDeadline=YES
+[TASK-DONE] id=574 type=SLAVE_TO_MASTER UAV_1->UAV_0 bytes=3883 finishSec=3211.54 durationSec=0.016248 metDeadline=YES
+[ROLE] t=3212.12 UAV[3] = SLAVE
+[ROLE] t=3212.12 UAV[0] = MASTER
+[TASK-DONE] id=575 type=SLAVE_TO_MASTER UAV_3->UAV_0 bytes=4468 finishSec=3212.14 durationSec=0.020664 metDeadline=YES
+[ROLE] t=3213.35 UAV[1] = SLAVE
+[TASK-DONE] id=576 type=SENSOR_TO_UAV Sensor_103->UAV_1 bytes=5303 finishSec=3213.38 durationSec=0.0254122 metDeadline=YES
+[ROLE] t=3215.34 UAV[3] = MASTER
+[TASK-DONE] id=577 type=SENSOR_TO_UAV Sensor_116->UAV_3 bytes=4594 finishSec=3215.36 durationSec=0.0208322 metDeadline=YES
+[ROLE] t=3217.06 UAV[1] = SLAVE
+[ROLE] t=3217.06 UAV[3] = MASTER
+[TASK-DONE] id=578 type=SLAVE_TO_MASTER UAV_1->UAV_3 bytes=5303 finishSec=3217.09 durationSec=0.025412 metDeadline=YES
+[ROLE] t=3227.65 UAV[0] = SLAVE
+[TASK-DONE] id=579 type=SENSOR_TO_UAV Sensor_251->UAV_0 bytes=4189 finishSec=3227.67 durationSec=0.0202922 metDeadline=YES
+[ROLE] t=3230.58 UAV[0] = SLAVE
+[ROLE] t=3230.58 UAV[3] = MASTER
+[TASK-DONE] id=580 type=SLAVE_TO_MASTER UAV_0->UAV_3 bytes=4189 finishSec=3230.6 durationSec=0.020292 metDeadline=YES
+[ROLE] t=3238.88 UAV[3] = MASTER
+[TASK-DONE] id=581 type=SENSOR_TO_UAV Sensor_233->UAV_3 bytes=4000 finishSec=3238.89 durationSec=0.0164042 metDeadline=YES
+[ROLE] t=3329.07 UAV[2] = MASTER
+[TASK-DONE] id=582 type=SENSOR_TO_UAV Sensor_483->UAV_2 bytes=1213 finishSec=3329.08 durationSec=0.0104868 metDeadline=YES
+[MOVE] t=3350.36 UAV[0] -> (2602.01, 2885.82, 50)
+[MOVE] t=3350.36 UAV[1] -> (2602.01, 2885.82, 50)
+[MOVE] t=3350.36 UAV[2] -> (2602.01, 2885.82, 50)
+[MOVE] t=3350.36 UAV[3] -> (2602.01, 2885.82, 50)
+[ROLE] t=3370.81 UAV[0] = MASTER
+[TASK-DONE] id=583 type=SENSOR_TO_UAV Sensor_285->UAV_0 bytes=4182 finishSec=3370.83 durationSec=0.0202802 metDeadline=YES
+[MOVE] t=3383.28 UAV[0] -> (2459.97, 2903.69, 50)
+[MOVE] t=3383.28 UAV[1] -> (2459.97, 2903.69, 50)
+[MOVE] t=3383.28 UAV[2] -> (2459.97, 2903.69, 50)
+[MOVE] t=3383.28 UAV[3] -> (2459.97, 2903.69, 50)
+[ROLE] t=3386.81 UAV[2] = SLAVE
+[TASK-DONE] id=584 type=SENSOR_TO_UAV Sensor_10->UAV_2 bytes=1520 finishSec=3386.82 durationSec=0.00582817 metDeadline=YES
+[ROLE] t=3387.68 UAV[1] = SLAVE
+[TASK-DONE] id=585 type=SENSOR_TO_UAV Sensor_262->UAV_1 bytes=1535 finishSec=3387.69 durationSec=0.00584817 metDeadline=YES
+[ROLE] t=3387.95 UAV[2] = SLAVE
+[ROLE] t=3387.95 UAV[1] = MASTER
+[TASK-DONE] id=586 type=SLAVE_TO_MASTER UAV_2->UAV_1 bytes=1520 finishSec=3387.96 durationSec=0.008466 metDeadline=YES
+[ROLE] t=3388.14 UAV[2] = SLAVE
+[TASK-DONE] id=587 type=SENSOR_TO_UAV Sensor_164->UAV_2 bytes=1525 finishSec=3388.15 durationSec=0.0101668 metDeadline=YES
+[ROLE] t=3388.88 UAV[1] = SLAVE
+[ROLE] t=3388.88 UAV[3] = MASTER
+[TASK-DONE] id=588 type=SLAVE_TO_MASTER UAV_1->UAV_3 bytes=1535 finishSec=3388.89 durationSec=0.012406 metDeadline=YES
+[ROLE] t=3389.07 UAV[1] = SLAVE
+[TASK-DONE] id=589 type=SENSOR_TO_UAV Sensor_209->UAV_1 bytes=1630 finishSec=3389.08 durationSec=0.00738684 metDeadline=YES
+[ROLE] t=3389.29 UAV[2] = SLAVE
+[ROLE] t=3389.29 UAV[1] = MASTER
+[TASK-DONE] id=590 type=SLAVE_TO_MASTER UAV_2->UAV_1 bytes=1525 finishSec=3389.29 durationSec=0.005836 metDeadline=YES
+[ROLE] t=3390.34 UAV[1] = SLAVE
+[ROLE] t=3390.34 UAV[3] = MASTER
+[TASK-DONE] id=591 type=SLAVE_TO_MASTER UAV_1->UAV_3 bytes=1630 finishSec=3390.34 durationSec=0.005976 metDeadline=YES
+[ROLE] t=3391.93 UAV[3] = MASTER
+[TASK-DONE] id=592 type=SENSOR_TO_UAV Sensor_141->UAV_3 bytes=396 finishSec=3391.94 durationSec=0.0088185 metDeadline=YES
+[ROLE] t=3392.23 UAV[3] = MASTER
+[TASK-DONE] id=593 type=SENSOR_TO_UAV Sensor_3->UAV_3 bytes=1285 finishSec=3392.24 durationSec=0.00938684 metDeadline=YES
+[ROLE] t=3392.27 UAV[0] = SLAVE
+[TASK-DONE] id=594 type=SENSOR_TO_UAV Sensor_392->UAV_0 bytes=961 finishSec=3392.28 durationSec=0.0077305 metDeadline=YES
+[ROLE] t=3392.89 UAV[2] = SLAVE
+[TASK-DONE] id=595 type=SENSOR_TO_UAV Sensor_135->UAV_2 bytes=1025 finishSec=3392.9 durationSec=0.0134868 metDeadline=YES
+[ROLE] t=3393.01 UAV[0] = SLAVE
+[ROLE] t=3393.01 UAV[3] = MASTER
+[ROLE] t=3393.01 UAV[1] = SLAVE
+[TASK-DONE] id=596 type=SLAVE_TO_MASTER UAV_0->UAV_3 bytes=961 finishSec=3393.01 durationSec=0.00671 metDeadline=YES
+[TASK-DONE] id=597 type=SENSOR_TO_UAV Sensor_400->UAV_1 bytes=1530 finishSec=3393.02 durationSec=0.00584017 metDeadline=YES
+[ROLE] t=3393.13 UAV[0] = SLAVE
+[TASK-DONE] id=598 type=SENSOR_TO_UAV Sensor_383->UAV_0 bytes=1190 finishSec=3393.13 durationSec=0.00538817 metDeadline=YES
+[ROLE] t=3393.29 UAV[3] = MASTER
+[TASK-DONE] id=599 type=SENSOR_TO_UAV Sensor_295->UAV_3 bytes=1540 finishSec=3393.3 durationSec=0.0114668 metDeadline=YES
+[ROLE] t=3393.63 UAV[2] = SLAVE
+[ROLE] t=3393.63 UAV[0] = MASTER
+[TASK-DONE] id=600 type=SLAVE_TO_MASTER UAV_2->UAV_0 bytes=1025 finishSec=3393.63 durationSec=0.005168 metDeadline=YES
+[ROLE] t=3393.76 UAV[2] = SLAVE
+[TASK-DONE] id=601 type=SENSOR_TO_UAV Sensor_424->UAV_2 bytes=1605 finishSec=3393.77 durationSec=0.0104068 metDeadline=YES
+[ROLE] t=3394.09 UAV[1] = SLAVE
+[ROLE] t=3394.09 UAV[0] = MASTER
+[TASK-DONE] id=602 type=SLAVE_TO_MASTER UAV_1->UAV_0 bytes=1530 finishSec=3394.1 durationSec=0.009346 metDeadline=YES
+[ROLE] t=3394.11 UAV[0] = SLAVE
+[ROLE] t=3394.11 UAV[3] = MASTER
+[TASK-DONE] id=603 type=SLAVE_TO_MASTER UAV_0->UAV_3 bytes=1190 finishSec=3394.12 durationSec=0.005388 metDeadline=YES
+[ROLE] t=3394.26 UAV[0] = SLAVE
+[TASK-DONE] id=604 type=SENSOR_TO_UAV Sensor_396->UAV_0 bytes=1275 finishSec=3394.27 durationSec=0.00550017 metDeadline=YES
+[ROLE] t=3394.29 UAV[1] = SLAVE
+[TASK-DONE] id=605 type=SENSOR_TO_UAV Sensor_57->UAV_1 bytes=1710 finishSec=3394.29 durationSec=0.00840684 metDeadline=YES
+[ROLE] t=3394.91 UAV[2] = SLAVE
+[ROLE] t=3394.91 UAV[0] = MASTER
+[TASK-DONE] id=606 type=SLAVE_TO_MASTER UAV_2->UAV_0 bytes=1605 finishSec=3394.92 durationSec=0.00594 metDeadline=YES
+[ROLE] t=3395.25 UAV[0] = SLAVE
+[ROLE] t=3395.25 UAV[3] = MASTER
+[TASK-DONE] id=607 type=SLAVE_TO_MASTER UAV_0->UAV_3 bytes=1275 finishSec=3395.26 durationSec=0.0055 metDeadline=YES
+[ROLE] t=3395.41 UAV[0] = SLAVE
+[TASK-DONE] id=608 type=SENSOR_TO_UAV Sensor_71->UAV_0 bytes=1610 finishSec=3395.42 durationSec=0.00594817 metDeadline=YES
+[ROLE] t=3395.49 UAV[1] = SLAVE
+[ROLE] t=3395.49 UAV[0] = MASTER
+[TASK-DONE] id=609 type=SLAVE_TO_MASTER UAV_1->UAV_0 bytes=1710 finishSec=3395.5 durationSec=0.00608 metDeadline=YES
+[ROLE] t=3396.64 UAV[0] = SLAVE
+[ROLE] t=3396.64 UAV[3] = MASTER
+[TASK-DONE] id=610 type=SLAVE_TO_MASTER UAV_0->UAV_3 bytes=1610 finishSec=3396.64 durationSec=0.005948 metDeadline=YES
+[ROLE] t=3397 UAV[1] = MASTER
+[TASK-DONE] id=611 type=SENSOR_TO_UAV Sensor_302->UAV_1 bytes=1125 finishSec=3397.01 durationSec=0.0124468 metDeadline=YES
+[ROLE] t=3397.97 UAV[1] = MASTER
+[TASK-DONE] id=612 type=SENSOR_TO_UAV Sensor_493->UAV_1 bytes=1205 finishSec=3397.98 durationSec=0.0124868 metDeadline=YES
+[ROLE] t=3398.34 UAV[3] = MASTER
+[TASK-DONE] id=613 type=SENSOR_TO_UAV Sensor_427->UAV_3 bytes=1525 finishSec=3398.35 durationSec=0.0112068 metDeadline=YES
+[ROLE] t=3398.97 UAV[1] = MASTER
+[TASK-DONE] id=614 type=SENSOR_TO_UAV Sensor_8->UAV_1 bytes=1300 finishSec=3398.97 durationSec=0.00555083 metDeadline=YES
+[ROLE] t=3399.41 UAV[3] = MASTER
+[TASK-DONE] id=615 type=SENSOR_TO_UAV Sensor_21->UAV_3 bytes=1685 finishSec=3399.42 durationSec=0.00604817 metDeadline=YES
+[ROLE] t=3482.94 UAV[2] = MASTER
+[TASK-DONE] id=616 type=SENSOR_TO_UAV Sensor_498->UAV_2 bytes=1345 finishSec=3482.95 durationSec=0.0103668 metDeadline=YES
+[ROLE] t=3484.02 UAV[2] = MASTER
+[TASK-DONE] id=617 type=SENSOR_TO_UAV Sensor_256->UAV_2 bytes=1405 finishSec=3484.03 durationSec=0.0135668 metDeadline=YES
+[ROLE] t=3485.13 UAV[2] = MASTER
+[TASK-DONE] id=618 type=SENSOR_TO_UAV Sensor_78->UAV_2 bytes=1515 finishSec=3485.14 durationSec=0.0111868 metDeadline=YES
+[ROLE] t=3486.35 UAV[2] = MASTER
+[TASK-DONE] id=619 type=SENSOR_TO_UAV Sensor_126->UAV_2 bytes=1600 finishSec=3486.36 durationSec=0.0115468 metDeadline=YES
+[MOVE] t=3580.83 UAV[0] -> (3624.73, 2131.2, 50)
+[MOVE] t=3580.83 UAV[1] -> (3624.73, 2131.2, 50)
+[MOVE] t=3580.83 UAV[2] -> (3624.73, 2131.2, 50)
+[MOVE] t=3580.83 UAV[3] -> (3624.73, 2131.2, 50)
+[MISSION] tasksTotal=619 tasksDone=619 allDone=YES sensorDone=405/405 slaveDone=214/214 totalBytes=1902141 finishSec=3486.36 sensorFinishSec=3486.36 slaveFinishSec=3396.64 missionDeadlineSec=3600 metMissionDeadline=YES taskDeadlinePass=619/619
+[UAV-BUFFER] UAV[0]=186075 UAV[1]=133449 UAV[2]=105658 UAV[3]=131750
+[DBG-END] Simulator::Destroy() BEGIN
+[DBG-END] Exit main

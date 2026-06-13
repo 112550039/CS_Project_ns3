@@ -39,9 +39,9 @@ The project started from the Lab2 / LEO setup:
 
 Recent update:
 - `uav-vanet.cc` now outputs `master_buffer_trace.csv`, recording chunk-level data arrival at the Master/CH UAV.
-- `uav-to-leo.cc` has been added to the build through `wscript` and can consume the master buffer CSV as the first handoff input.
-- `run_e2e_batch.sh` and the updated `make_e2e_summary.py` are used to run the first-stage batch pipeline and summarize outputs.
-- `convert_scheduler_to_vanet.py` converts TA scheduler/probe-derived traces into the `uav-vanet` replay JSON format.
+- `uav-to-leo.cc` has been added to the build through `wscript` and consumes the master buffer CSV as the first handoff input.
+- `run_e2e_batch.sh` and the updated `make_e2e_summary.py` run the first-stage batch pipeline and summarize outputs.
+- `convert_scheduler_to_vanet.py` converts scheduler/probe-derived traces into the `uav-vanet` replay JSON format.
 
 Important internal logic:
 - transfer events become replay tasks
@@ -66,15 +66,15 @@ Simple topology validation input.
 First larger topology already tested.
 
 ### `topo2.json`
-Next topology to test.
+Additional topology input.
 
 ### `scheduler_trace.json` / `topology_summary.json`
-TA scheduler/probe-derived input data.
+Scheduler/probe-derived input data.
 These are converted into `scheduler_trace_vanet.json` before replay.
 
 ### `scheduler_trace_vanet.json`
 Converted replay input for `uav-vanet.cc`.
-Current validated run uses this file.
+Current validated batch pipeline run uses this file.
 
 ### `uav-link-probe.cc`
 Current UAV-to-UAV probing tool.
@@ -88,7 +88,8 @@ First-stage batch pipeline helper scripts.
 They run `uav-vanet`, extract the master-arrived bytes, invoke `uav-to-leo`, and generate `pipeline_summary.csv`.
 
 ### `convert_scheduler_to_vanet.py`
-Converts TA scheduler output into the event format accepted by `uav-vanet.cc`.
+Small conversion helper.
+It converts `scheduler_trace.json` and `topology_summary.json` into the event format accepted by `uav-vanet.cc`.
 
 ---
 
@@ -130,14 +131,14 @@ uav-vanet -> master_buffer_trace.csv -> uav-to-leo -> pipeline_summary.csv
 
 Current observed status:
 - `uav-vanet` finishes and generates `output_vanet.txt` / `master_buffer_trace.csv` correctly.
-- the updated `uav-to-leo.cc` can complete the Master/CH UAV to LEO fixed-volume upload in the batch pipeline.
-- the current successful output set is stored under `pipeline_output/`.
+- the updated `uav-to-leo.cc` completes the Master/CH UAV to LEO fixed-volume upload in the batch pipeline.
+- the current representative output set is stored under `outputs/` as listed in the repo layout.
 
 Latest validated run:
-- `tasksDone=104/104`, `allDone=YES`, `sensorDone=60/60`, `slaveDone=44/44`
-- `finishSec=476.558`, `metMissionDeadline=YES`
-- `totalMasterArrivedBytes=149618`
-- `leo_total_rx_bytes=149618`, `leo_done=YES`
+- `tasksDone=619/619`, `allDone=YES`
+- `metMissionDeadline=YES`
+- `totalMasterArrivedBytes=1238529`
+- `leo_total_rx_bytes=1238529`, `leo_done=YES`
 
 ---
 
@@ -162,7 +163,7 @@ So the current repo should be described as:
 ## 6. Immediate next steps
 
 1. keep the current CSV handoff as the short-term validated integration path
-2. update README / docs to point to the successful `pipeline_output/` result set
+2. keep README / docs aligned with the representative `outputs/` result set
 3. add slot-based progress output later: arrived bytes, uploaded bytes, remaining bytes per slot
 4. align final scheduler input/output format with teammates
 5. later merge the two simulator lines into a synchronized E2E NS-3 program if needed
@@ -177,3 +178,4 @@ If continuing from this repo:
 - use `scheduler_trace_vanet.json` as the current validated scheduler-derived replay input
 - keep `schedule_trace.json` and `topo1.json` as older reference inputs
 - keep future changes focused on schedule-driven replay, throughput probing, LEO integration, and slot-based progress reporting
+- use the `outputs/` files in the repo layout as the current representative successful batch-output set

@@ -7,7 +7,7 @@ Current focus:
 - replay an external JSON schedule in NS-3
 - simulate `MOVE / ROLE_SET / SENSOR_TO_UAV / SLAVE_TO_MASTER`
 - check whether all tasks finish before their deadlines
-- report mission finish time, sensor finish time, and slave finish time
+- report mission finish time, sensor finish time, slave finish time, and Master-to-LEO upload completion
 - probe slave-to-master UAV links and output per-link estimated data rate / measured throughput for scheduling
 
 Current mainline components:
@@ -27,6 +27,7 @@ Validated inputs so far:
 - `schedule_trace.json` — simple topology
 - `topo1.json` — larger topology
 - `topo2.json` — larger topology
+- `scheduler_trace.json` / `topology_summary.json` — scheduler/probe-derived input
 
 Current repo role:
 
@@ -34,8 +35,8 @@ Current repo role:
 - **implemented (initial):** UAV-to-UAV probing for slave-to-master links
 - **implemented (initial):** Master buffer trace handoff from `uav-vanet.cc` to `uav-to-leo.cc`
 - **implemented:** first-stage batch E2E pipeline through CSV handoff
-- **validated:** `uav-vanet -> master_buffer_trace.csv -> uav-to-leo -> pipeline_summary.csv` on the TA scheduler trace
-- **not yet complete:** fully synchronized end-to-end NS-3 pipeline, slot-based progress observation, full scheduler feedback loop
+- **validated:** `uav-vanet -> master_buffer_trace.csv -> uav-to-leo -> pipeline_summary.csv` on scheduler-derived traces
+- **not yet complete:** fully synchronized single-simulator NS-3 pipeline, slot-based progress observation, full scheduler feedback loop
 
 ---
 
@@ -58,7 +59,7 @@ This file contains a **chunk-level trace of data received by the Master/CH UAV**
 
 Each column represents a chunk actually received by the Master/CH at a specific point in time.
 
-Currently, LEO upload is not yet integrated, so `masterBufferBytes` will only accumulate and will not decrease due to uploads to LEO.
+In the current batch pipeline, this CSV is the handoff interface from `uav-vanet.cc` to `uav-to-leo.cc`. The upload is handled in the next executable, so `masterBufferBytes` inside this file is still an arrival-side buffer trace.
 
 ---
 
@@ -110,16 +111,18 @@ Main flow:
 
 Current note:
 - this is a **file-based batch handoff**, not a fully synchronized single-simulator pipeline yet
-- recent testing shows the first-stage batch pipeline can complete successfully on the TA scheduler trace
-- current validated output set is stored under `pipeline_output/` and includes `output_vanet.txt`, `master_buffer_trace.csv`, `output_uav_to_leo.txt`, `pipeline_summary.csv`, `uav-to-leo_result.csv`, `visibility_windows.csv`, `csv_trigger.csv`, and `adaptiveRateLog.csv`
+- recent testing shows the first-stage batch pipeline can complete successfully on the scheduler-derived trace
+- the representative validated output files are stored under `outputs/` as listed in the repo layout
 
 ### `ns3/contrib/leo/examples/make_e2e_summary.py`
 Helper script used by `run_e2e_batch.sh`.
 It parses `output_vanet.txt`, `master_buffer_trace.csv`, `output_uav_to_leo.txt`, and available LEO CSV outputs, then writes `pipeline_summary.csv`.
 
 ### `ns3/contrib/leo/examples/convert_scheduler_to_vanet.py`
-Helper script for converting TA scheduler output into the replay JSON format accepted by `uav-vanet.cc`.
+Small helper script for converting scheduler output into the replay JSON format accepted by `uav-vanet.cc`.
 
+Input: `scheduler_trace.json` + `topology_summary.json`  
+Output: `scheduler_trace_vanet.json`
 
 ### JSON inputs
 - `schedule_trace.json`
@@ -154,9 +157,8 @@ Key parameters:
 
 Current notes:
 - the updated fixed-volume / handoff reporting path has been validated in the first-stage batch pipeline output set
-- TCP receive buffer is set to 8 MB (`RcvBufSize` / `SndBufSize`) to prevent the window from capping effective throughput below Shannon capacity
-- effective throughput is significantly lower than Shannon capacity due to TCP slow start; approximately 35% efficiency over the 110 ms transfer window for a 10 MB payload
-- beamforming gain from CSV lookup is verified to increase effective throughput (752 → 784 Mbps) compared to analytical fallback (2128 → 2456 Mbps Shannon increase maps to ~4% application-layer gain, dominated by cwnd ramp-up)
+- the handoff restart path sends only remaining bytes, avoiding repeated full-volume retransmission
+- output now separates trigger-time target, actual RX satellite/window, total Rx bytes, and throughput summary
 
 ---
 
@@ -167,29 +169,36 @@ repo/
 ├─ README.md
 ├─ docs/
 │  ├─ PROJECT_STATUS.md
-│  └─ SETUP_AND_IO.md
+│  ├─ Report_M.pdf
+│  ├─ Report_M.pptx
+│  ├─ SETUP_AND_IO.md
+│  └─ uav-to-leo-integration.md
 ├─ ns3/
 │  └─ contrib/leo/examples/
 │     ├─ beam_pattern.csv
 │     ├─ calculate_delay.cc
-│     ├─ uav-vanet.cc
-│     ├─ uav-link-probe.cc
-│     ├─ uav-to-leo.cc
-│     ├─ run_e2e_batch.sh
-│     ├─ make_e2e_summary.py
 │     ├─ convert_scheduler_to_vanet.py
-│     ├─ wscript
-│     ├─ schedule_trace.json
+│     ├─ make_e2e_summary.py
+│     ├─ run_e2e_batch.sh
+│     ├─ scheduler_trace.csv
+│     ├─ scheduler_trace.json
 │     ├─ topo1.json
 │     ├─ topo2.json
-│     ├─ scheduler_trace.json
 │     ├─ topology_summary.json
-│     └─ scheduler_trace_vanet.json
-├─ pipeline_output/
-│  └─ successful first-stage E2E batch output set
+│     ├─ uav-link-probe.cc
+│     ├─ uav-to-leo.cc
+│     ├─ uav-vanet.cc
+│     ├─ visibility_windows.csv
+│     └─ wscript
 ├─ outputs/
-│  ├─ output_schedule_vv12.txt
-│  └─ output_topo1_vv13.txt
+│  ├─ adaptiveRateLog.csv
+│  ├─ csv_trigger.csv
+│  ├─ master_buffer_trace.csv
+│  ├─ output_uav_to_leo.txt
+│  ├─ output_vanet.txt
+│  ├─ pipeline_summary.csv
+│  ├─ uav-to-leo_result.csv
+│  └─ visibility_windows.csv
 └─ legacy/
 ```
 
@@ -203,7 +212,7 @@ Notes:
 
 ## First-stage E2E validation output
 
-A successful batch output set is stored under `pipeline_output/`.
+A successful batch output set is stored under `outputs/`.
 The validated flow is:
 
 ```text
@@ -211,9 +220,9 @@ uav-vanet -> master_buffer_trace.csv -> uav-to-leo -> pipeline_summary.csv
 ```
 
 Current successful run summary:
-- `uav-vanet`: `tasksDone=104/104`, `allDone=YES`, `metMissionDeadline=YES`
-- Master buffer handoff: `totalMasterArrivedBytes = 149618`
-- `uav-to-leo`: `leo_total_rx_bytes = 149618`, `leo_done=YES`
+- `uav-vanet`: `tasksDone=619/619`, `allDone=YES`, `metMissionDeadline=YES`
+- Master buffer handoff: `totalMasterArrivedBytes = 1238529`
+- `uav-to-leo`: `leo_total_rx_bytes = 1238529`, `leo_done=YES`
 
 This is still a CSV-based batch handoff, not a fully synchronized single NS-3 simulator.
 
@@ -292,9 +301,9 @@ From the NS-3 root:
   --csvOutFile=/home/demo/Desktop/uav_link_probe.csv"
 ```
 
-### `uav-to-leo`
-```bash
-./waf --run "uav-to-leo \
+### `uav-to-leo` key options
+```text
+uav-to-leo
     --orbitFile:       CSV file with orbit parameters []
     --traceFile:       CSV file to redirect stdout to []
     --precision:       The time precision with which to compute position updates. 0 means arbitrary precision (ns3::LeoCircularOrbitMobilityModel::Precision) [+1e+09ns]
@@ -314,7 +323,7 @@ From the NS-3 root:
     --nRF:             Number of RF chains (hybrid: nRF <= nAnt) [4]
     --destOnly:        Indicates only the destination may respond to this RREQ. (ns3::aodv::RoutingProtocol::DestinationOnly) [false]
     --pcap:            Enable PCAP packet capture [false]
-    --fixedVolume:     Stop simulation when maxBytes received (default true; pass false to run full duration) [true]"
+    --fixedVolume:     Stop simulation when maxBytes received (default true; pass false to run full duration) [true]
 ```
 
 ---
@@ -344,20 +353,8 @@ The helper scripts are currently placed under `contrib/leo/examples/`.
 cd ~/ns3/ns-3.35
 chmod +x contrib/leo/examples/run_e2e_batch.sh
 chmod +x contrib/leo/examples/make_e2e_summary.py
-./contrib/leo/examples/run_e2e_batch.sh contrib/leo/examples/topo1.json topo1
+./contrib/leo/examples/run_e2e_batch.sh contrib/leo/examples/scheduler_trace_vanet.json scheduler_new
 ```
 
-Expected output directory:
-
-```text
-outputs/e2e_topo1_<timestamp>/
-├─ output_vanet.txt
-├─ master_buffer_trace.csv
-├─ output_uav_to_leo.txt
-└─ pipeline_summary.csv
-```
-
-Current known issue:
-- `uav-vanet` output and `master_buffer_trace.csv` are generated correctly in the current tests.
-- `uav-to-leo` may still run for too long in the full batch pipeline; the fixed-volume stop condition / dynamic handoff behavior is under debugging.
+Expected output files are the representative files listed under `outputs/` in the repo layout.
 
