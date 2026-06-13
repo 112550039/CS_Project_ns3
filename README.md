@@ -33,7 +33,8 @@ Current repo role:
 - **implemented:** schedule replay / mission verification
 - **implemented (initial):** UAV-to-UAV probing for slave-to-master links
 - **implemented (initial):** Master buffer trace handoff from `uav-vanet.cc` to `uav-to-leo.cc`
-- **partially connected:** first-stage batch pipeline through CSV handoff
+- **implemented:** first-stage batch E2E pipeline through CSV handoff
+- **validated:** `uav-vanet -> master_buffer_trace.csv -> uav-to-leo -> pipeline_summary.csv` on the TA scheduler trace
 - **not yet complete:** fully synchronized end-to-end NS-3 pipeline, slot-based progress observation, full scheduler feedback loop
 
 ---
@@ -109,16 +110,23 @@ Main flow:
 
 Current note:
 - this is a **file-based batch handoff**, not a fully synchronized single-simulator pipeline yet
-- recent testing shows `uav-vanet` finishes normally, but `uav-to-leo` fixed-volume termination / handoff behavior still needs further debugging when running the full batch pipeline
+- recent testing shows the first-stage batch pipeline can complete successfully on the TA scheduler trace
+- current validated output set is stored under `pipeline_output/` and includes `output_vanet.txt`, `master_buffer_trace.csv`, `output_uav_to_leo.txt`, `pipeline_summary.csv`, `uav-to-leo_result.csv`, `visibility_windows.csv`, `csv_trigger.csv`, and `adaptiveRateLog.csv`
 
 ### `ns3/contrib/leo/examples/make_e2e_summary.py`
 Helper script used by `run_e2e_batch.sh`.
 It parses `output_vanet.txt`, `master_buffer_trace.csv`, `output_uav_to_leo.txt`, and available LEO CSV outputs, then writes `pipeline_summary.csv`.
 
+### `ns3/contrib/leo/examples/convert_scheduler_to_vanet.py`
+Helper script for converting TA scheduler output into the replay JSON format accepted by `uav-vanet.cc`.
+
+
 ### JSON inputs
 - `schedule_trace.json`
 - `topo1.json`
 - `topo2.json`
+- `scheduler_trace.json` / `topology_summary.json` — TA scheduler/probe-derived input
+- `scheduler_trace_vanet.json` — converted replay input for `uav-vanet`
 
 These traces define:
 - UAV count
@@ -145,6 +153,7 @@ Key parameters:
 - `--rateInterval`: adaptive rate update interval (seconds)
 
 Current notes:
+- the updated fixed-volume / handoff reporting path has been validated in the first-stage batch pipeline output set
 - TCP receive buffer is set to 8 MB (`RcvBufSize` / `SndBufSize`) to prevent the window from capping effective throughput below Shannon capacity
 - effective throughput is significantly lower than Shannon capacity due to TCP slow start; approximately 35% efficiency over the 110 ms transfer window for a 10 MB payload
 - beamforming gain from CSV lookup is verified to increase effective throughput (752 → 784 Mbps) compared to analytical fallback (2128 → 2456 Mbps Shannon increase maps to ~4% application-layer gain, dominated by cwnd ramp-up)
@@ -168,10 +177,16 @@ repo/
 │     ├─ uav-to-leo.cc
 │     ├─ run_e2e_batch.sh
 │     ├─ make_e2e_summary.py
+│     ├─ convert_scheduler_to_vanet.py
 │     ├─ wscript
 │     ├─ schedule_trace.json
 │     ├─ topo1.json
-│     └─ topo2.json
+│     ├─ topo2.json
+│     ├─ scheduler_trace.json
+│     ├─ topology_summary.json
+│     └─ scheduler_trace_vanet.json
+├─ pipeline_output/
+│  └─ successful first-stage E2E batch output set
 ├─ outputs/
 │  ├─ output_schedule_vv12.txt
 │  └─ output_topo1_vv13.txt
@@ -183,6 +198,24 @@ Notes:
 - `legacy/` can remain empty for now
 - only stable and representative files need to be committed first
 - old debug outputs / half-broken intermediate versions can be added later if needed
+
+---
+
+## First-stage E2E validation output
+
+A successful batch output set is stored under `pipeline_output/`.
+The validated flow is:
+
+```text
+uav-vanet -> master_buffer_trace.csv -> uav-to-leo -> pipeline_summary.csv
+```
+
+Current successful run summary:
+- `uav-vanet`: `tasksDone=104/104`, `allDone=YES`, `metMissionDeadline=YES`
+- Master buffer handoff: `totalMasterArrivedBytes = 149618`
+- `uav-to-leo`: `leo_total_rx_bytes = 149618`, `leo_done=YES`
+
+This is still a CSV-based batch handoff, not a fully synchronized single NS-3 simulator.
 
 ---
 

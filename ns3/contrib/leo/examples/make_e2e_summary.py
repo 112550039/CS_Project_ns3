@@ -18,7 +18,12 @@ def extract(pattern: str, text: str, default: str = "") -> str:
         return default
     return m.group(1)
 
-
+def find_line(prefix: str, text: str) -> str:
+    for line in text.splitlines():
+        if line.startswith(prefix):
+            return line
+    return ""
+    
 def parse_master_trace(path: str) -> dict:
     result = {
         "first_master_time_sec": "",
@@ -88,8 +93,14 @@ def parse_csv_trigger(path: str) -> dict:
 def parse_leo_result(path: str) -> dict:
     result = {
         "leo_effective_throughput_mbps": "",
+        "leo_active_window_throughput_mbps": "",
+        "leo_main_rx_window_throughput_mbps": "",
         "leo_visible_start_sec": "",
         "leo_visible_end_sec": "",
+        "leo_actual_rx_sat": "",
+        "leo_main_rx_window_start_sec": "",
+        "leo_main_rx_window_end_sec": "",
+        "leo_result_total_rx_bytes": "",
     }
 
     if not path or not os.path.exists(path):
@@ -98,12 +109,15 @@ def parse_leo_result(path: str) -> dict:
     with open(path, "r", encoding="utf-8", errors="ignore", newline="") as f:
         reader = csv.DictReader(f)
         for row in reader:
-            # Header from uav-to-leo_result.csv:
-            # Effective Throughput (Mbps),Elevation Cutoff (Deg),
-            # Visible Time Window Start (s),Visible Time Window End (s)
             result["leo_effective_throughput_mbps"] = row.get("Effective Throughput (Mbps)", "")
+            result["leo_active_window_throughput_mbps"] = row.get("Active Window Throughput (Mbps)", "")
+            result["leo_main_rx_window_throughput_mbps"] = row.get("Main Rx Window Throughput (Mbps)", "")
             result["leo_visible_start_sec"] = row.get("Visible Time Window Start (s)", "")
             result["leo_visible_end_sec"] = row.get("Visible Time Window End (s)", "")
+            result["leo_actual_rx_sat"] = row.get("Actual Rx Sat", "")
+            result["leo_main_rx_window_start_sec"] = row.get("Main Rx Window Start (s)", "")
+            result["leo_main_rx_window_end_sec"] = row.get("Main Rx Window End (s)", "")
+            result["leo_result_total_rx_bytes"] = row.get("Total Rx Bytes", "")
             break
 
     return result
@@ -126,27 +140,41 @@ def main():
     trig = parse_csv_trigger(args.csv_trigger)
     leo_result = parse_leo_result(args.leo_result)
 
-    # Parse uav-vanet mission summary
-    # Example:
-    # [MISSION] tasksTotal=212 tasksDone=212 allDone=YES ...
-    tasks_total = extract(r"tasksTotal=([0-9]+)", vanet_text, "")
-    tasks_done = extract(r"tasksDone=([0-9]+)", vanet_text, "")
-    all_done = extract(r"allDone=([A-Z]+)", vanet_text, "")
-    finish_sec = extract(r"finishSec=([0-9.]+)", vanet_text, "")
-    sensor_done = extract(r"sensorDone=([0-9]+/[0-9]+)", vanet_text, "")
-    slave_done = extract(r"slaveDone=([0-9]+/[0-9]+)", vanet_text, "")
-    sensor_finish_sec = extract(r"sensorFinishSec=([0-9.]+)", vanet_text, "")
-    slave_finish_sec = extract(r"slaveFinishSec=([0-9.]+)", vanet_text, "")
-    met_deadline = extract(r"metMissionDeadline=([A-Z]+)", vanet_text, "")
+    # Parse uav-vanet mission summary.
+    # Important: only parse the [MISSION] line, otherwise finishSec may match the first [TASK-DONE].
+    mission_line = find_line("[MISSION]", vanet_text)
+    mission_src = mission_line if mission_line else vanet_text
+
+    tasks_total = extract(r"tasksTotal=([0-9]+)", mission_src, "")
+    tasks_done = extract(r"tasksDone=([0-9]+)", mission_src, "")
+    all_done = extract(r"allDone=([A-Z]+)", mission_src, "")
+    finish_sec = extract(r"finishSec=([0-9.]+)", mission_src, "")
+    sensor_done = extract(r"sensorDone=([0-9]+/[0-9]+)", mission_src, "")
+    slave_done = extract(r"slaveDone=([0-9]+/[0-9]+)", mission_src, "")
+    sensor_finish_sec = extract(r"sensorFinishSec=([0-9.]+)", mission_src, "")
+    slave_finish_sec = extract(r"slaveFinishSec=([0-9.]+)", mission_src, "")
+    met_deadline = extract(r"metMissionDeadline=([A-Z]+)", mission_src, "")
 
     # Parse uav-to-leo terminal output
-    leo_total_rx = extract(r"Bytes received:\s*([0-9]+)", leo_text, "")
+    leo_total_rx = extract(r"Total Rx bytes:\s*([0-9]+)", leo_text, "")
+    if not leo_total_rx:
+        leo_total_rx = extract(r"Bytes received:\s*([0-9]+)", leo_text, "")
+
     leo_eff = extract(r"Effective throughput:\s*([0-9.]+)", leo_text, "")
+    leo_active_eff = extract(r"Active-window throughput:\s*([0-9.]+)", leo_text, "")
+    leo_main_window_eff = extract(r"Main RX-window throughput:\s*([0-9.]+)", leo_text, "")
+
     leo_first_tx = extract(r"First Tx time:\s*([0-9.]+)", leo_text, "")
     leo_last_rx = extract(r"Last\s+Rx time:\s*([0-9.]+)", leo_text, "")
 
     if not leo_eff:
         leo_eff = leo_result["leo_effective_throughput_mbps"]
+    if not leo_active_eff:
+        leo_active_eff = leo_result["leo_active_window_throughput_mbps"]
+    if not leo_main_window_eff:
+        leo_main_window_eff = leo_result["leo_main_rx_window_throughput_mbps"]
+    if not leo_total_rx:
+        leo_total_rx = leo_result["leo_result_total_rx_bytes"]
 
     # Simple upload completion check
     try:
@@ -185,6 +213,11 @@ def main():
         "leo_first_tx_sec",
         "leo_last_rx_sec",
         "leo_effective_throughput_mbps",
+        "leo_active_window_throughput_mbps",
+        "leo_main_rx_window_throughput_mbps",
+        "leo_actual_rx_sat",
+        "leo_main_rx_window_start_sec",
+        "leo_main_rx_window_end_sec",
         "leo_visible_start_sec",
         "leo_visible_end_sec",
         "leo_done",
@@ -220,6 +253,11 @@ def main():
         "leo_first_tx_sec": leo_first_tx,
         "leo_last_rx_sec": leo_last_rx,
         "leo_effective_throughput_mbps": leo_eff,
+        "leo_active_window_throughput_mbps": leo_active_eff,
+        "leo_main_rx_window_throughput_mbps": leo_main_window_eff,
+        "leo_actual_rx_sat": leo_result["leo_actual_rx_sat"],
+        "leo_main_rx_window_start_sec": leo_result["leo_main_rx_window_start_sec"],
+        "leo_main_rx_window_end_sec": leo_result["leo_main_rx_window_end_sec"],
         "leo_visible_start_sec": leo_result["leo_visible_start_sec"],
         "leo_visible_end_sec": leo_result["leo_visible_end_sec"],
         "leo_done": "YES" if leo_done else "NO",

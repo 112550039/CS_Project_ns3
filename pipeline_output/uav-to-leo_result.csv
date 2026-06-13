@@ -1,0 +1,2 @@
+Effective Throughput (Mbps),Active Window Throughput (Mbps),Main Rx Window Throughput (Mbps),Elevation Cutoff (Deg),Visible Time Window Start (s),Visible Time Window End (s),Actual Rx Sat,Main Rx Window Start (s),Main Rx Window End (s),Total Rx Bytes
+0.020611,0.020611,0.020611,40.000000,79.862200,140.862200,142,140.862200,219.800027,149618

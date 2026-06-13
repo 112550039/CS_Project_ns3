@@ -503,6 +503,63 @@ CloseWindow (double endTimeSec)
     g_windows.push_back (g_curWindow);
 }
 
+static const WindowRecord*
+GetMainRxWindow ()
+{
+    const WindowRecord* best = nullptr;
+
+    for (const auto& w : g_windows)
+    {
+        if (w.totalRxBytes == 0)
+        {
+            continue;
+        }
+
+        if (best == nullptr ||
+            w.totalRxBytes > best->totalRxBytes ||
+            (w.totalRxBytes == best->totalRxBytes && w.lastRxSec > best->lastRxSec))
+        {
+            best = &w;
+        }
+    }
+
+    return best;
+}
+
+static double
+GetActiveWindowSeconds ()
+{
+    double total = 0.0;
+
+    for (const auto& w : g_windows)
+    {
+        if (w.totalRxBytes > 0 &&
+            w.firstTxSec >= 0.0 &&
+            w.lastRxSec > w.firstTxSec)
+        {
+            total += (w.lastRxSec - w.firstTxSec);
+        }
+    }
+
+    return total;
+}
+
+static uint64_t
+GetActiveWindowRxBytes ()
+{
+    uint64_t total = 0;
+
+    for (const auto& w : g_windows)
+    {
+        if (w.totalRxBytes > 0)
+        {
+            total += w.totalRxBytes;
+        }
+    }
+
+    return total;
+}
+
 // [MODIFIED for Step-3] Also writes to g_curWindow when a window is open.
 //                       g_tput cumulative behaviour preserved for Section 16.
 static void
@@ -541,12 +598,28 @@ AppRxTrace (Ptr<const Packet> p, const Address &/*from*/)
     //          window receives maxBytes, making further handoffs unreachable.
     //          Per-window comparison preserves single-window semantics exactly
     //          when no handoff occurs.
+    
+    /*
     if (g_fixedVolume && !g_stopFired
         && g_windowOpen
         && g_curWindow.totalRxBytes >= g_volumeBytes)
     {
         g_stopFired = true;
         Simulator::Stop ();
+    }*/
+    
+    if (g_fixedVolume && !g_stopFired
+        && g_volumeBytes > 0
+        && g_tput.totalRxBytes >= g_volumeBytes)
+    {
+        g_stopFired = true;
+
+        if (g_windowOpen)
+        {
+             CloseWindow (now);
+        }
+
+       Simulator::Stop ();
     }
 }
 
@@ -925,7 +998,7 @@ PerformHandoff ()
     g_handoff.candidateSatIdx  = -1;
 
     BeginWindow (newIdx);      // [Step-3] new window for the new target
-    g_stopFired = false;       // [Step-3] allow per-window stop (fixedVolume)
+    //g_stopFired = false;       // [Step-3] allow per-window stop (fixedVolume)
 
     // (4) Install a new BulkSend pointed at the new satellite.
     BulkSendHelper sender ("ns3::TcpSocketFactory",
@@ -937,7 +1010,8 @@ PerformHandoff ()
     // DoInitialize() then does Schedule(m_startTime, StartApplication).
     // Using Now() would set m_startTime=349s → StartApplication fires at 698s.
     // Using Seconds(0) keeps m_startTime=0 → fires immediately at the handoff time.
-    newApp.Start (Seconds (0.0));
+    // newApp.Start (Seconds (0.0));
+    newApp.Start (Simulator::Now ());
 
     // (5) Re-hook trace sources so the newly-created TCP socket and
     //     BulkSendApplication Tx events are observed. Same one-shot scheduler
@@ -1018,7 +1092,7 @@ SelectAndStartUpload ()
     sender.SetAttribute ("MaxBytes", UintegerValue (g_ctx.maxBytes));
     sender.SetAttribute ("SendSize", UintegerValue (g_ctx.sendSize));
     ApplicationContainer newApp = sender.Install (g_ctx.uavNode);
-    newApp.Start (Seconds (0.0));
+    newApp.Start (Simulator::Now ());
 
     BeginWindow ((uint32_t) bestIdx);
 
@@ -1557,6 +1631,31 @@ main (int argc, char *argv[])
         if (shannonRef > 0.0) efficiency = effMbps / shannonRef * 100.0;
     }
 
+
+    const WindowRecord* mainRxWindow = GetMainRxWindow ();
+
+    double activeWindowSec = GetActiveWindowSeconds ();
+    uint64_t activeWindowRxBytes = GetActiveWindowRxBytes ();
+    double activeWindowMbps = 0.0;
+
+    if (activeWindowSec > 0.0 && activeWindowRxBytes > 0)
+    {
+        activeWindowMbps = (activeWindowRxBytes * 8.0) / (activeWindowSec * 1e6);
+    }
+
+    int32_t actualRxSatIdx = -1;
+    double mainRxWindowStart = -1.0;
+    double mainRxWindowEnd = -1.0;
+    double mainRxWindowMbps = 0.0;
+
+    if (mainRxWindow != nullptr)
+    {
+        actualRxSatIdx = static_cast<int32_t> (mainRxWindow->satIdx);
+        mainRxWindowStart = mainRxWindow->startTimeSec;
+        mainRxWindowEnd = mainRxWindow->endTimeSec;
+        mainRxWindowMbps = mainRxWindow->avgEffMbps;
+    }
+    
     // Visible time window (first OK→DOWN transition observed in g_rateLog)
     double visStart = -1.0, visEnd = -1.0;
     for (auto &r : g_rateLog)
@@ -1635,7 +1734,7 @@ main (int argc, char *argv[])
                       << " B" << std::endl;
         std::cout << "Initial (t=0) pick:  Sat[" << g_csvTrig.initialSatIdx
                   << "]" << std::endl;
-        std::cout << "Re-selected target:  Sat[" << g_csvTrig.selectedSatIdx
+        std::cout << "Trigger-time target: Sat[" << g_csvTrig.selectedSatIdx
                   << "] (elev=" << std::setprecision(2) << g_csvTrig.selectedElev
                   << " deg, dist=" << std::setprecision(1) << g_csvTrig.selectedDist
                   << " km)" << std::endl;
@@ -1647,6 +1746,19 @@ main (int argc, char *argv[])
     std::cout << "Rate-log interval:   " << rateInterval << " s" << std::endl;
     std::cout << "Window start:        " << visStart << " s" << std::endl;
     std::cout << "Window end:          " << visEnd   << " s" << std::endl;
+    
+    if (mainRxWindow != nullptr)
+    {
+        std::cout << "\n--- Actual RX Window ---" << std::endl;
+        std::cout << "Actual RX Sat:       Sat[" << actualRxSatIdx << "]" << std::endl;
+        std::cout << "RX window id:        " << mainRxWindow->windowId << std::endl;
+        std::cout << "RX window start:     " << std::fixed << std::setprecision(3)
+                  << mainRxWindowStart << " s" << std::endl;
+        std::cout << "RX window end:       " << mainRxWindowEnd << " s" << std::endl;
+        std::cout << "RX window bytes:     " << mainRxWindow->totalRxBytes << std::endl;
+        std::cout << "RX window throughput:" << std::setprecision(3)
+                  << mainRxWindowMbps << " Mbps" << std::endl;
+    }
 
     std::cout << "\n--- Effective Throughput Measurement ---" << std::endl;
     std::cout << "Mode:                "
@@ -1666,6 +1778,18 @@ main (int argc, char *argv[])
                                               << measSec * 1000.0 << " ms" << std::endl;
         std::cout << "Effective throughput:" << std::setprecision(3)
                                               << effMbps << " Mbps" << std::endl;
+                                              
+        std::cout << "Active-window throughput:"
+                  << std::setprecision(3) << activeWindowMbps
+                  << " Mbps" << std::endl;
+
+        if (mainRxWindow != nullptr)
+        {
+            std::cout << "Main RX-window throughput:"
+                      << std::setprecision(3) << mainRxWindowMbps
+                      << " Mbps" << std::endl;
+        }
+        
         if (shannonRef > 0.0)
         {
             std::cout << "Shannon (theoretical):"
@@ -1716,14 +1840,30 @@ main (int argc, char *argv[])
     {
         std::ofstream resultFile (outputDir + "/uav-to-leo_result.csv");
         resultFile << "Effective Throughput (Mbps),"
+                   << "Active Window Throughput (Mbps),"
+                   << "Main Rx Window Throughput (Mbps),"
                    << "Elevation Cutoff (Deg),"
                    << "Visible Time Window Start (s),"
-                   << "Visible Time Window End (s)" << std::endl;
+                   << "Visible Time Window End (s),"
+                   << "Actual Rx Sat,"
+                   << "Main Rx Window Start (s),"
+                   << "Main Rx Window End (s),"
+                   << "Total Rx Bytes"
+                   << std::endl;
+
         resultFile << std::fixed << std::setprecision(6)
-                   << effMbps           << ","
-                   << band.elevAngleDeg << ","
-                   << visStart          << ","
-                   << visEnd            << std::endl;
+                   << effMbps             << ","
+                   << activeWindowMbps    << ","
+                   << mainRxWindowMbps    << ","
+                   << band.elevAngleDeg   << ","
+                   << visStart            << ","
+                   << visEnd              << ","
+                   << actualRxSatIdx      << ","
+                   << mainRxWindowStart   << ","
+                   << mainRxWindowEnd     << ","
+                   << g_tput.totalRxBytes
+                   << std::endl;
+
         resultFile.close ();
     }
 
@@ -1732,15 +1872,24 @@ main (int argc, char *argv[])
     //               connections; matches the WindowRecord populated in Step 3.
     {
         std::ofstream winFile (outputDir + "/visibility_windows.csv");
-        winFile << "window_id,start_time_sec,end_time_sec,avg_eff_throughput_mbps"
+        winFile << "window_id,sat_idx,start_time_sec,end_time_sec,"
+                << "first_tx_sec,last_rx_sec,total_tx_bytes,total_rx_bytes,"
+                << "avg_eff_throughput_mbps"
                 << std::endl;
+
         for (auto &w : g_windows)
         {
             winFile << std::fixed
                     << w.windowId << ","
-                    << std::setprecision(1) << w.startTimeSec << ","
-                    << std::setprecision(1) << w.endTimeSec   << ","
-                    << std::setprecision(1) << w.avgEffMbps   << std::endl;
+                    << w.satIdx << ","
+                    << std::setprecision(3) << w.startTimeSec << ","
+                    << std::setprecision(3) << w.endTimeSec << ","
+                    << std::setprecision(3) << w.firstTxSec << ","
+                    << std::setprecision(3) << w.lastRxSec << ","
+                    << w.totalTxBytes << ","
+                    << w.totalRxBytes << ","
+                    << std::setprecision(6) << w.avgEffMbps
+                    << std::endl;
         }
         winFile.close ();
         std::cerr << "[Step-4] Wrote " << g_windows.size ()
